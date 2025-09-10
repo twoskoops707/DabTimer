@@ -27,12 +27,21 @@ jobs:
     - name: Install Cordova
       run: npm install -g cordova
 
+    - name: Clean existing directory
+      run: |
+        rm -rf DabTimerAndroid || true
+
     - name: Create Cordova project
       run: |
         cordova create DabTimerAndroid com.twoskoops707.dabtimer DabTimer
+
+    - name: Copy app files
+      run: |
         cd DabTimerAndroid
-        cp -r ../* www/ 2>/dev/null || true
-        cp ../config.xml . 2>/dev/null || true
+        # Remove default www content and copy our files
+        rm -rf www/*
+        cp -r ../css ../js ../img ../sounds ../index.html www/
+        cp ../config.xml .
 
     - name: Add Android platform
       run: |
