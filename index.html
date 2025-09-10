@@ -59,6 +59,8 @@
                         <h3>Current Settings</h3>
                         <div class="settings-display">
                             <p>Material: <span id="current-material">Quartz</span></p>
+                        <p>Thickness: <span id="current-thickness">2mm</span></p>
+                        <p>Thickness: <span id="current-thickness">2mm</span></p>
                             <p>Concentrate: <span id="current-concentrate">Shatter</span></p>
                             <p>Heater: <span id="current-heater">Torch</span></p>
                         </div>
@@ -70,16 +72,30 @@
             <div id="science-screen" class="tab-content">
                 <div class="science-container">
                     <h2>Concentrate Science</h2>
+                    
+                    <div class="concentrate-selector">
+                        <select id="concentrate-select">
+                            <option value="shatter">Shatter</option>
+                            <option value="wax">Wax</option>
+                            <option value="resin">Live Resin</option>
+                            <option value="rosin">Rosin</option>
+                            <option value="budder">Budder</option>
+                            <option value="crumble">Crumble</option>
+                            <option value="live_resin">Live Resin</option>
+                        </select>
+                    </div>
+                    
                     <div class="concentrate-info active" id="shatter-info">
                         <div class="concentrate-header">
                             <h3>Shatter</h3>
                             <img src="img/science-shatter.jpg" alt="Shatter">
                         </div>
                         <div class="concentrate-details">
-                            <p>A brittle, glass-like cannabis extract that breaks easily.</p>
+                            <p>A translucent, glass-like extract that fractures easily. High THC content with preserved terpene profile.</p>
                             <div class="temp-info">
                                 <h4>Ideal Vaporization Temperature</h4>
                                 <p>315-400°F (157-204°C)</p>
+                                <p class="science-note">Preserves delicate terpenes like α-Pinene (311°F) and β-Myrcene (334°F)</p>
                             </div>
                             <div class="data-points">
                                 <div class="data-point">
@@ -90,14 +106,81 @@
                                     <span class="data-label">Consistency</span>
                                     <span class="data-value">Brittle, Glass-like</span>
                                 </div>
+                                <div class="data-point">
+                                    <span class="data-label">Best For</span>
+                                    <span class="data-value">Flavorful, low-temp dabs</span>
+                                </div>
+                                <div class="data-point">
+                                    <span class="data-label">Terpene Preservation</span>
+                                    <span class="data-value">Excellent</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Other concentrate info divs would be here but hidden -->
+                    
+                    <!-- Additional concentrate info would go here -->
+                    
+                    <div class="material-science-table">
+                        <h3>Material Heating Guide</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Material</th>
+                                    <th>Thickness</th>
+                                    <th>Heat Time (s)</th>
+                                    <th>Cool Time (s)</th>
+                                    <th>Thermal Properties</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Quartz</td>
+                                    <td>1mm</td>
+                                    <td>15-20</td>
+                                    <td>25-30</td>
+                                    <td>Fast heat, excellent flavor</td>
+                                </tr>
+                                <tr>
+                                    <td>Quartz</td>
+                                    <td>2mm</td>
+                                    <td>25-30</td>
+                                    <td>40-45</td>
+                                    <td>Balanced heat retention</td>
+                                </tr>
+                                <tr>
+                                    <td>Quartz</td>
+                                    <td>4mm</td>
+                                    <td>40-45</td>
+                                    <td>60-65</td>
+                                    <td>Excellent heat retention</td>
+                                </tr>
+                                <tr>
+                                    <td>Titanium</td>
+                                    <td>N/A</td>
+                                    <td>20-25</td>
+                                    <td>30-35</td>
+                                    <td>Durable, fast heating</td>
+                                </tr>
+                                <tr>
+                                    <td>Ceramic</td>
+                                    <td>N/A</td>
+                                    <td>45-50</td>
+                                    <td>65-70</td>
+                                    <td>Excellent flavor, fragile</td>
+                                </tr>
+                                <tr>
+                                    <td>Borosilicate</td>
+                                    <td>2mm</td>
+                                    <td>30-35</td>
+                                    <td>45-50</td>
+                                    <td>Thermal shock resistant</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="table-note">Times based on butane torch heating. Adjust for other heating elements.</p>
+                    </div>
                 </div>
             </div>
-
-            <!-- Calendar Screen -->
             <div id="calendar-screen" class="tab-content">
                 <div class="calendar-container">
                     <h2>Usage Calendar</h2>
@@ -136,6 +219,47 @@
                             <button class="option-btn active" data-value="quartz">Quartz</button>
                             <button class="option-btn" data-value="titanium">Titanium</button>
                             <button class="option-btn" data-value="ceramic">Ceramic</button>
+                            <button class="option-btn" data-value="borosilicate">Borosilicate</button>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group" id="thickness-group">
+                        <h3>Thickness</h3>
+                        <div class="option-buttons">
+                            <button class="option-btn active" data-value="1mm">1mm</button>
+                            <button class="option-btn" data-value="2mm">2mm</button>
+                            <button class="option-btn" data-value="4mm">4mm</button>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h3>Rig Type</h3>
+                        <div class="rig-type-buttons">
+                            <button class="rig-type-btn active" data-value="mini_rig">
+                                <i class="fas fa-compress-alt"></i>
+                                <span>Mini Rig</span>
+                            </button>
+                            <button class="rig-type-btn" data-value="standard_rig">
+                                <i class="fas fa-glass-whiskey"></i>
+                                <span>Standard</span>
+                            </button>
+                            <button class="rig-type-btn" data-value="recycler">
+                                <i class="fas fa-recycle"></i>
+                                <span>Recycler</span>
+                            </button>
+                            <button class="rig-type-btn" data-value="e_rig">
+                                <i class="fas fa-bolt"></i>
+                                <span>E-Rig</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h3>Heating Element</h3>
+                        <div class="option-buttons">
+                            <button class="option-btn active" data-value="butane_torch">Butane Torch</button>
+                            <button class="option-btn" data-value="bic_lighter">Bic Lighter</button>
+                            <button class="option-btn" data-value="acetylene_torch">Acetylene Torch</button>
                         </div>
                     </div>
                     
@@ -146,32 +270,23 @@
                             <button class="option-btn" data-value="wax">Wax</button>
                             <button class="option-btn" data-value="resin">Live Resin</button>
                             <button class="option-btn" data-value="rosin">Rosin</button>
+                            <button class="option-btn" data-value="budder">Budder</button>
+                            <button class="option-btn" data-value="crumble">Crumble</button>
                         </div>
                     </div>
                     
                     <div class="setting-group">
-                        <h3>Heating Element</h3>
-                        <div class="option-buttons">
-                            <button class="option-btn active" data-value="torch">Torch</button>
-                            <button class="option-btn" data-value="enail">E-Nail</button>
-                            <button class="option-btn" data-value="ebanger">E-Banger</button>
-                        </div>
-                    </div>
-                    
-                    <div class="setting-group">
-                        <h3>Timer Display</h3>
-                        <div class="option-buttons">
-                            <button class="option-btn active" data-value="digital">Digital</button>
-                            <button class="option-btn" data-value="analog">Analog</button>
-                        </div>
-                    </div>
-                    
-                    <div class="setting-group">
-                        <h3>Timer Presets</h3>
-                        <div class="preset-buttons">
-                            <button class="preset-btn" data-preset="low">Low Temp</button>
-                            <button class="preset-btn" data-preset="medium">Medium Temp</button>
-                            <button class="preset-btn" data-preset="high">High Temp</button>
+                        <h3>Custom Times (Seconds)</h3>
+                        <div class="custom-time-inputs">
+                            <div class="input-group">
+                                <label for="custom-heat">Heat Time:</label>
+                                <input type="number" id="custom-heat" min="10" max="180" value="30">
+                            </div>
+                            <div class="input-group">
+                                <label for="custom-cool">Cool Time:</label>
+                                <input type="number" id="custom-cool" min="10" max="180" value="45">
+                            </div>
+                            <button id="apply-custom-times" class="btn-secondary">Apply Custom Times</button>
                         </div>
                     </div>
                 </div>
@@ -179,6 +294,25 @@
         </main>
 
         <!-- Tab Navigation -->
+        <nav class="tab-bar">
+            <button class="tab-btn active" data-tab="timer-screen">
+                <i class="fas fa-clock"></i>
+                <span>Timer</span>
+            </button>
+            <button class="tab-btn" data-tab="science-screen">
+                <i class="fas fa-flask"></i>
+                <span>Science</span>
+            </button>
+            <button class="tab-btn" data-tab="calendar-screen">
+                <i class="fas fa-calendar"></i>
+                <span>Calendar</span>
+            </button>
+            <button class="tab-btn" data-tab="setup-screen">
+                <i class="fas fa-cog"></i>
+                <span>Setup</span>
+            </button>
+        </nav>
+    </div>
         <nav class="tab-bar">
             <button class="tab-btn active" data-tab="timer-screen">
                 <i class="fas fa-clock"></i>

@@ -422,3 +422,221 @@ function saveUsageData() {
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', initApp);
+// Enhanced calculateTimes function with rig type and thickness support
+function calculateTimes() {
+    if (state.settings.useCustomTimes) {
+        return {
+            heatUpTime: state.settings.customHeat,
+            coolDownTime: state.settings.customCool
+        };
+    }
+    
+    const material = state.settings.material;
+    const thickness = state.settings.thickness;
+    const heater = state.settings.heater;
+    const concentrate = state.settings.concentrate;
+    const rigType = state.settings.rigType;
+    
+    let baseHeatTime = 0;
+    let baseCoolTime = 0;
+    
+    // Get base times based on material and thickness
+    if (material === 'quartz' || material === 'borosilicate') {
+        const materialConfig = CONFIG.materials[material].thickness[thickness];
+        baseHeatTime = materialConfig.baseHeat;
+        baseCoolTime = materialConfig.baseCool;
+    } else {
+        baseHeatTime = CONFIG.materials[material].baseHeat;
+        baseCoolTime = CONFIG.materials[material].baseCool;
+    }
+    
+    // Apply heater modifier
+    const heaterModifier = CONFIG.heatingElements[heater].modifier;
+    baseHeatTime = Math.round(baseHeatTime * heaterModifier);
+    
+    // Apply concentrate modifier
+    const concentrateModifier = CONFIG.concentrates[concentrate].heatModifier;
+    baseHeatTime = Math.round(baseHeatTime * concentrateModifier);
+    baseCoolTime = Math.round(baseCoolTime * concentrateModifier);
+    
+    // Apply rig type modifier
+    const rigHeatModifier = CONFIG.rigTypes[rigType].heatModifier;
+    const rigCoolModifier = CONFIG.rigTypes[rigType].coolModifier;
+    baseHeatTime = Math.round(baseHeatTime * rigHeatModifier);
+    baseCoolTime = Math.round(baseCoolTime * rigCoolModifier);
+    
+    return { 
+        heatUpTime: Math.max(10, baseHeatTime), // Minimum 10 seconds
+        coolDownTime: Math.max(15, baseCoolTime) // Minimum 15 seconds
+    };
+}
+
+// Add event listener for concentrate selector
+document.getElementById('concentrate-select').addEventListener('change', function(e) {
+    const selectedConcentrate = e.target.value;
+    
+    // Hide all concentrate info
+    document.querySelectorAll('.concentrate-info').forEach(info => {
+        info.classList.remove('active');
+    });
+    
+    // Show selected concentrate info
+    document.getElementById(`${selectedConcentrate}-info`).classList.add('active');
+    
+    // Update settings if needed
+    state.settings.concentrate = selectedConcentrate;
+    updateSettingsDisplay();
+    saveSettings();
+});
+
+// Add rig type selection functionality
+function setupRigTypeButtons() {
+    const rigTypeButtons = document.querySelectorAll('.rig-type-btn');
+    rigTypeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const rigType = button.dataset.value;
+            
+            // Update active state
+            rigTypeButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Update settings
+            state.settings.rigType = rigType;
+            updateSettingsDisplay();
+            saveSettings();
+        });
+    });
+}
+
+// Update settings display to include rig type
+function updateSettingsDisplay() {
+    elements.currentMaterial.textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1);
+    elements.currentConcentrate.textContent = state.settings.concentrate.charAt(0).toUpperCase() + state.settings.concentrate.slice(1);
+    elements.currentHeater.textContent = state.settings.heater.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    
+    // Show thickness if applicable
+    if (state.settings.material === 'quartz' || state.settings.material === 'borosilicate') {
+        document.getElementById('thickness-group').style.display = 'block';
+        document.getElementById('current-thickness').textContent = state.settings.thickness;
+    } else {
+        document.getElementById('thickness-group').style.display = 'none';
+    }
+    
+    // Update science tab based on concentrate
+    document.querySelectorAll('.concentrate-info').forEach(info => {
+        info.classList.remove('active');
+    });
+    document.getElementById(`${state.settings.concentrate}-info`).classList.add('active');
+    
+    // Set selected concentrate in dropdown
+    document.getElementById('concentrate-select').value = state.settings.concentrate;
+}
+// Enhanced calculateTimes function with rig type and thickness support
+function calculateTimes() {
+    if (state.settings.useCustomTimes) {
+        return {
+            heatUpTime: state.settings.customHeat,
+            coolDownTime: state.settings.customCool
+        };
+    }
+    
+    const material = state.settings.material;
+    const thickness = state.settings.thickness;
+    const heater = state.settings.heater;
+    const concentrate = state.settings.concentrate;
+    const rigType = state.settings.rigType;
+    
+    let baseHeatTime = 0;
+    let baseCoolTime = 0;
+    
+    // Get base times based on material and thickness
+    if (material === 'quartz' || material === 'borosilicate') {
+        const materialConfig = CONFIG.materials[material].thickness[thickness];
+        baseHeatTime = materialConfig.baseHeat;
+        baseCoolTime = materialConfig.baseCool;
+    } else {
+        baseHeatTime = CONFIG.materials[material].baseHeat;
+        baseCoolTime = CONFIG.materials[material].baseCool;
+    }
+    
+    // Apply heater modifier
+    const heaterModifier = CONFIG.heatingElements[heater].modifier;
+    baseHeatTime = Math.round(baseHeatTime * heaterModifier);
+    
+    // Apply concentrate modifier
+    const concentrateModifier = CONFIG.concentrates[concentrate].heatModifier;
+    baseHeatTime = Math.round(baseHeatTime * concentrateModifier);
+    baseCoolTime = Math.round(baseCoolTime * concentrateModifier);
+    
+    // Apply rig type modifier
+    const rigHeatModifier = CONFIG.rigTypes[rigType].heatModifier;
+    const rigCoolModifier = CONFIG.rigTypes[rigType].coolModifier;
+    baseHeatTime = Math.round(baseHeatTime * rigHeatModifier);
+    baseCoolTime = Math.round(baseCoolTime * rigCoolModifier);
+    
+    return { 
+        heatUpTime: Math.max(10, baseHeatTime), // Minimum 10 seconds
+        coolDownTime: Math.max(15, baseCoolTime) // Minimum 15 seconds
+    };
+}
+
+// Add event listener for concentrate selector
+document.getElementById('concentrate-select').addEventListener('change', function(e) {
+    const selectedConcentrate = e.target.value;
+    
+    // Hide all concentrate info
+    document.querySelectorAll('.concentrate-info').forEach(info => {
+        info.classList.remove('active');
+    });
+    
+    // Show selected concentrate info
+    document.getElementById(`${selectedConcentrate}-info`).classList.add('active');
+    
+    // Update settings if needed
+    state.settings.concentrate = selectedConcentrate;
+    updateSettingsDisplay();
+    saveSettings();
+});
+
+// Add rig type selection functionality
+function setupRigTypeButtons() {
+    const rigTypeButtons = document.querySelectorAll('.rig-type-btn');
+    rigTypeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const rigType = button.dataset.value;
+            
+            // Update active state
+            rigTypeButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Update settings
+            state.settings.rigType = rigType;
+            updateSettingsDisplay();
+            saveSettings();
+        });
+    });
+}
+
+// Update settings display to include rig type
+function updateSettingsDisplay() {
+    elements.currentMaterial.textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1);
+    elements.currentConcentrate.textContent = state.settings.concentrate.charAt(0).toUpperCase() + state.settings.concentrate.slice(1);
+    elements.currentHeater.textContent = state.settings.heater.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    
+    // Show thickness if applicable
+    if (state.settings.material === 'quartz' || state.settings.material === 'borosilicate') {
+        document.getElementById('thickness-group').style.display = 'block';
+        document.getElementById('current-thickness').textContent = state.settings.thickness;
+    } else {
+        document.getElementById('thickness-group').style.display = 'none';
+    }
+    
+    // Update science tab based on concentrate
+    document.querySelectorAll('.concentrate-info').forEach(info => {
+        info.classList.remove('active');
+    });
+    document.getElementById(`${state.settings.concentrate}-info`).classList.add('active');
+    
+    // Set selected concentrate in dropdown
+    document.getElementById('concentrate-select').value = state.settings.concentrate;
+}
