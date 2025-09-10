@@ -40,7 +40,7 @@ jobs:
         cordova build android
 
     - name: Upload APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: dab-timer-apk
         path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
