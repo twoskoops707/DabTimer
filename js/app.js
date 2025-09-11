@@ -465,11 +465,6 @@ function calculateFavoriteConcentrate() {
     return favorite;
 }
 
-function updateCharts() {
-    // Placeholder for chart updates
-    // Would use Chart.js or similar library here
-    console.log("Charts would be updated here");
-}
 
 function updateHistory() {
     const historyList = document.getElementById('history-list');
@@ -562,4 +557,12 @@ function initializeApp() {
     loadUsageData();
     
     console.log("Full app initialized");
+}
+
+// Import chart functions
+function updateCharts() {
+    // This will be handled by charts.js
+    if (typeof updateCharts === "function") {
+        window.updateCharts();
+    }
 }
