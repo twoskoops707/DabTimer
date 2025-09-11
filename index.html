@@ -13,6 +13,13 @@
     <div id="splash-screen" class="screen active">
         <div class="splash-content">
             <div class="logo">
+            <div class="dab-rig-graphic">
+                <div class="rig-base"></div>
+                <div class="rig-neck"></div>
+                <div class="rig-can"></div>
+                <div class="rig-mouthpiece"></div>
+                <div class="rig-dab"></div>
+            </div>
                 <i class="fas fa-cannabis"></i>
                 <h1>DAB TIMER</h1>
                 <p>PREMIUM EDITION</p>
@@ -59,16 +66,26 @@
                         <h3>Current Settings</h3>
                         <div class="settings-display">
                             <p>Material: <span id="current-material">Quartz</span></p>
-                        <p>Thickness: <span id="current-thickness">2mm</span></p>
-                        <p>Thickness: <span id="current-thickness">2mm</span></p>
                             <p>Concentrate: <span id="current-concentrate">Shatter</span></p>
                             <p>Heater: <span id="current-heater">Torch</span></p>
                         </div>
                     </div>
+                    <div class="custom-time-section">
+                        <h3>Custom Times</h3>
+                        <div class="custom-time-inputs">
+                            <div class="input-group">
+                                <label for="custom-heat">Heat Time (s):</label>
+                                <input type="number" id="custom-heat" min="10" max="180" value="30">
+                            </div>
+                            <div class="input-group">
+                                <label for="custom-cool">Cool Time (s):</label>
+                                <input type="number" id="custom-cool" min="10" max="180" value="45">
+                            </div>
+                            <button id="apply-custom-times" class="btn-secondary">Apply Custom Times</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <!-- Science Screen -->
             <div id="science-screen" class="tab-content">
                 <div class="science-container">
                     <h2>Concentrate Science</h2>
@@ -219,7 +236,6 @@
                             <button class="option-btn active" data-value="quartz">Quartz</button>
                             <button class="option-btn" data-value="titanium">Titanium</button>
                             <button class="option-btn" data-value="ceramic">Ceramic</button>
-                            <button class="option-btn" data-value="borosilicate">Borosilicate</button>
                         </div>
                     </div>
                     
@@ -247,10 +263,6 @@
                                 <i class="fas fa-recycle"></i>
                                 <span>Recycler</span>
                             </button>
-                            <button class="rig-type-btn" data-value="e_rig">
-                                <i class="fas fa-bolt"></i>
-                                <span>E-Rig</span>
-                            </button>
                         </div>
                     </div>
                     
@@ -271,22 +283,6 @@
                             <button class="option-btn" data-value="resin">Live Resin</button>
                             <button class="option-btn" data-value="rosin">Rosin</button>
                             <button class="option-btn" data-value="budder">Budder</button>
-                            <button class="option-btn" data-value="crumble">Crumble</button>
-                        </div>
-                    </div>
-                    
-                    <div class="setting-group">
-                        <h3>Custom Times (Seconds)</h3>
-                        <div class="custom-time-inputs">
-                            <div class="input-group">
-                                <label for="custom-heat">Heat Time:</label>
-                                <input type="number" id="custom-heat" min="10" max="180" value="30">
-                            </div>
-                            <div class="input-group">
-                                <label for="custom-cool">Cool Time:</label>
-                                <input type="number" id="custom-cool" min="10" max="180" value="45">
-                            </div>
-                            <button id="apply-custom-times" class="btn-secondary">Apply Custom Times</button>
                         </div>
                     </div>
                 </div>
@@ -294,6 +290,25 @@
         </main>
 
         <!-- Tab Navigation -->
+        <nav class="tab-bar">
+            <button class="tab-btn active" data-tab="timer-screen">
+                <i class="fas fa-clock"></i>
+                <span>Timer</span>
+            </button>
+            <button class="tab-btn" data-tab="science-screen">
+                <i class="fas fa-flask"></i>
+                <span>Science</span>
+            </button>
+            <button class="tab-btn" data-tab="calendar-screen">
+                <i class="fas fa-calendar"></i>
+                <span>Calendar</span>
+            </button>
+            <button class="tab-btn" data-tab="setup-screen">
+                <i class="fas fa-cog"></i>
+                <span>Setup</span>
+            </button>
+        </nav>
+    </div>
         <nav class="tab-bar">
             <button class="tab-btn active" data-tab="timer-screen">
                 <i class="fas fa-clock"></i>

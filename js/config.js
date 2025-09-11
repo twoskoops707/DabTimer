@@ -20,15 +20,6 @@ const CONFIG = {
             specificHeat: 0.85,
             baseHeat: 45,
             baseCool: 65
-        },
-        borosilicate: {
-            thermalConductivity: 1.2,
-            specificHeat: 0.85,
-            thickness: {
-                "1mm": { baseHeat: 18, baseCool: 30 },
-                "2mm": { baseHeat: 30, baseCool: 45 },
-                "3mm": { baseHeat: 40, baseCool: 55 }
-            }
         }
     },
     heatingElements: {
@@ -52,43 +43,42 @@ const CONFIG = {
         shatter: { 
             idealTemp: '315-400°F',
             heatModifier: 1.0,
-            description: 'A translucent, glass-like extract that fractures easily. High THC content with preserved terpene profile.'
+            description: 'A translucent, glass-like extract that fractures easily. High THC content with preserved terpene profile.',
+            thc: '70-90%',
+            terpenes: 'Pinene, Myrcene, Limonene'
         },
         wax: { 
             idealTemp: '350-450°F',
             heatModifier: 1.1,
-            description: 'Opaque, butter-like consistency. Rich in terpenes with balanced flavor and potency.'
+            description: 'Opaque, butter-like consistency. Rich in terpenes with balanced flavor and potency.',
+            thc: '60-80%',
+            terpenes: 'Caryophyllene, Linalool, Humulene'
         },
         resin: { 
             idealTemp: '400-500°F',
             heatModifier: 1.2,
-            description: 'Full-spectrum extract from fresh frozen material. Exceptional terpene preservation and flavor complexity.'
+            description: 'Full-spectrum extract from fresh frozen material. Exceptional terpene preservation and flavor complexity.',
+            thc: '65-85%',
+            terpenes: 'Terpinolene, Ocimene, Terpineol'
         },
         rosin: { 
             idealTemp: '380-450°F',
             heatModifier: 0.9,
-            description: 'Solventless extract using heat and pressure. Purest form with complete cannabinoid profile.'
+            description: 'Solventless extract using heat and pressure. Purest form with complete cannabinoid profile.',
+            thc: '60-80%',
+            terpenes: 'Myrcene, Pinene, Caryophyllene'
         },
         budder: { 
             idealTemp: '375-425°F',
             heatModifier: 1.0,
-            description: 'Whipped consistency with creamy texture. High terpene content and smooth vaporization.'
-        },
-        crumble: {
-            idealTemp: '390-440°F',
-            heatModifier: 1.05,
-            description: 'Dry, crumbly texture with high potency. Stable at room temperature with good flavor retention.'
-        },
-        live_resin: {
-            idealTemp: '400-480°F',
-            heatModifier: 1.15,
-            description: 'Extracted from flash-frozen plants. Maximum terpene preservation and complex flavor profile.'
+            description: 'Whipped consistency with creamy texture. High terpene content and smooth vaporization.',
+            thc: '70-85%',
+            terpenes: 'Limonene, Pinene, Myrcene'
         }
     },
     rigTypes: {
         mini_rig: { heatModifier: 0.8, coolModifier: 0.9 },
         standard_rig: { heatModifier: 1.0, coolModifier: 1.0 },
-        recycler: { heatModifier: 1.1, coolModifier: 1.2 },
-        e_rig: { heatModifier: 0.7, coolModifier: 0.8 }
+        recycler: { heatModifier: 1.1, coolModifier: 1.2 }
     }
 };

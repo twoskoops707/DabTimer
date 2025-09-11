@@ -4,10 +4,11 @@
     --primary-light: #C8E6C9;
     --secondary-color: #795548;
     --accent-color: #FF9800;
-    --text-primary: #212121;
-    --text-secondary: #757575;
-    --background: #F5F5F5;
-    --card-background: #FFFFFF;
+    --text-primary: #FFFFFF;
+    --text-secondary: #CCCCCC;
+    --background: #121212;
+    --card-background: #1E1E1E;
+    --input-background: #2D2D2D;
     --error-color: #F44336;
 }
 
@@ -94,7 +95,7 @@ body {
 }
 
 header {
-    background-color: var(--primary-color);
+    background-color: var(--card-background);
     color: white;
     padding: 15px 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -167,7 +168,7 @@ main {
 .progress-container {
     width: 100%;
     height: 10px;
-    background-color: var(--primary-light);
+    background-color: #333;
     border-radius: 5px;
     overflow: hidden;
 }
@@ -200,12 +201,13 @@ main {
 
 .current-settings {
     text-align: left;
+    margin-bottom: 20px;
 }
 
 .current-settings h3 {
     margin-bottom: 15px;
     color: var(--text-secondary);
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #333;
     padding-bottom: 10px;
 }
 
@@ -217,7 +219,67 @@ main {
 
 .settings-display span {
     font-weight: 600;
-    color: var(--primary-dark);
+    color: var(--primary-color);
+}
+
+.custom-time-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+}
+
+.custom-time-section h3 {
+    margin-bottom: 15px;
+    color: var(--text-secondary);
+}
+
+.custom-time-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.input-group input {
+    padding: 12px;
+    background-color: var(--input-background);
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+#apply-custom-times {
+    grid-column: span 2;
+    margin-top: 15px;
+    padding: 12px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+#apply-custom-times:hover {
+    background-color: var(--primary-dark);
 }
 
 /* Science Screen */
@@ -230,8 +292,22 @@ main {
 
 .science-container h2 {
     margin-bottom: 20px;
-    color: var(--primary-dark);
+    color: var(--primary-color);
     text-align: center;
+}
+
+.concentrate-selector {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#concentrate-select {
+    padding: 10px 15px;
+    background-color: var(--input-background);
+    border: 1px solid #444;
+    border-radius: 20px;
+    color: var(--text-primary);
+    font-size: 1rem;
 }
 
 .concentrate-info {
@@ -250,7 +326,7 @@ main {
 }
 
 .concentrate-header h3 {
-    color: var(--primary-dark);
+    color: var(--primary-color);
 }
 
 .concentrate-header img {
@@ -260,8 +336,13 @@ main {
     object-fit: cover;
 }
 
+.concentrate-description {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
 .temp-info {
-    background-color: var(--primary-light);
+    background-color: #2a2a2a;
     padding: 15px;
     border-radius: 10px;
     margin: 15px 0;
@@ -269,34 +350,46 @@ main {
 
 .temp-info h4 {
     margin-bottom: 5px;
-    color: var(--primary-dark);
+    color: var(--primary-color);
 }
 
-.data-points {
+.temp-range {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.science-note {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-top: 5px;
+}
+
+.concentrate-properties {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
     margin-top: 20px;
 }
 
-.data-point {
-    background-color: #f9f9f9;
+.property {
+    background-color: #2a2a2a;
     padding: 15px;
     border-radius: 10px;
-    text-align: center;
 }
 
-.data-label {
+.property-label {
     display: block;
     color: var(--text-secondary);
     font-size: 0.9rem;
     margin-bottom: 5px;
 }
 
-.data-value {
+.property-value {
     display: block;
     font-weight: 600;
-    color: var(--primary-dark);
+    color: var(--primary-color);
 }
 
 /* Calendar Screen */
@@ -309,58 +402,94 @@ main {
 
 .calendar-container h2 {
     margin-bottom: 20px;
-    color: var(--primary-dark);
+    color: var(--primary-color);
     text-align: center;
 }
 
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.calendar-controls {
     margin-bottom: 20px;
 }
 
-.calendar-header button {
+.time-range-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.time-range-btn {
+    padding: 8px 15px;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 20px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.time-range-btn.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.date-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.date-navigation button {
     background: none;
     border: none;
-    font-size: 1.2rem;
     color: var(--primary-color);
+    font-size: 1.2rem;
     cursor: pointer;
 }
 
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
+.custom-date-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.custom-date-selector input {
+    padding: 8px;
+    background-color: var(--input-background);
+    border: 1px solid #444;
+    border-radius: 5px;
+    color: var(--text-primary);
+}
+
+.usage-chart {
+    height: 200px;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+}
+
+.usage-stats {
     margin-bottom: 30px;
-}
-
-.calendar-day {
-    text-align: center;
-    padding: 10px 0;
-    border-radius: 50%;
-}
-
-.calendar-day.active {
-    background-color: var(--primary-color);
-    color: white;
 }
 
 .usage-stats h3 {
     margin-bottom: 15px;
     color: var(--text-secondary);
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #333;
     padding-bottom: 10px;
 }
 
 .stats-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 15px;
 }
 
 .stat {
-    background-color: #f9f9f9;
+    background-color: #2a2a2a;
     padding: 15px;
     border-radius: 10px;
     text-align: center;
@@ -370,7 +499,7 @@ main {
     display: block;
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--primary-dark);
+    color: var(--primary-color);
     margin-bottom: 5px;
 }
 
@@ -378,6 +507,32 @@ main {
     display: block;
     color: var(--text-secondary);
     font-size: 0.9rem;
+}
+
+.usage-history h3 {
+    margin-bottom: 15px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+.history-list {
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+}
+
+.history-item:last-child {
+    border-bottom: none;
 }
 
 /* Setup Screen */
@@ -390,7 +545,7 @@ main {
 
 .setup-container h2 {
     margin-bottom: 20px;
-    color: var(--primary-dark);
+    color: var(--primary-color);
     text-align: center;
 }
 
@@ -411,9 +566,10 @@ main {
 
 .option-btn {
     padding: 10px 15px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
     border-radius: 20px;
+    color: var(--text-primary);
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -424,31 +580,40 @@ main {
     border-color: var(--primary-color);
 }
 
-.preset-buttons {
-    display: flex;
-    flex-direction: column;
+.rig-type-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
 
-.preset-btn {
+.rig-type-btn {
     padding: 15px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
     border-radius: 10px;
+    color: var(--text-primary);
     cursor: pointer;
-    text-align: left;
+    text-align: center;
     transition: all 0.3s ease;
 }
 
-.preset-btn:hover {
-    background-color: var(--primary-light);
+.rig-type-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.rig-type-btn i {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    display: block;
 }
 
 /* Tab Bar */
 .tab-bar {
     display: flex;
     justify-content: space-around;
-    background-color: white;
+    background-color: var(--card-background);
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     padding: 10px 0;
 }
@@ -474,6 +639,20 @@ main {
     margin-bottom: 5px;
 }
 
+/* Notification */
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .logo h1 {
@@ -493,283 +672,94 @@ main {
         margin-top: 15px;
     }
     
-    .data-points {
+    .concentrate-properties {
         grid-template-columns: 1fr;
     }
     
     .stats-grid {
         grid-template-columns: 1fr;
     }
+    
+    .rig-type-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .custom-time-inputs {
+        grid-template-columns: 1fr;
+    }
+    
+    #apply-custom-times {
+        grid-column: span 1;
+    }
 }
-/* Science screen enhancements */
-.concentrate-selector {
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-#concentrate-select {
-    padding: 10px 15px;
-    border: 2px solid var(--primary-color);
-    border-radius: 20px;
-    background-color: white;
-    font-size: 1rem;
-    color: var(--text-primary);
-}
-
-.science-note {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    font-style: italic;
-    margin-top: 5px;
+.dab-rig-graphic {
+    position: relative;
+    width: 150px;
+    height: 200px;
+    margin: 0 auto 20px;
 }
 
-.material-science-table {
-    margin-top: 30px;
-    overflow-x: auto;
+.rig-base {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 20px;
+    background-color: #795548;
+    border-radius: 5px;
 }
 
-.material-science-table table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
+.rig-neck {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 80px;
+    background-color: #795548;
 }
 
-.material-science-table th,
-.material-science-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
+.rig-can {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: #9E9E9E;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
-.material-science-table th {
-    background-color: var(--primary-light);
-    color: var(--primary-dark);
-    font-weight: 600;
+.rig-mouthpiece {
+    position: absolute;
+    bottom: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 40px;
+    background-color: #795548;
+    border-radius: 10px 10px 0 0;
 }
 
-.material-science-table tr:hover {
-    background-color: #f9f9f9;
+.rig-dab {
+    position: absolute;
+    bottom: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15px;
+    height: 15px;
+    background-color: #FF9800;
+    border-radius: 50%;
+    animation: glow 2s infinite alternate;
 }
 
-.table-note {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-top: 10px;
-    text-align: center;
-}
-
-/* Rig type selection */
-.rig-type-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.rig-type-btn {
-    padding: 15px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.rig-type-btn.active {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-}
-
-.rig-type-btn i {
-    font-size: 1.5rem;
-    margin-bottom: 5px;
-    display: block;
-}
-
-/* Custom time inputs enhancement */
-.custom-time-inputs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.input-group label {
-    margin-bottom: 5px;
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-
-.input-group input {
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.input-group input:focus {
-    border-color: var(--primary-color);
-    outline: none;
-}
-
-#apply-custom-times {
-    grid-column: span 2;
-    margin-top: 15px;
-    padding: 12px;
-    background-color: var(--secondary-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-}
-
-#apply-custom-times:hover {
-    background-color: var(--primary-dark);
-}
-/* Science screen enhancements */
-.concentrate-selector {
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-#concentrate-select {
-    padding: 10px 15px;
-    border: 2px solid var(--primary-color);
-    border-radius: 20px;
-    background-color: white;
-    font-size: 1rem;
-    color: var(--text-primary);
-}
-
-.science-note {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    font-style: italic;
-    margin-top: 5px;
-}
-
-.material-science-table {
-    margin-top: 30px;
-    overflow-x: auto;
-}
-
-.material-science-table table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.material-science-table th,
-.material-science-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-}
-
-.material-science-table th {
-    background-color: var(--primary-light);
-    color: var(--primary-dark);
-    font-weight: 600;
-}
-
-.material-science-table tr:hover {
-    background-color: #f9f9f9;
-}
-
-.table-note {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-top: 10px;
-    text-align: center;
-}
-
-/* Rig type selection */
-.rig-type-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.rig-type-btn {
-    padding: 15px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.rig-type-btn.active {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-}
-
-.rig-type-btn i {
-    font-size: 1.5rem;
-    margin-bottom: 5px;
-    display: block;
-}
-
-/* Custom time inputs enhancement */
-.custom-time-inputs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.input-group label {
-    margin-bottom: 5px;
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-
-.input-group input {
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.input-group input:focus {
-    border-color: var(--primary-color);
-    outline: none;
-}
-
-#apply-custom-times {
-    grid-column: span 2;
-    margin-top: 15px;
-    padding: 12px;
-    background-color: var(--secondary-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-}
-
-#apply-custom-times:hover {
-    background-color: var(--primary-dark);
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px #FF9800;
+    }
+    to {
+        box-shadow: 0 0 20px #FF9800;
+    }
 }
