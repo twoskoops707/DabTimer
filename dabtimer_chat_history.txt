@@ -1,0 +1,460 @@
+    1  console.log("Dab Timer app loading...");
+    2  // Wait for full DOM load
+    3  document.addEventListener('DOMContentLoaded', function() {
+    4      console.log("DOM fully loaded, initializing app...");
+    5      
+    6      // Get essential elements
+    7      const splashScreen = document.getElementById('splash-screen');
+    8      const appScreen = document.getElementById('app');
+    9      const getStartedBtn = document.getElementById('get-started');
+   10      
+   11      // Check if elements exist
+   12      if (!splashScreen || !appScreen || !getStartedBtn) {
+   13          console.error("Critical elements not found!");
+   14          return;
+   15      }
+   16      
+   17      console.log("Essential elements found, setting up event listeners...");
+   18      
+   19      // Simple get started button functionality
+   20      getStartedBtn.addEventListener('click', function() {
+   21          console.log("Get Started button clicked");
+   22          splashScreen.classList.remove('active');
+   23          appScreen.classList.add('active');
+   24          
+   25          // Initialize the rest of the app after transition
+   26          setTimeout(initializeFullApp, 100);
+   27      });
+   28      
+   29      // Initialize clock
+   30      updateClock();
+   31      setInterval(updateClock, 1000);
+   32  });
+   33  // Simple clock function
+   34  function updateClock() {
+   35      const clockElement = document.getElementById('current-time');
+   36      if (clockElement) {
+   37          const now = new Date();
+   38          clockElement.textContent = now.toLocaleTimeString([], { 
+   39              hour: '2-digit', 
+   40              minute: '2-digit' 
+   41          });
+   42      }
+   43  }
+   44  // Initialize the full app after the start screen
+   45  function initializeFullApp() {
+   46      console.log("Initializing full application...");
+   47      
+   48      // This will load the rest of the functionality
+   49      // For now, just ensure basic navigation works
+   50      
+   51      // Set up tab navigation
+   52      const tabButtons = document.querySelectorAll('.tab-btn');
+   53      const tabContents = document.querySelectorAll('.tab-content');
+   54      
+   55      if (tabButtons.length > 0 && tabContents.length > 0) {
+   56          tabButtons.forEach(button => {
+   57              button.addEventListener('click', function() {
+   58                  const tabId = this.dataset.tab;
+   59                  console.log("Switching to tab:", tabId);
+   60                  
+   61                  // Update active tab button
+   62                  tabButtons.forEach(btn => btn.classList.remove('active'));
+   63                  this.classList.add('active');
+   64                  
+   65                  // Update active tab content
+   66                  tabContents.forEach(content => {
+   67                      content.classList.remove('active');
+   68                      if (content.id === tabId) {
+   69                          content.classList.add('active');
+   70                      }
+   71                  });
+   72              });
+   73          });
+   74      }
+   75      
+   76      console.log("Basic navigation setup complete");
+   77  }
+   78  // Basic state object
+   79  const state = {
+   80      currentTab: 'home-screen',
+   81      settings: {
+   82          material: 'quartz',
+   83          concentrate: 'shatter',
+   84          heater: 'torch'
+   85      }
+   86  };
+   87  console.log("App initialization functions defined");
+   88  EOF
+   89  # Test the syntax
+   90  node -c js/app.js && echo "✓ Minimal JavaScript syntax is valid"
+   91  # Create a simple test to verify it works
+   92  cat > test-minimal.html << 'EOF'
+   93  <!DOCTYPE html>
+   94  <html>
+   95  <head>
+   96      <title>Test Minimal</title>
+   97      <style>
+   98          .screen { display: none; }
+   99          .screen.active { display: block; }
+  100          #splash-screen.active { display: flex; }
+  101      </style>
+  102  </head>
+  103  <body>
+  104      <div id="splash-screen" class="screen active">
+  105          <button id="get-started">Get Started</button>
+  106      </div>
+  107      <div id="app" class="screen">
+  108          <div class="tab-content" id="home-screen">Home Content</div>
+  109          <div class="tab-content" id="timer-screen">Timer Content</div>
+  110      </div>
+  111      <script src="js/app.js"></script>
+  112  </body>
+  113  </html>
+  114  EOF
+  115  echo "Test file created. Open test-minimal.html to check if the basic functionality works."
+  116  # Check if the essential elements exist in your main index.html
+  117  grep -n "splash-screen\|app\|get-started" index.html
+  118  e,it
+  119  exit
+  120  # Replace the entire home screen section with a simple, clean version
+  121  cat > clean-home-screen.html << 'EOF'
+  122              <!-- Home Screen -->
+  123              <div id="home-screen" class="tab-content active">
+  124                  <div class="home-container">
+  125                      <div class="home-header">
+  126                          <i class="fas fa-cannabis"></i>
+  127                          <h1>DAB TIMER</h1>
+  128                          <p>Configure your session settings</p>
+  129                      </div>
+  130                      <div class="settings-grid">
+  131                          <div class="setting-card">
+  132                              <h3>Material</h3>
+  133                              <div class="options">
+  134                                  <button class="option-btn active" data-setting="material" data-value="quartz">Quartz</button>
+  135                                  <button class="option-btn" data-setting="material" data-value="titanium">Titanium</button>
+  136                                  <button class="option-btn" data-setting="material" data-value="ceramic">Ceramic</button>
+  137                              </div>
+  138                          </div>
+  139                          <div class="setting-card">
+  140                              <h3>Concentrate</h3>
+  141                              <div class="options">
+  142                                  <button class="option-btn active" data-setting="concentrate" data-value="shatter">Shatter</button>
+  143                                  <button class="option-btn" data-setting="concentrate" data-value="wax">Wax</button>
+  144                                  <button class="option-btn" data-setting="concentrate" data-value="resin">Resin</button>
+  145                              </div>
+  146                          </div>
+  147                          <div class="setting-card">
+  148                              <h3>Heating</h3>
+  149                              <div class="options">
+  150                                  <button class="option-btn active" data-setting="heater" data-value="torch">Torch</button>
+  151                                  <button class="option-btn" data-setting="heater" data-value="lighter">Lighter</button>
+  152                              </div>
+  153                          </div>
+  154                      </div>
+  155                      <div class="action-buttons">
+  156                          <button id="start-timer-btn" class="btn-primary large">
+  157                              <i class="fas fa-play"></i> Start Timer
+  158                          </button>
+  159                      </div>
+  160                  </div>
+  161              </div>
+  162  EOF
+  163  # Replace the home screen section
+  164  if [ ! -z "$START_LINE" ] && [ ! -z "$END_LINE" ]; then     sed -i "${START_LINE},${END_LINE}d" index.html;     sed -i "${START_LINE}i$(cat clean-home-screen.html)" index.html; fi
+  165  e
+  166  # Create a completely minimal JavaScript file
+  167  cat > js/app.js << 'EOF'
+  168  console.log("Dab Timer - Simple Init");
+  169  // Wait for FULL DOM readiness
+  170  document.addEventListener('DOMContentLoaded', function() {
+  171      console.log("DOM fully loaded and parsed");
+  172      
+  173      // Initialize with delay to ensure everything is ready
+  174      setTimeout(initializeApp, 100);
+  175  });
+  176  function initializeApp() {
+  177      console.log("Initializing app...");
+  178      
+  179      // Check if essential elements exist
+  180      const homeScreen = document.getElementById('home-screen');
+  181      if (!homeScreen) {
+  182          console.error("Home screen not found!");
+  183          return;
+  184      }
+  185      
+  186      console.log("Home screen found, setting up...");
+  187      
+  188      // Set up basic functionality
+  189      setupOptionButtons();
+  190      setupStartButton();
+  191      setupTabNavigation();
+  192      updateClock();
+  193      
+  194      console.log("App initialized successfully");
+  195  }
+  196  function setupOptionButtons() {
+  197      const optionButtons = document.querySelectorAll('.option-btn');
+  198      console.log("Found", optionButtons.length, "option buttons");
+  199      
+  200      optionButtons.forEach(button => {
+  201          button.addEventListener('click', function() {
+  202              // Remove active class from siblings in same group
+  203              const parent = this.parentElement;
+  204              const siblings = parent.querySelectorAll('.option-btn');
+  205              siblings.forEach(btn => btn.classList.remove('active'));
+  206              
+  207              // Add active class to clicked button
+  208              this.classList.add('active');
+  209              
+  210              console.log("Selected:", this.dataset.setting, "=", this.dataset.value);
+  211          });
+  212      });
+  213  }
+  214  function setupStartButton() {
+  215      const startBtn = document.getElementById('start-timer-btn');
+  216      if (startBtn) {
+  217          startBtn.addEventListener('click', function() {
+  218              console.log("Start timer clicked");
+  219              switchToTab('timer-screen');
+  220          });
+  221      } else {
+  222          console.error("Start button not found");
+  223      }
+  224  }
+  225  function setupTabNavigation() {
+  226      const tabButtons = document.querySelectorAll('.tab-btn');
+  227      const tabContents = document.querySelectorAll('.tab-content');
+  228      
+  229      console.log("Setting up", tabButtons.length, "tab buttons");
+  230      
+  231      tabButtons.forEach(button => {
+  232          button.addEventListener('click', function() {
+  233              const tabId = this.dataset.tab;
+  234              console.log("Switching to tab:", tabId);
+  235              
+  236              // Update buttons
+  237              tabButtons.forEach(btn => btn.classList.remove('active'));
+  238              this.classList.add('active');
+  239              
+  240              // Update content
+  241              tabContents.forEach(content => {
+  242                  content.classList.remove('active');
+  243                  if (content.id === tabId) {
+  244                      content.classList.add('active');
+  245                  }
+  246              });
+  247          });
+  248      });
+  249  }
+  250  function switchToTab(tabId) {
+  251      const tabButtons = document.querySelectorAll('.tab-btn');
+  252      const tabContents = document.querySelectorAll('.tab-content');
+  253      
+  254      tabButtons.forEach(button => {
+  255          if (button.dataset.tab === tabId) {
+  256              button.classList.add('active');
+  257          } else {
+  258              button.classList.remove('active');
+  259          }
+  260      });
+  261      
+  262      tabContents.forEach(content => {
+  263          if (content.id === tabId) {
+  264              content.classList.add('active');
+  265          } else {
+  266              content.classList.remove('active');
+  267          }
+  268      });
+  269  }
+  270  function updateClock() {
+  271      const clock = document.getElementById('current-time');
+  272      if (clock) {
+  273          const now = new Date();
+  274          clock.textContent = now.toLocaleTimeString();
+  275          
+  276          // Update every minute instead of every second to reduce load
+  277          setTimeout(updateClock, 60000);
+  278      }
+  279  }
+  280  // Basic error handling
+  281  window.addEventListener('error', function(e) {
+  282      console.error("JavaScript error:", e.error);
+  283  });
+  284  console.log("Script loaded successfully");
+  285  EOF
+  286  # Add minimal CSS for the home screen
+  287  cat >> css/style.css << 'EOF'
+  288  /* Clean Home Screen Styles */
+  289  .home-container {
+  290      padding: 20px;
+  291      max-width: 500px;
+  292      margin: 0 auto;
+  293  }
+  294  .home-header {
+  295      text-align: center;
+  296      margin-bottom: 30px;
+  297      padding: 20px 0;
+  298  }
+  299  .home-header i {
+  300      font-size: 3rem;
+  301      color: var(--primary-color);
+  302      margin-bottom: 15px;
+  303      display: block;
+  304  }
+  305  .home-header h1 {
+  306      color: var(--primary-color);
+  307      margin: 10px 0;
+  308      font-size: 2rem;
+  309  }
+  310  .home-header p {
+  311      color: var(--text-secondary);
+  312      font-size: 1.1rem;
+  313  }
+  314  .settings-grid {
+  315      display: grid;
+  316      grid-template-columns: 1fr;
+  317      gap: 20px;
+  318      margin-bottom: 30px;
+  319  }
+  320  .setting-card {
+  321      background: var(--card-background);
+  322      padding: 20px;
+  323      border-radius: 10px;
+  324      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  325  }
+  326  .setting-card h3 {
+  327      color: var(--text-secondary);
+  328      margin-bottom: 15px;
+  329      font-size: 1.1rem;
+  330      text-align: center;
+  331  }
+  332  .options {
+  333      display: flex;
+  334      justify-content: center;
+  335      gap: 10px;
+  336      flex-wrap: wrap;
+  337  }
+  338  .option-btn {
+  339      padding: 10px 15px;
+  340      background: #2a2a2a;
+  341      border: 1px solid #444;
+  342      border-radius: 20px;
+  343      color: var(--text-primary);
+  344      cursor: pointer;
+  345      transition: all 0.3s ease;
+  346      min-width: 80px;
+  347  }
+  348  .option-btn.active {
+  349      background: var(--primary-color);
+  350      color: white;
+  351      border-color: var(--primary-color);
+  352  }
+  353  .option-btn:hover {
+  354      background: #3a3a3a;
+  355  }
+  356  .action-buttons {
+  357      text-align: center;
+  358  }
+  359  .btn-primary.large {
+  360      padding: 15px 30px;
+  361      font-size: 1.2rem;
+  362  }
+  363  /* Ensure proper tab display */
+  364  .tab-content {
+  365      display: none;
+  366  }
+  367  .tab-content.active {
+  368      display: block;
+  369  }
+  370  /* Main app layout */
+  371  #app {
+  372      display: flex;
+  373      flex-direction: column;
+  374      height: 100vh;
+  375  }
+  376  main {
+  377      flex: 1;
+  378      overflow-y: auto;
+  379  }
+  380  EOF
+  381  node -c js/app.js && echo "✅ JavaScript syntax is valid"
+  382  git add .
+  383  git commit -m "COMPLETE overhaul: Fixed home screen display issues with minimal clean code"
+  384  git push origin main
+  385  # Create a simple test to verify the structure
+  386  cat > verify-structure.html << 'EOF'
+  387  <!DOCTYPE html>
+  388  <html>
+  389  <head>
+  390      <title>Structure Test</title>
+  391      <style>
+  392          body { 
+  393              font-family: Arial, sans-serif;
+  394              margin: 0;
+  395              padding: 20px;
+  396              background: #1a1a1a;
+  397              color: white;
+  398          }
+  399          .home-container {
+  400              background: #2a2a2a;
+  401              padding: 20px;
+  402              border-radius: 10px;
+  403              max-width: 500px;
+  404              margin: 0 auto;
+  405          }
+  406          .option-btn {
+  407              padding: 10px 15px;
+  408              background: #333;
+  409              border: 1px solid #555;
+  410              color: white;
+  411              border-radius: 20px;
+  412              margin: 5px;
+  413          }
+  414      </style>
+  415  </head>
+  416  <body>
+  417      <div class="home-container">
+  418          <div style="text-align:center; margin-bottom:20px;">
+  419              <div style="font-size:2rem;">💨</div>
+  420              <h1>DAB TIMER</h1>
+  421              <p>Structure Test - Should Display</p>
+  422          </div>
+  423          
+  424          <div style="background:#333; padding:15px; border-radius:10px; margin:10px 0;">
+  425              <h3>Material</h3>
+  426              <div>
+  427                  <button class="option-btn">Quartz</button>
+  428                  <button class="option-btn">Titanium</button>
+  429              </div>
+  430          </div>
+  431          
+  432          <button style="padding:15px; background:#4CAF50; color:white; border:none; border-radius:25px; width:100%;">
+  433              Start Timer
+  434          </button>
+  435      </div>
+  436  </body>
+  437  </html>
+  438  EOF
+  439  echo "Test file created. Open verify-structure.html to check if basic structure displays."
+  440  pwd && ls
+  441  pwd verify-structure.html
+  442  nano ~/path
+  443  chmod +x ~/path
+  444  echo 'export PATH=$PATH:~' >> ~/.bashrc
+  445  source ~/.bashrc
+  446  path
+  447  nano ~/path
+  448  exit
+  449  chmod +x ~/path
+  450  echo 'export PATH=$PATH:~' >> ~/.bashrc
+  451  source ~/.bashrc
+  452  path
+  453  nano ~/path
+  454  chmod +x ~/path
+  455  echo 'export PATH=$PATH:~' >> ~/.bashrc
+  456  source ~/.bashrc
+  457  path
+  458  exit
+  459  # Save just the command history
+  460  history > dabtimer_chat_history.txt

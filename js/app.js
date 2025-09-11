@@ -530,34 +530,7 @@ function navigatePeriod(direction) {
 }
 
 // Add calendar setup to initialization
-function initializeApp() {
-    console.log("Initializing full application...");
-    
-    // Initialize elements
-    elements = {
-        currentTime: document.getElementById('current-time'),
-        timerMode: document.getElementById('timer-mode'),
-        timer: document.getElementById('timer'),
-        timerProgress: document.getElementById('timer-progress'),
-        startTimer: document.getElementById('start-timer'),
-        resetTimer: document.getElementById('reset-timer'),
-        currentMaterial: document.getElementById('current-material'),
-        currentConcentrate: document.getElementById('current-concentrate'),
-        currentHeater: document.getElementById('current-heater')
-    };
-    
     // Setup functionality
-    setupOptions();
-    setupStartButton();
-    setupTabs();
-    setupTimerControls();
-    setupCalendar(); // Added calendar setup
-    startClock();
-    
-    // Load saved data
-    loadSettings();
-    loadUsageData();
-    
     console.log("Full app initialized");
 }
 
