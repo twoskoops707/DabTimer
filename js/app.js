@@ -536,3 +536,351 @@ function saveUsageData() {
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', initApp);
+// Show calculation splash screen
+function showCalculationSplash() {
+    const calculationSplash = document.getElementById('calculation-splash');
+    calculationSplash.classList.add('active');
+    
+    // Calculate times
+    const times = calculateTimes();
+    
+    // Hide splash after calculation
+    setTimeout(() => {
+        calculationSplash.classList.remove('active');
+        initializeTimerWithTimes(times);
+    }, 2500);
+}
+
+// Initialize timer with specific times
+function initializeTimerWithTimes(times) {
+    state.timer.mode = 'heat';
+    state.timer.timeLeft = times.heatUpTime;
+    state.timer.totalTime = times.heatUpTime;
+    
+    elements.timerMode.textContent = 'HEAT UP';
+    updateTimerDisplay();
+    
+    // Show formula explanation during cooling period
+    if (state.timer.mode === 'cool') {
+        showFormulaExplanation();
+    }
+    
+    // Record usage
+    recordUsage();
+}
+
+// Show formula explanation
+function showFormulaExplanation() {
+    const formulaExplanation = document.getElementById('formula-explanation');
+    const formulaContent = document.getElementById('formula-content');
+    
+    // Generate formula explanation based on current settings
+    const material = state.settings.material;
+    const concentrate = state.settings.concentrate;
+    
+    let formulaText = '';
+    
+    if (material === 'quartz') {
+        formulaText = `Quartz (SiO₂) has a specific heat capacity of 0.75 J/g°C and thermal conductivity of 1.4 W/mK. `;
+    } else if (material === 'titanium') {
+        formulaText = `Titanium has a specific heat capacity of 0.52 J/g°C and thermal conductivity of 22 W/mK. `;
+    } else if (material === 'ceramic') {
+        formulaText = `Ceramic has a specific heat capacity of 0.85 J/g°C and thermal conductivity of 1.5 W/mK. `;
+    }
+    
+    if (concentrate === 'shatter') {
+        formulaText += `Shatter vaporizes optimally at 315-400°F, requiring precise cooling to preserve terpenes like α-Pinene (311°F) and β-Myrcene (334°F).`;
+    } else if (concentrate === 'wax') {
+        formulaText += `Wax vaporizes optimally at 350-450°F, requiring slightly longer heating to fully extract cannabinoids without burning.`;
+    } else if (concentrate === 'resin') {
+        formulaText += `Live resin vaporizes optimally at 400-500°F, requiring higher temperatures to extract full spectrum of terpenes and cannabinoids.`;
+    } else if (concentrate === 'rosin') {
+        formulaText += `Rosin vaporizes optimally at 380-450°F, requiring careful temperature control to preserve delicate flavor profile.`;
+    } else if (concentrate === 'budder') {
+        formulaText += `Budder vaporizes optimally at 375-425°F, requiring even heating to maintain its creamy consistency.`;
+    }
+    
+    formulaContent.textContent = formulaText;
+    formulaExplanation.classList.add('visible');
+}
+
+// Hide formula explanation
+function hideFormulaExplanation() {
+    const formulaExplanation = document.getElementById('formula-explanation');
+    formulaExplanation.classList.remove('visible');
+}
+
+// Show enjoy message
+function showEnjoyMessage() {
+    const enjoyMessage = document.getElementById('enjoy-message');
+    enjoyMessage.style.display = 'block';
+    
+    setTimeout(() => {
+        enjoyMessage.style.display = 'none';
+    }, 3000);
+}
+
+// Update switch to cool down mode
+function switchToCoolDown() {
+    const times = calculateTimes();
+    
+    state.timer.mode = 'cool';
+    state.timer.timeLeft = times.coolDownTime;
+    state.timer.totalTime = times.coolDownTime;
+    
+    elements.timerMode.textContent = 'COOL DOWN';
+    updateTimerDisplay();
+    
+    // Show formula explanation during cooling period
+    showFormulaExplanation();
+}
+
+// Update complete timer function
+function completeTimer() {
+    state.timer.isRunning = false;
+    clearInterval(state.timer.interval);
+    
+    elements.startTimer.innerHTML = '<i class="fas fa-play"></i> Start Again';
+    
+    // Show enjoy message
+    showEnjoyMessage();
+    
+    // Hide formula explanation
+    hideFormulaExplanation();
+    
+    // Play sound
+    playAlarmSound();
+    
+    // Show notification
+    showNotification('Dab time! Your concentrate is at the perfect temperature.');
+}
+
+// Update event listener for custom time lock
+document.getElementById('lock-custom-times').addEventListener('change', function(e) {
+    state.settings.lockCustomTimes = e.target.checked;
+    saveSettings();
+    
+    if (e.target.checked) {
+        showNotification('Custom times locked. Settings changes will not affect timer.');
+    } else {
+        showNotification('Custom times unlocked. Timer will use calculated times based on settings.');
+    }
+});
+
+// Update calculateTimes function to respect lock
+function calculateTimes() {
+    if (state.settings.useCustomTimes && state.settings.lockCustomTimes) {
+        return {
+            heatUpTime: state.settings.customHeat,
+            coolDownTime: state.settings.customCool
+        };
+    }
+    
+    if (state.settings.useCustomTimes) {
+        return {
+            heatUpTime: state.settings.customHeat,
+            coolDownTime: state.settings.customCool
+        };
+    }
+    
+    // ... rest of the existing calculateTimes logic
+}
+
+// Update initializeTimer to use splash screen
+function initializeTimer() {
+    showCalculationSplash();
+}
+
+// Load lock state on app init
+function loadSettings() {
+    const savedSettings = localStorage.getItem('dabTimer_settings');
+    if (savedSettings) {
+        state.settings = { ...state.settings, ...JSON.parse(savedSettings) };
+        
+        // Set lock checkbox state
+        document.getElementById('lock-custom-times').checked = state.settings.lockCustomTimes || false;
+    }
+}
+// Add event listener for home screen start button
+document.getElementById('start-from-home').addEventListener('click', () => {
+    // Switch to timer tab
+    switchTab('timer-screen');
+    
+    // Start the timer
+    setTimeout(() => {
+        if (!state.timer.isRunning && state.timer.timeLeft === 0) {
+            initializeTimer();
+        }
+    }, 500);
+});
+
+// Update tab switching to include home screen
+function switchTab(tabId) {
+    // Update tab buttons
+    elements.tabButtons.forEach(button => {
+        if (button.dataset.tab === tabId) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    });
+    
+    // Update tab contents
+    elements.tabContents.forEach(content => {
+        if (content.id === tabId) {
+            content.classList.add('active');
+        } else {
+            content.classList.remove('active');
+        }
+    });
+    
+    state.currentTab = tabId;
+}
+// Update calendar display with visual statistics
+function updateCalendarDisplay() {
+    // Calculate statistics
+    const stats = calculateUsageStatistics();
+    
+    // Update total sessions
+    document.getElementById('total-sessions').textContent = stats.totalSessions;
+    
+    // Update sessions per day
+    document.getElementById('sessions-per-day').textContent = stats.sessionsPerDay.toFixed(1);
+    
+    // Update favorite concentrate
+    document.getElementById('fav-concentrate').textContent = stats.favoriteConcentrate;
+    
+    // Update most active day
+    document.getElementById('most-active-day').textContent = stats.mostActiveDay;
+    
+    // Generate bar chart
+    generateBarChart(stats.usageByDay);
+    
+    // Generate pie chart
+    generatePieChart(stats.concentrateDistribution);
+}
+
+// Calculate usage statistics
+function calculateUsageStatistics() {
+    const now = new Date();
+    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    
+    let totalSessions = 0;
+    let sessionsByDay = {};
+    let concentrateCount = {};
+    
+    // Initialize days of week
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    daysOfWeek.forEach(day => {
+        sessionsByDay[day] = 0;
+    });
+    
+    // Count sessions and concentrates
+    for (const date in state.usage) {
+        const usageDate = new Date(date);
+        if (usageDate >= oneWeekAgo) {
+            const dayOfWeek = daysOfWeek[usageDate.getDay()];
+            sessionsByDay[dayOfWeek] += state.usage[date].count;
+            totalSessions += state.usage[date].count;
+            
+            // Count concentrates
+            for (const concentrate in state.usage[date].concentrates) {
+                if (!concentrateCount[concentrate]) {
+                    concentrateCount[concentrate] = 0;
+                }
+                concentrateCount[concentrate] += state.usage[date].concentrates[concentrate];
+            }
+        }
+    }
+    
+    // Find favorite concentrate
+    let favoriteConcentrate = 'None';
+    let maxCount = 0;
+    for (const concentrate in concentrateCount) {
+        if (concentrateCount[concentrate] > maxCount) {
+            maxCount = concentrateCount[concentrate];
+            favoriteConcentrate = concentrate;
+        }
+    }
+    
+    // Find most active day
+    let mostActiveDay = 'None';
+    let maxSessions = 0;
+    for (const day in sessionsByDay) {
+        if (sessionsByDay[day] > maxSessions) {
+            maxSessions = sessionsByDay[day];
+            mostActiveDay = day;
+        }
+    }
+    
+    // Calculate sessions per day
+    const daysInPeriod = 7; // For weekly view
+    const sessionsPerDay = totalSessions / daysInPeriod;
+    
+    return {
+        totalSessions,
+        sessionsPerDay,
+        favoriteConcentrate,
+        mostActiveDay,
+        usageByDay: sessionsByDay,
+        concentrateDistribution: concentrateCount
+    };
+}
+
+// Generate bar chart
+function generateBarChart(usageByDay) {
+    const barChart = document.getElementById('usage-frequency-chart');
+    barChart.innerHTML = '';
+    
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const maxSessions = Math.max(...Object.values(usageByDay));
+    
+    daysOfWeek.forEach(day => {
+        const sessions = usageByDay[day] || 0;
+        const height = maxSessions > 0 ? (sessions / maxSessions) * 150 : 0;
+        
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.style.height = `${height}px`;
+        
+        const label = document.createElement('div');
+        label.className = 'bar-label';
+        label.textContent = day;
+        
+        bar.appendChild(label);
+        barChart.appendChild(bar);
+    });
+}
+
+// Generate pie chart
+function generatePieChart(concentrateDistribution) {
+    const pieChart = document.getElementById('concentrate-preference-chart');
+    pieChart.innerHTML = '';
+    
+    // Create legend
+    const legend = document.createElement('div');
+    legend.className = 'pie-legend';
+    
+    const colors = ['#4CAF50', '#FF9800', '#2196F3', '#9C27B0', '#E91E63'];
+    let colorIndex = 0;
+    
+    for (const concentrate in concentrateDistribution) {
+        const item = document.createElement('div');
+        item.className = 'legend-item';
+        
+        const colorBox = document.createElement('div');
+        colorBox.className = 'legend-color';
+        colorBox.style.backgroundColor = colors[colorIndex % colors.length];
+        
+        const label = document.createElement('span');
+        label.textContent = `${concentrate}: ${concentrateDistribution[concentrate]}`;
+        
+        item.appendChild(colorBox);
+        item.appendChild(label);
+        legend.appendChild(item);
+        
+        colorIndex++;
+    }
+    
+    pieChart.appendChild(legend);
+}

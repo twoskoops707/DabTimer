@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Update the timer screen in index.html
-sed -i '/<!-- Timer Screen -->/,/<!-- Science Screen -->/c\
+sed -i '/<!-- Timer Screen -->/,/<!-- Home Screen -->/c\
             <!-- Timer Screen -->\
             <div id="timer-screen" class="tab-content active">\
                 <div class="timer-container">\
@@ -11,6 +11,7 @@ sed -i '/<!-- Timer Screen -->/,/<!-- Science Screen -->/c\
                         <div class="progress-container">\
                             <div id="timer-progress" class="progress-bar"></div>\
                         </div>\
+                        <div class="enjoy-message" id="enjoy-message">Enjoy</div>\
                     </div>\
                     <div class="timer-controls">\
                         <button id="start-timer" class="btn-primary">\
@@ -28,6 +29,12 @@ sed -i '/<!-- Timer Screen -->/,/<!-- Science Screen -->/c\
                             <p>Heater: <span id="current-heater">Torch</span></p>\
                         </div>\
                     </div>\
+                    <div class="formula-explanation" id="formula-explanation">\
+                        <div class="formula-title">Precision Timing Formula</div>\
+                        <div class="formula-content" id="formula-content">\
+                            Calculating optimal heat and cool times based on material properties and concentrate characteristics.\
+                        </div>\
+                    </div>\
                     <div class="custom-time-section">\
                         <h3>Custom Times</h3>\
                         <div class="custom-time-inputs">\
@@ -38,6 +45,13 @@ sed -i '/<!-- Timer Screen -->/,/<!-- Science Screen -->/c\
                             <div class="input-group">\
                                 <label for="custom-cool">Cool Time (s):</label>\
                                 <input type="number" id="custom-cool" min="10" max="180" value="45">\
+                            </div>\
+                            <div class="custom-time-toggle">\
+                                <label class="toggle-switch">\
+                                    <input type="checkbox" id="lock-custom-times">\
+                                    <span class="toggle-slider"></span>\
+                                </label>\
+                                <span class="toggle-label">Lock Custom Times</span>\
                             </div>\
                             <button id="apply-custom-times" class="btn-secondary">Apply Custom Times</button>\
                         </div>\
