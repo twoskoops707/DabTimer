@@ -47,6 +47,11 @@
                                 <button class="option-btn active" data-setting="concentrate" data-value="shatter">Shatter</button>
                                 <button class="option-btn" data-setting="concentrate" data-value="wax">Wax</button>
                                 <button class="option-btn" data-setting="concentrate" data-value="resin">Live Resin</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="rosin">Rosin</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="budder">Budder</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="diamonds">Diamonds</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="sauce">Sauce</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="crumble">Crumble</button>
                             </div>
                         </div>
 
@@ -164,6 +169,26 @@
             </div>
             </div>
         </main>
+<!-- Custom Time Modal -->
+<div id="custom-time-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Custom Timer Settings</h3>
+            <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="input-group">
+                <label for="custom-heat-time">Heat Up Time (seconds):</label>
+                <input type="number" id="custom-heat-time" min="10" max="300" value="30">
+            </div>
+            <div class="input-group">
+                <label for="custom-cool-time">Cool Down Time (seconds):</label>
+                <input type="number" id="custom-cool-time" min="10" max="300" value="45">
+            </div>
+            <button id="apply-custom-times" class="btn-primary">Apply Custom Times</button>
+        </div>
+    </div>
+</div>
 
         <!-- Tab Navigation -->
         <nav class="tab-bar">
@@ -186,5 +211,17 @@
     <script src="js/charts.js"></script>
     <script src="js/audio.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/custom-times.js"></script>
 </body>
 </html>
+
+<!-- Add this inside the timer-container div, after the current-settings div -->
+<div class="formula-display">
+    <h4>Heating Formula</h4>
+    <div class="formula-line">t = (m × c × ΔT) / P</div>
+    <div class="formula-line">Material: <span id="formula-material">Quartz</span></div>
+    <div class="formula-line">Heater: <span id="formula-heater">Torch</span></div>
+    <div class="formula-line">Heat Up: <span id="formula-heat-time">30s</span></div>
+    <div class="formula-line">Cool Down: <span id="formula-cool-time">45s</span></div>
+    <div class="formula-line">Total Cycle: <span id="formula-total-time">75s</span></div>
+</div>

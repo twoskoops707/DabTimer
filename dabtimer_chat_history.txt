@@ -456,5 +456,377 @@
   456  source ~/.bashrc
   457  path
   458  exit
-  459  # Save just the command history
-  460  history > dabtimer_chat_history.txt
+  459  cd ~/DabTimer && git add . && git commit -m "FIXED: Clock functionality - removed duplicate initializeApp, clock now shows real time" && git push origin main
+  460  grep -n -A 15 -B 5 "Concentrate.*option\|concentrate.*buttons" index.html
+  461  grep -n -A 10 -B 5 "concentrate\|Concentrate" index.html
+  462  sed -i '/Live Resin<\/button>/a\                                <button class="option-btn" data-setting="concentrate" data-value="rosin">Rosin</button>\n                                <button class="option-btn" data-setting="concentrate" data-value="budder">Budder</button>\n                                <button class="option-btn" data-setting="concentrate" data-value="diamonds">Diamonds</button>\n                                <button class="option-btn" data-setting="concentrate" data-value="sauce">Sauce</button>\n                                <button class="option-btn" data-setting="concentrate" data-value="crumble">Crumble</button>' index.html
+  463  sed -i '/rosin: { idealTemp: '\''380-450°F'\'' }/a\        budder: { idealTemp: '\''350-420°F'\'' },\n        diamonds: { idealTemp: '\''400-500°F'\'' },\n        sauce: { idealTemp: '\''380-450°F'\'' },\n        crumble: { idealTemp: '\''360-430°F'\'' }' js/app.js
+  464  cat > custom-time-modal.html << 'EOF'
+<!-- Custom Time Modal -->
+<div id="custom-time-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Custom Timer Settings</h3>
+            <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="input-group">
+                <label for="custom-heat-time">Heat Up Time (seconds):</label>
+                <input type="number" id="custom-heat-time" min="10" max="300" value="30">
+            </div>
+            <div class="input-group">
+                <label for="custom-cool-time">Cool Down Time (seconds):</label>
+                <input type="number" id="custom-cool-time" min="10" max="300" value="45">
+            </div>
+            <button id="apply-custom-times" class="btn-primary">Apply Custom Times</button>
+        </div>
+    </div>
+</div>
+EOF
+
+  465  sed -i '/<\/body>/i\    <script src="js\/custom-times.js"><\/script>' index.html
+  466  cat > js/custom-times.js << 'EOF'
+// Custom Time Modal functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('custom-time-modal');
+    const customTimeBtn = document.getElementById('custom-time-btn');
+    const closeModal = document.querySelector('.close-modal');
+    const applyBtn = document.getElementById('apply-custom-times');
+    
+    if (customTimeBtn && modal) {
+        customTimeBtn.addEventListener('click', function() {
+            modal.style.display = 'block';
+        });
+        
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        applyBtn.addEventListener('click', function() {
+            const heatTime = parseInt(document.getElementById('custom-heat-time').value);
+            const coolTime = parseInt(document.getElementById('custom-cool-time').value);
+            
+            if (heatTime && coolTime) {
+                // Store custom times
+                localStorage.setItem('custom_heat_time', heatTime);
+                localStorage.setItem('custom_cool_time', coolTime);
+                
+                modal.style.display = 'none';
+                alert('Custom times saved successfully!');
+            }
+        });
+        
+        // Close modal if clicked outside
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+});
+EOF
+
+  467  cat >> css/style.css << 'EOF'
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+    background-color: #2a2a2a;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    border-left: 4px solid #4CAF50;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #4CAF50;
+}
+
+.close-modal {
+    color: #aaa;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: white;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    color: #ccc;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background: #333;
+    color: white;
+}
+
+#apply-custom-times {
+    margin-top: 10px;
+}
+EOF
+
+  468  sed -i '/<\/main>/r custom-time-modal.html' index.html
+  469  rm custom-time-modal.html
+  470  cat >> js/custom-times.js << 'EOF'
+
+// Function to get custom times with fallback to defaults
+function getCustomTimes() {
+    const customHeat = localStorage.getItem('custom_heat_time');
+    const customCool = localStorage.getItem('custom_cool_time');
+    
+    return {
+        heatTime: customHeat ? parseInt(customHeat) : null,
+        coolTime: customCool ? parseInt(customCool) : null
+    };
+}
+
+// Update timer initialization to use custom times
+const originalInitializeTimer = initializeTimer;
+initializeTimer = function() {
+    const customTimes = getCustomTimes();
+    const material = CONFIG.materials[state.settings.material];
+    const heater = CONFIG.heaters[state.settings.heater];
+    
+    // Use custom times if set, otherwise use configured times
+    const heatUpTime = customTimes.heatTime || Math.round(material.heatUp * heater.modifier);
+    const coolDownTime = customTimes.coolTime || Math.round(material.coolDown * heater.modifier);
+    
+    state.timer.mode = 'heat';
+    state.timer.timeLeft = heatUpTime;
+    state.timer.totalTime = heatUpTime;
+    
+    if (elements.timerMode) elements.timerMode.textContent = 'HEAT UP';
+    updateTimerDisplay();
+    
+    recordUsage();
+};
+EOF
+
+  471  cat >> js/custom-times.js << 'EOF'
+
+// Update formula display with actual values
+function updateFormulaDisplay(heatTime, coolTime, material, heater) {
+    const formulaDisplay = document.querySelector('.formula-display');
+    if (!formulaDisplay) return;
+    
+    // Calculate the actual values used
+    const actualHeatTime = heatTime || Math.round(material.heatUp * heater.modifier);
+    const actualCoolTime = coolTime || Math.round(material.coolDown * heater.modifier);
+    
+    formulaDisplay.innerHTML = `
+        <h4>Heating Formula</h4>
+        <div class="formula-line">t = (m × c × ΔT) / P</div>
+        <div class="formula-line">Material: ${state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1)}</div>
+        <div class="formula-line">Heater: ${state.settings.heater.charAt(0).toUpperCase() + state.settings.heater.slice(1)}</div>
+        <div class="formula-line">Heat Up: ${actualHeatTime}s (${material.heatUp}s × ${heater.modifier})</div>
+        <div class="formula-line">Cool Down: ${actualCoolTime}s (${material.coolDown}s × ${heater.modifier})</div>
+        <div class="formula-line">Total Cycle: ${actualHeatTime + actualCoolTime}s</div>
+    `;
+}
+
+// Update the timer initialization to show formula
+const originalInitializeTimer = initializeTimer;
+initializeTimer = function() {
+    const customTimes = getCustomTimes();
+    const material = CONFIG.materials[state.settings.material];
+    const heater = CONFIG.heaters[state.settings.heater];
+    
+    // Use custom times if set, otherwise use configured times
+    const heatUpTime = customTimes.heatTime || Math.round(material.heatUp * heater.modifier);
+    const coolDownTime = customTimes.coolTime || Math.round(material.coolDown * heater.modifier);
+    
+    state.timer.mode = 'heat';
+    state.timer.timeLeft = heatUpTime;
+    state.timer.totalTime = heatUpTime;
+    
+    if (elements.timerMode) elements.timerMode.textContent = 'HEAT UP';
+    updateTimerDisplay();
+    
+    // Update formula with actual values
+    updateFormulaDisplay(customTimes.heatTime, customTimes.coolTime, material, heater);
+    
+    recordUsage();
+};
+EOF
+
+  472  cat >> js/custom-times.js << 'EOF'
+
+// Update the cool down function to show formula
+const originalSwitchToCoolDown = switchToCoolDown;
+switchToCoolDown = function() {
+    const customTimes = getCustomTimes();
+    const material = CONFIG.materials[state.settings.material];
+    const heater = CONFIG.heaters[state.settings.heater];
+    
+    const coolDownTime = customTimes.coolTime || Math.round(material.coolDown * heater.modifier);
+    
+    state.timer.mode = 'cool';
+    state.timer.timeLeft = coolDownTime;
+    state.timer.totalTime = coolDownTime;
+    
+    if (elements.timerMode) elements.timerMode.textContent = 'COOL DOWN';
+    updateTimerDisplay();
+    
+    // Update formula to show cool down time
+    updateFormulaDisplay(customTimes.heatTime, customTimes.coolTime, material, heater);
+};
+EOF
+
+  473  cat >> css/style.css << 'EOF'
+
+/* Header Settings Menu */
+.header-settings {
+    position: relative;
+}
+
+.settings-menu-btn {
+    background: none;
+    border: none;
+    color: #4CAF50;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.settings-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 5px;
+    padding: 10px;
+    min-width: 150px;
+    z-index: 1000;
+}
+
+.settings-dropdown.active {
+    display: block;
+}
+
+.settings-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #444;
+}
+
+.settings-option:last-child {
+    border-bottom: none;
+}
+
+.settings-option label {
+    color: #ccc;
+    font-size: 14px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #666;
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:
+
+cat >> js/custom-times.js << 'EOF'
+
+// Update the cool down function to show formula
+const originalSwitchToCoolDown = switchToCoolDown;
+switchToCoolDown = function() {
+    const customTimes = getCustomTimes();
+    const material = CONFIG.materials[state.settings.material];
+    const heater = CONFIG.heaters[state.settings.heater];
+    
+    const coolDownTime = customTimes.coolTime || Math.round(material.coolDown * heater.modifier);
+    
+    state.timer.mode = 'cool';
+    state.timer.timeLeft = coolDownTime;
+    state.timer.totalTime = coolDownTime;
+    
+    if (elements.timerMode) elements.timerMode.textContent = 'COOL DOWN';
+    updateTimerDisplay();
+    
+    // Update formula to show cool down time
+    updateFormulaDisplay(customTimes.heatTime, customTimes.coolTime, material, heater);
+};
+EOF
+
+  474  search history
+  475  # Save just the command history
+  476  history > dabtimer_chat_history.txt

@@ -12,6 +12,10 @@ const CONFIG = {
         wax: { idealTemp: '350-450°F' },
         resin: { idealTemp: '400-500°F' },
         rosin: { idealTemp: '380-450°F' }
+        budder: { idealTemp: '350-420°F' },
+        diamonds: { idealTemp: '400-500°F' },
+        sauce: { idealTemp: '380-450°F' },
+        crumble: { idealTemp: '360-430°F' }
     },
     heaters: {
         torch: { modifier: 1.0 },
@@ -540,4 +544,132 @@ function updateCharts() {
     if (typeof updateCharts === "function") {
         window.updateCharts();
     }
+}
+
+// Add this function to update formula display
+function updateFormulaDisplay(heatTime, coolTime, material, heater) {
+    const formulaDisplay = document.querySelector('.formula-display');
+    if (!formulaDisplay) return;
+    
+    const actualHeatTime = heatTime || Math.round(material.heatUp * heater.modifier);
+    const actualCoolTime = coolTime || Math.round(material.coolDown * heater.modifier);
+    
+    // Update individual elements
+    document.getElementById('formula-material').textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1);
+    document.getElementById('formula-heater').textContent = state.settings.heater.charAt(0).toUpperCase() + state.settings.heater.slice(1);
+    document.getElementById('formula-heat-time').textContent = `${actualHeatTime}s (${material.heatUp}s × ${heater.modifier})`;
+    document.getElementById('formula-cool-time').textContent = `${actualCoolTime}s (${material.coolDown}s × ${heater.modifier})`;
+    document.getElementById('formula-total-time').textContent = `${actualHeatTime + actualCoolTime}s`;
+}
+
+// Update the existing initializeTimer function
+function initializeTimer() {
+    const material = CONFIG.materials[state.settings.material];
+    const heater = CONFIG.heaters[state.settings.heater];
+    
+    const heatUpTime = Math.round(material.heatUp * heater.modifier);
+    const coolDownTime = Math.round(material.coolDown * heater.modifier);
+    
+    state.timer.mode = 'heat';
+    state.timer.timeLeft = heatUpTime;
+    state.timer.totalTime = heatUpTime;
+    
+    if (elements.timerMode) elements.timerMode.textContent = 'HEAT UP';
+    updateTimerDisplay();
+    
+    // Update formula with actual values
+    updateFormulaDisplay(null, null, material, heater);
+    
+    // Record usage
+    recordUsage();
+}
+
+// Update the existing switchToCoolDown function
+function switchToCoolDown() {
+    const material = CONFIG.materials[state.settings.material];
+    const heater = CONFIG.heaters[state.settings.heater];
+    
+    const coolDownTime = Math.round(material.coolDown * heater.modifier);
+    
+    state.timer.mode = 'cool';
+    state.timer.timeLeft = coolDownTime;
+    state.timer.totalTime = coolDownTime;
+    
+    if (elements.timerMode) elements.timerMode.textContent = 'COOL DOWN';
+    updateTimerDisplay();
+    
+cat >> js/app.js << 'EOF'
+
+// Add this function to update formula display
+function updateFormulaDisplay(heatTime, coolTime, material, heater) {
+    const formulaDisplay = document.querySelector('.formula-display');
+    if (!formulaDisplay) return;
+    
+    const actualHeatTime = heatTime || Math.round(material.heatUp * heater.modifier);
+    const actualCoolTime = coolTime || Math.round(material.coolDown * heater.modifier);
+    
+    // Update individual elements
+    document.getElementById('formula-material').textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1);
+    document.getElementById('formula-heater').textContent = state.settings.heater.charAt(0).toUpperCase() + state.settings.heater.slice(1);
+    document.getElementById('formula-heat-time').textContent = `${actualHeatTime}s (${material.heatUp}s × ${heater.modifier})`;
+    document.getElementById('formula-cool-time').textContent = `${actualCoolTime}s (${material.coolDown}s × ${heater.modifier})`;
+    document.getElementById('formula-total-time').textContent = `${actualHeatTime + actualCoolTime}s`;
+}
+
+// Update the existing initializeTimer function
+function initializeTimer() {
+    const material = CONFIG.materials[state.settings.material];
+    const heater = CONFIG.heaters[state.settings.heater];
+    
+    const heatUpTime = Math.round(material.heatUp * heater.modifier);
+    const coolDownTime = Math.round(material.coolDown * heater.modifier);
+    
+    state.timer.mode = 'heat';
+    state.timer.timeLeft = heatUpTime;
+    state.timer.totalTime = heatUpTime;
+    
+    if (elements.timerMode) elements.timerMode.textContent = 'HEAT UP';
+    updateTimerDisplay();
+    
+    // Update formula with actual values
+    updateFormulaDisplay(null, null, material, heater);
+    
+    // Record usage
+    recordUsage();
+}
+
+// Update the existing switchToCoolDown function
+function switchToCoolDown() {
+    const material = CONFIG.materials[state.settings.material];
+    const heater = CONFIG.heaters[state.settings.heater];
+    
+    const coolDownTime = Math.round(material.coolDown * heater.modifier);
+    
+    state.timer.mode = 'cool';
+    state.timer.timeLeft = coolDownTime;
+    state.timer.totalTime = coolDownTime;
+    
+    if (elements.timerMode) elements.timerMode.textContent = 'COOL DOWN';
+    updateTimerDisplay();
+    
+    // Update formula to show cool down time
+    updateFormulaDisplay(null, null, material, heater);
+}
+
+// Also update when settings change
+function updateSettingsDisplay() {
+    if (elements.currentMaterial) {
+        elements.currentMaterial.textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1);
+    }
+    if (elements.currentConcentrate) {
+        elements.currentConcentrate.textContent = state.settings.concentrate.charAt(0).toUpperCase() + state.settings.concentrate.slice(1);
+    }
+    if (elements.currentHeater) {
+        elements.currentHeater.textContent = state.settings.heater.charAt(0).toUpperCase() + state.settings.heater.slice(1);
+    }
+    
+    // Update formula display when settings change
+    const material = CONFIG.materials[state.settings.material];
+    const heater = CONFIG.heaters[state.settings.heater];
+    updateFormulaDisplay(null, null, material, heater);
 }

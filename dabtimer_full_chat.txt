@@ -1,0 +1,959 @@
+Script started on 2025-09-11 14:50:36-07:00 [TERM="xterm-256color" TTY="/dev/pts/3" COLUMNS="56" LINES="31"]
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cd ~/DabTimer && git add . && git commit -m "FIXED: Clock functionality - removed duplicate initializeApp, clock now shows real time" && git push origin main
+[?2004l[main 36a3165] FIXED: Clock functionality - removed duplicate initializeApp, clock now shows real time
+ 3 files changed, 460 insertions(+), 27 deletions(-)
+ create mode 100644 dabtimer_chat_history.txt
+ create mode 100644 dabtimer_full_chat.txt
+Enumerating objects: 9, done.
+Counting objects:  11% (1/9)Counting objects:  22% (2/9)Counting objects:  33% (3/9)Counting objects:  44% (4/9)Counting objects:  55% (5/9)Counting objects:  66% (6/9)Counting objects:  77% (7/9)Counting objects:  88% (8/9)Counting objects: 100% (9/9)Counting objects: 100% (9/9), done.
+Delta compression using up to 8 threads
+Compressing objects:  20% (1/5)Compressing objects:  40% (2/5)Compressing objects:  60% (3/5)Compressing objects:  80% (4/5)Compressing objects: 100% (5/5)Compressing objects: 100% (5/5), done.
+Writing objects:  16% (1/6)Writing objects:  33% (2/6)Writing objects:  50% (3/6)Writing objects:  66% (4/6)Writing objects:  83% (5/6)Writing objects: 100% (6/6)Writing objects: 100% (6/6), 5.50 KiB | 5.50 MiB/s, done.
+Total 6 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/2)[Kremote: Resolving deltas:  50% (1/2)[Kremote: Resolving deltas: 100% (2/2)[Kremote: Resolving deltas: 100% (2/2), completed with 2 local objects.[K
+To https://github.com/twoskoops707/DabTimer.git
+   88eebd1..36a3165  main -> main
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m grep -n -A 15 -B 5 "Concentrate.*option\|concentrate.*buttons" index.html
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m grep -n -A 10 -B 5 "concentrate\|Concentrate" index.html
+[?2004l40-                                <button class="option-btn" data-setting="material" data-value="ceramic">Ceramic</button>
+41-                            </div>
+42-                        </div>
+43-
+44-                        <div class="setting-card">
+45:                            <h3>Concentrate</h3>
+46-                            <div class="option-buttons">
+47:                                <button class="option-btn active" data-setting="concentrate" data-value="shatter">Shatter</button>
+48:                                <button class="option-btn" data-setting="concentrate" data-value="wax">Wax</button>
+49:                                <button class="option-btn" data-setting="concentrate" data-value="resin">Live Resin</button>
+50-                            </div>
+51-                        </div>
+52-
+53-                        <div class="setting-card">
+54-                            <h3>Heating</h3>
+55-                            <div class="option-buttons">
+56-                                <button class="option-btn active" data-setting="heater" data-value="torch">Torch</button>
+57-                                <button class="option-btn" data-setting="heater" data-value="lighter">Lighter</button>
+58-                            </div>
+59-                        </div>
+--
+87-                    </div>
+88-                    <div class="current-settings">
+89-                        <h3>Current Settings</h3>
+90-                        <div class="settings-display">
+91-                            <p>Material: <span id="current-material">Quartz</span></p>
+92:                            <p>Concentrate: <span id="current-concentrate">Shatter</span></p>
+93-                            <p>Heater: <span id="current-heater">Torch</span></p>
+94-                        </div>
+95-                    <div class="formula-display" style="margin-top: 20px; padding: 15px; background: #2a2a2a; border-radius: 10px;">
+96-                        <h4>Heating Formula</h4>
+97-                        <div class="formula-line">t = (m × c × ΔT) / P</div>
+98-                        <div class="formula-line">Where m = mass, c = specific heat</div>
+99-                        <div class="formula-line">ΔT = temp difference, P = power</div>
+100-                    </div>
+101-                    </div>
+102-                </div>
+--
+127-                                
+128-                            </div>
+129-                        </div>
+130-
+131-                        <div class="stat-card">
+132:                            <h3>Concentrate Preference</h3>
+133:                            <div class="pie-chart" id="concentrate-preference-chart">
+134-                                
+135-                            </div>
+136-                        </div>
+137-
+138-                        <div class="stat-card full-width">
+139-                            <h3>Monthly Summary</h3>
+140-                            <div class="stats-grid">
+141-                                <div class="stat">
+142-                                    <span class="stat-value" id="total-sessions">0</span>
+143-                                    <span class="stat-label">Total Sessions</span>
+--
+145-                                <div class="stat">
+146-                                    <span class="stat-value" id="sessions-per-day">0</span>
+147-                                    <span class="stat-label">Sessions per Day</span>
+148-                                </div>
+149-                                <div class="stat">
+150:                                    <span class="stat-value" id="fav-concentrate">None</span>
+151:                                    <span class="stat-label">Favorite Concentrate</span>
+152-                                </div>
+153-                            </div>
+154-                        </div>
+155-                    </div>
+156-
+157-                    <div class="usage-history">
+158-                        <h3>Recent Activity</h3>
+159-                        <div class="history-list" id="history-list">
+160-                            
+161-                        </div>
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m sed -i '/Live Resin<\/button>/a\                                <button class="option-btn" data-setting="concentrate" data-value="rosin">Rosin</button>\n                                <button class="option-btn" data-setting="concentrate" data-value="budder">Budder</button>\n                                <button class="option-btn" data-setting="concentrate" data-value="diamonds">Diamonds</button>\n                                <button class="option-btn" data-setting="concentrate" data-value="sauce">Sauce</button>\n                                <button class="option-btn" data-setting="concentrate" data-value="crumble">Crumble</button>' index.html [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kl
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m sed -i '/rosin: { idealTemp: '\''380-450°F'\'' }/a\        budder: { idealTemp: '\''350-420°F'\'' },\n        diamonds: { idealTemp: '\''400-500°F'\'' },\n        sauce: { idealTemp: '\''380-450°F'\'' },\n        crumble: { idealTemp: '\''360-430°F'\'' }' js/app.js
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cat > custom-time-modal.html << 'EOF'
+[?2004l[?2004h> <!-- Custom Time Modal -->
+[?2004l[?2004h> <div id="custom-time-modal" class="modal">
+[?2004l[?2004h>     <div class="modal-content">
+[?2004l[?2004h>         <div class="modal-header">
+[?2004l[?2004h>             <h3>Custom Timer Settings</h3>
+[?2004l[?2004h>             <span class="close-modal">&times;</span>
+[?2004l[?2004h>         </div>
+[?2004l[?2004h>         <div class="modal-body">
+[?2004l[?2004h>             <div class="input-group">
+[?2004l[?2004h>                 <label for="custom-heat-time">Heat Up Time (seconds):</label>
+[?2004l[?2004h>                 <input type="number" id="custom-heat-time" min="10" max="300" value="30">
+[?2004l[?2004h>             </div>
+[?2004l[?2004h>             <div class="input-group">
+[?2004l[?2004h>                 <label for="custom-cool-time">Cool Down Time (seconds):</label>
+[?2004l[?2004h>                 <input type="number" id="custom-cool-time" min="10" max="300" value="45">
+[?2004l[?2004h>             </div>
+[?2004l[?2004h>             <button id="apply-custom-times" class="btn-primary">Apply Custom Times</button>
+[?2004l[?2004h>         </div>
+[?2004l[?2004h>     </div>
+[?2004l[?2004h> </div>
+[?2004l[?2004h> EOF
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m sed -i '/<\/body>/i\    <script src="js\/custom-times.js"><\/script>' index.html
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cat > js/custom-times.js << 'EOF'
+[?2004l[?2004h> // Custom Time Modal functionality
+[?2004l[?2004h> document.addEventListener('DOMContentLoaded', function() {
+[?2004l[?2004h>     const modal = document.getElementById('custom-time-modal');
+[?2004l[?2004h>     const customTimeBtn = document.getElementById('custom-time-btn');
+[?2004l[?2004h>     const closeModal = document.querySelector('.close-modal');
+[?2004l[?2004h>     const applyBtn = document.getElementById('apply-custom-times');
+[?2004l[?2004h>     
+[?2004l[?2004h>     if (customTimeBtn && modal) {
+[?2004l[?2004h>         customTimeBtn.addEventListener('click', function() {
+[?2004l[?2004h>             modal.style.display = 'block';
+[?2004l[?2004h>         });
+[?2004l[?2004h>         
+[?2004l[?2004h>         closeModal.addEventListener('click', function() {
+[?2004l[?2004h>             modal.style.display = 'none';
+[?2004l[?2004h>         });
+[?2004l[?2004h>         
+[?2004l[?2004h>         applyBtn.addEventListener('click', function() {
+[?2004l[?2004h>             const heatTime = parseInt(document.getElementById('custom-heat-time').value);
+[?2004l[?2004h>             const coolTime = parseInt(document.getElementById('custom-cool-time').value);
+[?2004l[?2004h>             
+[?2004l[?2004h>             if (heatTime && coolTime) {
+[?2004l[?2004h>                 // Store custom times
+[?2004l[?2004h>                 localStorage.setItem('custom_heat_time', heatTime);
+[?2004l[?2004h>                 localStorage.setItem('custom_cool_time', coolTime);
+[?2004l[?2004h>                 
+[?2004l[?2004h>                 modal.style.display = 'none';
+[?2004l[?2004h>                 alert('Custom times saved successfully!');
+[?2004l[?2004h>             }
+[?2004l[?2004h>         });
+[?2004l[?2004h>         
+[?2004l[?2004h>         // Close modal if clicked outside
+[?2004l[?2004h>         window.addEventListener('click', function(event) {
+[?2004l[?2004h>             if (event.target === modal) {
+[?2004l[?2004h>                 modal.style.display = 'none';
+[?2004l[?2004h>             }
+[?2004l[?2004h>         });
+[?2004l[?2004h>     }
+[?2004l[?2004h> });
+[?2004l[?2004h> EOF
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cat >> css/style.css << 'EOF'
+[?2004l[?2004h> 
+[?2004l[?2004h> /* Modal Styles */
+[?2004l[?2004h> .modal {
+[?2004l[?2004h>     display: none;
+[?2004l[?2004h>     position: fixed;
+[?2004l[?2004h>     z-index: 1000;
+[?2004l[?2004h>     left: 0;
+[?2004l[?2004h>     top: 0;
+[?2004l[?2004h>     width: 100%;
+[?2004l[?2004h>     height: 100%;
+[?2004l[?2004h>     background-color: rgba(0,0,0,0.7);
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .modal-content {
+[?2004l[?2004h>     background-color: #2a2a2a;
+[?2004l[?2004h>     margin: 10% auto;
+[?2004l[?2004h>     padding: 20px;
+[?2004l[?2004h>     border-radius: 10px;
+[?2004l[?2004h>     width: 90%;
+[?2004l[?2004h>     max-width: 400px;
+[?2004l[?2004h>     border-left: 4px solid #4CAF50;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .modal-header {
+[?2004l[?2004h>     display: flex;
+[?2004l[?2004h>     justify-content: space-between;
+[?2004l[?2004h>     align-items: center;
+[?2004l[?2004h>     margin-bottom: 20px;
+[?2004l[?2004h>     border-bottom: 1px solid #444;
+[?2004l[?2004h>     padding-bottom: 10px;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .modal-header h3 {
+[?2004l[?2004h>     margin: 0;
+[?2004l[?2004h>     color: #4CAF50;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .close-modal {
+[?2004l[?2004h>     color: #aaa;
+[?2004l[?2004h>     font-size: 24px;
+[?2004l[?2004h>     font-weight: bold;
+[?2004l[?2004h>     cursor: pointer;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .close-modal:hover {
+[?2004l[?2004h>     color: white;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .modal-body {
+[?2004l[?2004h>     display: flex;
+[?2004l[?2004h>     flex-direction: column;
+[?2004l[?2004h>     gap: 15px;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .input-group {
+[?2004l[?2004h>     display: flex;
+[?2004l[?2004h>     flex-direction: column;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .input-group label {
+[?2004l[?2004h>     color: #ccc;
+[?2004l[?2004h>     margin-bottom: 5px;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .input-group input {
+[?2004l[?2004h>     padding: 10px;
+[?2004l[?2004h>     border: 1px solid #555;
+[?2004l[?2004h>     border-radius: 5px;
+[?2004l[?2004h>     background: #333;
+[?2004l[?2004h>     color: white;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> #apply-custom-times {
+[?2004l[?2004h>     margin-top: 10px;
+[?2004l[?2004h> }
+[?2004l[?2004h> EOF
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m sed -i '/<\/main>/r custom-time-modal.html' index.html
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m rm custom-time-modal.html
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cat >> js/custom-times.js << 'EOF'
+[?2004l[?2004h> 
+[?2004l[?2004h> // Function to get custom times with fallback to defaults
+[?2004l[?2004h> function getCustomTimes() {
+[?2004l[?2004h>     const customHeat = localStorage.getItem('custom_heat_time');
+[?2004l[?2004h>     const customCool = localStorage.getItem('custom_cool_time');
+[?2004l[?2004h>     
+[?2004l[?2004h>     return {
+[?2004l[?2004h>         heatTime: customHeat ? parseInt(customHeat) : null,
+[?2004l[?2004h>         coolTime: customCool ? parseInt(customCool) : null
+[?2004l[?2004h>     };
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> // Update timer initialization to use custom times
+[?2004l[?2004h> const originalInitializeTimer = initializeTimer;
+[?2004l[?2004h> initializeTimer = function() {
+[?2004l[?2004h>     const customTimes = getCustomTimes();
+[?2004l[?2004h>     const material = CONFIG.materials[state.settings.material];
+[?2004l[?2004h>     const heater = CONFIG.heaters[state.settings.heater];
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Use custom times if set, otherwise use configured times
+[?2004l[?2004h>     const heatUpTime = customTimes.heatTime || Math.round(material.heatUp * heater.modifier);
+[?2004l[?2004h>     const coolDownTime = customTimes.coolTime || Math.round(material.coolDown * heater.modifier);
+[?2004l[?2004h>     
+[?2004l[?2004h>     state.timer.mode = 'heat';
+[?2004l[?2004h>     state.timer.timeLeft = heatUpTime;
+[?2004l[?2004h>     state.timer.totalTime = heatUpTime;
+[?2004l[?2004h>     
+[?2004l[?2004h>     if (elements.timerMode) elements.timerMode.textContent = 'HEAT UP';
+[?2004l[?2004h>     updateTimerDisplay();
+[?2004l[?2004h>     
+[?2004l[?2004h>     recordUsage();
+[?2004l[?2004h> };
+[?2004l[?2004h> EOF[K> EOF[K> EOF
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cat >> js/custom-times.js << 'EOF'
+[?2004l[?2004h> 
+[?2004l[?2004h> // Update formula display with actual values
+[?2004l[?2004h> function updateFormulaDisplay(heatTime, coolTime, material, heater) {
+[?2004l[?2004h>     const formulaDisplay = document.querySelector('.formula-display');
+[?2004l[?2004h>     if (!formulaDisplay) return;
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Calculate the actual values used
+[?2004l[?2004h>     const actualHeatTime = heatTime || Math.round(material.heatUp * heater.modifier);
+[?2004l[?2004h>     const actualCoolTime = coolTime || Math.round(material.coolDown * heater.modifier);
+[?2004l[?2004h>     
+[?2004l[?2004h>     formulaDisplay.innerHTML = `
+[?2004l[?2004h>         <h4>Heating Formula</h4>
+[?2004l[?2004h>         <div class="formula-line">t = (m × c × ΔT) / P</div>
+[?2004l[?2004h>         <div class="formula-line">Material: ${state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1)}</div>
+[?2004l[?2004h>         <div class="formula-line">Heater: ${state.settings.heater.charAt(0).toUpperCase() + state.settings.heater.slice(1)}</div>
+[?2004l[?2004h>         <div class="formula-line">Heat Up: ${actualHeatTime}s (${material.heatUp}s × ${heater.modifier})</div> [A
+[?2004l[?2004h>         <div class="formula-line">Cool Down: ${actualCoolTime}s (${material.coolDown}s × ${heater.modifier})</div>
+[?2004l[?2004h>         <div class="formula-line">Total Cycle: ${actualHeatTime + actualCoolTime}s</div>
+[?2004l[?2004h>     `;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> // Update the timer initialization to show formula
+[?2004l[?2004h> const originalInitializeTimer = initializeTimer;
+[?2004l[?2004h> initializeTimer = function() {
+[?2004l[?2004h>     const customTimes = getCustomTimes();
+[?2004l[?2004h>     const material = CONFIG.materials[state.settings.material];
+[?2004l[?2004h>     const heater = CONFIG.heaters[state.settings.heater];
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Use custom times if set, otherwise use configured times
+[?2004l[?2004h>     const heatUpTime = customTimes.heatTime || Math.round(material.heatUp * heater.modifier);
+[?2004l[?2004h>     const coolDownTime = customTimes.coolTime || Math.round(material.coolDown * heater.modifier);
+[?2004l[?2004h>     
+[?2004l[?2004h>     state.timer.mode = 'heat';
+[?2004l[?2004h>     state.timer.timeLeft = heatUpTime;
+[?2004l[?2004h>     state.timer.totalTime = heatUpTime;
+[?2004l[?2004h>     
+[?2004l[?2004h>     if (elements.timerMode) elements.timerMode.textContent = 'HEAT UP';
+[?2004l[?2004h>     updateTimerDisplay();
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Update formula with actual values
+[?2004l[?2004h>     updateFormulaDisplay(customTimes.heatTime, customTimes.coolTime, material, heater);
+[?2004l[?2004h>     
+[?2004l[?2004h>     recordUsage();
+[?2004l[?2004h> };
+[?2004l[?2004h> EOF
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cat >> js/custom-times.js << 'EOF'
+[?2004l[?2004h> 
+[?2004l[?2004h> // Update the cool down function to show formula
+[?2004l[?2004h> const originalSwitchToCoolDown = switchToCoolDown;
+[?2004l[?2004h> switchToCoolDown = function() {
+[?2004l[?2004h>     const customTimes = getCustomTimes();
+[?2004l[?2004h>     const material = CONFIG.materials[state.settings.material];
+[?2004l[?2004h>     const heater = CONFIG.heaters[state.settings.heater];
+[?2004l[?2004h>     
+[?2004l[?2004h>     const coolDownTime = customTimes.coolTime || Math.round(material.coolDown * heater.modifier);
+[?2004l[?2004h>     
+[?2004l[?2004h>     state.timer.mode = 'cool';
+[?2004l[?2004h>     state.timer.timeLeft = coolDownTime;
+[?2004l[?2004h>     state.timer.totalTime = coolDownTime;
+[?2004l[?2004h>     
+[?2004l[?2004h>     if (elements.timerMode) elements.timerMode.textContent = 'COOL DOWN';
+[?2004l[?2004h>     updateTimerDisplay();
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Update formula to show cool down time
+[?2004l[?2004h>     updateFormulaDisplay(customTimes.heatTime, customTimes.coolTime, material, heater);
+[?2004l[?2004h> };
+[?2004l[?2004h> EOF
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cat >> css/style.css << 'EOF'
+[?2004l[?2004h> 
+[?2004l[?2004h> /* Header Settings Menu */
+[?2004l[?2004h> .header-settings {
+[?2004l[?2004h>     position: relative;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .settings-menu-btn {
+[?2004l[?2004h>     background: none;
+[?2004l[?2004h>     border: none;
+[?2004l[?2004h>     color: #4CAF50;
+[?2004l[?2004h>     font-size: 18px;
+[?2004l[?2004h>     cursor: pointer;
+[?2004l[?2004h>     padding: 5px;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .settings-dropdown {
+[?2004l[?2004h>     display: none;
+[?2004l[?2004h>     position: absolute;
+[?2004l[?2004h>     top: 100%;
+[?2004l[?2004h>     right: 0;
+[?2004l[?2004h>     background: #2a2a2a;
+[?2004l[?2004h>     border: 1px solid #444;
+[?2004l[?2004h>     border-radius: 5px;
+[?2004l[?2004h>     padding: 10px;
+[?2004l[?2004h>     min-width: 150px;
+[?2004l[?2004h>     z-index: 1000;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .settings-dropdown.active {
+[?2004l[?2004h>     display: block;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .settings-option {
+[?2004l[?2004h>     display: flex;
+[?2004l[?2004h>     justify-content: space-between;
+[?2004l[?2004h>     align-items: center;
+[?2004l[?2004h>     padding: 8px 0;
+[?2004l[?2004h>     border-bottom: 1px solid #444;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .settings-option:last-child {
+[?2004l[?2004h>     border-bottom: none;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .settings-option label {
+[?2004l[?2004h>     color: #ccc;
+[?2004l[?2004h>     font-size: 14px;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .switch {
+[?2004l[?2004h>     position: relative;
+[?2004l[?2004h>     display: inline-block;
+[?2004l[?2004h>     width: 40px;
+[?2004l[?2004h>     height: 20px;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .switch input {
+[?2004l[?2004h>     opacity: 0;
+[?2004l[?2004h>     width: 0;
+[?2004l[?2004h>     height: 0;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .slider {
+[?2004l[?2004h>     position: absolute;
+[?2004l[?2004h>     cursor: pointer;
+[?2004l[?2004h>     top: 0;
+[?2004l[?2004h>     left: 0;
+[?2004l[?2004h>     right: 0;
+[?2004l[?2004h>     bottom: 0;
+[?2004l[?2004h>     background-color: #666;
+[?2004l[?2004h>     transition: .4s;
+[?2004l[?2004h>     border-radius: 20px;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .slider:before {
+[?2004l[?2004h>     position: absolute;
+[?2004l[?2004h>     content: "";
+[?2004l[?2004h>     height: 16px;
+[?2004l[?2004h>     width: 16px;
+[?2004l[?2004h>     left: 2px;
+[?2004l[?2004h>     bottom: 2px;
+[?2004l[?2004h>     background-color: white;
+[?2004l[?2004h>     transition: .4s;
+[?2004l[?2004h>     border-radius: 50%;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> input:checked + .slider {
+[?2004l[?2004h>     background-color: #4CAF50;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> input:
+[?2004l[?2004h> [K> [K> 
+[?2004l[?2004h> [H[2J> cat >> css/style.css << 'EOF'
+
+/* Header Settings Menu */
+.header-settings {
+    position: relative;
+}
+
+.settings-menu-btn {
+    background: none;
+    border: none;
+    color: #4CAF50;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.settings-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 5px;
+    padding: 10px;
+    min-width: 150px;
+    z-index: 1000;
+}
+
+.settings-dropdown.active {
+    display: block;
+}
+
+.settings-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #444;
+}
+
+.settings-option:last-child {
+    border-bottom: none;
+}
+
+.settings-option label {
+    color: #ccc;
+    font-size: 14px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #666;
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:
+
+[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[C[C[C[C[C[C[C[C[C[5@js/custom-times.j
+
+[C/ Update the cool down function to show formula
+const originalSwitchToCoolDown = switchToCoolDown;
+switchToCoolDown = function() {
+    const customTimes = getCustomTimes();
+    const material = CONFIG.materials[state.settings.material];             
+[C[C[C[Cconst heater = CONFIG.heaters[state.settings.heater];                
+[C[C[C[C               
+[C[C[C[Cconst coolDownTime = customTimes.coolTime || Math.rou[21@nd(material.coolDown * heater.modifier)
+[C[C[C[C             
+    state.timer.mode = 'cool';
+    state.timer.timeLeft = coolDownTime;
+    state.timer.totalTime = coolDownTime;
+[C[C[C[C              
+[C[C[C[Cif (elements.timerMode) elements.timerMode.textConten[3@t = 'COOL DOWN'
+[C[C[C[C[12@updateTimerDisplay()
+[C[C[C[C                    
+[C[C[C[C// Update formula to show cool down time
+[C[C[C[CupdateFormulaDisplay(customTimes.heatTime, customTime[13@s.coolTime, material, heater)
+};                   
+EOF               
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m search history
+[?2004lNo command search found, did you mean:
+ Command setarch in package util-linux
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;3[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m search history
+[?2004lNo command search found, did you mean:
+ Command setarch in package util-linux
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m # Save just the command history
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m history > dabtimer_chat_history.txt
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m 
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m # Or if you want to capture visible terminal content
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m script dabtimer_full_chat.txt[K[0;32m~/DabTimer[0m [0;97m$[0m script dabtimer_full_chat.txt[K[0;32m~/DabTimer[0m [0;97m$[0m script dabtimer_full_chat.txtl[C[C[C[C[C[C[C[C[C[C[C[C[C# Or if you want to capture visible terminal content[A[0;32m~/DabTimer[0m [0;97m$[0m [13Pscript dabtimer_full_chat.txtl
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C# Or if you want to capture visible terminal content[A[0;32m~/DabTimer[0m [0;97m$[0m [13Pscript dabtimer_full_chat.txtl
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+[?2004lScript started, output log file is 'dabtimer_full_chat.txtl'.
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m ls
+[?2004l[0m[01;34mDabTimer[0m                   [01;34mjs[0m
+DabTimer-Clean-Backup.zip  package.json
+DabTimer.zip               [01;34mrepo-to-text[0m
+[01;34mDabTimerAndroid[0m            [01;34mres[0m
+README.md                  [01;34msounds[0m
+[01;32mbuild.sh[0m                   [01;34mtemplates[0m
+calendar-screen.html       test-home-fixed.html
+complete-test.html         timer-screen.html
+config.xml                 timer-screen.html.backup
+[01;34mcss[0m                        [01;32mupdate_calendar_screen.sh[0m
+dabtimer_chat_history.txt  [01;32mupdate_home_screen.sh[0m
+dabtimer_full_chat.txt     [01;32mupdate_science.sh[0m
+dabtimer_full_chat.txtl    [01;32mupdate_science_screen.sh[0m
+emergency-test.html        [01;32mupdate_setup.sh[0m
+[01;32mgithub-setup.sh[0m            [01;32mupdate_setup_screen.sh[0m
+[01;34mimg[0m                        [01;32mupdate_tabs.sh[0m
+index.html                 [01;32mupdate_timer_screen.sh[0m
+index.html.backup.final    verify-structure.html
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m cat >> index.html << 'EOF'
+[?2004l[?2004h> 
+[?2004l[?2004h> <!-- Add this inside the timer-container div, after the current-settings div -->
+[?2004l[?2004h> <div class="formula-display">
+[?2004l[?2004h>     <h4>Heating Formula</h4>
+[?2004l[?2004h>     <div class="formula-line">t = (m × c × ΔT) / P</div>
+[?2004l[?2004h>     <div class="formula-line">Material: <span id="formula-material">Quartz</span></div>
+[?2004l[?2004h>     <div class="formula-line">Heater: <span id="formula-heater">Torch</span></div>
+[?2004l[?2004h>     <div class="formula-line">Heat Up: <span id="formula-heat-time">30s</span></div>
+[?2004l[?2004h>     <div class="formula-line">Cool Down: <span id="formula-cool-time">45s</span></div>
+[?2004l[?2004h>     <div class="formula-line">Total Cycle: <span id="formula-total-time">75s</span></div>
+[?2004l[?2004h> </div>
+[?2004l[?2004h> EOF
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cat >> js/app.js << 'EOF'
+[?2004l[?2004h> 
+[?2004l[?2004h> // Add this function to update formula display
+[?2004l[?2004h> function updateFormulaDisplay(heatTime, coolTime, material, heater) {
+[?2004l[?2004h>     const formulaDisplay = document.querySelector('.formula-display');
+[?2004l[?2004h>     if (!formulaDisplay) return;
+[?2004l[?2004h>     
+[?2004l[?2004h>     const actualHeatTime = heatTime || Math.round(material.heatUp * heater.modifier);
+[?2004l[?2004h>     const actualCoolTime = coolTime || Math.round(material.coolDown * heater.modifier);
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Update individual elements
+[?2004l[?2004h>     document.getElementById('formula-material').textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1);
+[?2004l[?2004h>     document.getElementById('formula-heater').textContent = state.settings.heater.charAt(0).toUpperCase() + state.settings.heater.slice(1);
+[?2004l[?2004h>     document.getElementById('formula-heat-time').textContent = `${actualHeatTime}s (${material.heatUp}s × ${heater.modifier})`;
+[?2004l[?2004h>     document.getElementById('formula-cool-time').textContent = `${actualCoolTime}s (${material.coolDown}s × ${heater.modifier})`;
+[?2004l[?2004h>     document.getElementById('formula-total-time').textContent = `${actualHeatTime + actualCoolTime}s`;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> // Update the existing initializeTimer function
+[?2004l[?2004h> function initializeTimer() {
+[?2004l[?2004h>     const material = CONFIG.materials[state.settings.material];
+[?2004l[?2004h>     const heater = CONFIG.heaters[state.settings.heater];
+[?2004l[?2004h>     
+[?2004l[?2004h>     const heatUpTime = Math.round(material.heatUp * heater.modifier);
+[?2004l[?2004h>     const coolDownTime = Math.round(material.coolDown * heater.modifier);
+[?2004l[?2004h>     
+[?2004l[?2004h>     state.timer.mode = 'heat';
+[?2004l[?2004h>     state.timer.timeLeft = heatUpTime;
+[?2004l[?2004h>     state.timer.totalTime = heatUpTime;
+[?2004l[?2004h>     
+[?2004l[?2004h>     if (elements.timerMode) elements.timerMode.textContent = 'HEAT UP';
+[?2004l[?2004h>     updateTimerDisplay();
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Update formula with actual values
+[?2004l[?2004h>     updateFormulaDisplay(null, null, material, heater);
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Record usage
+[?2004l[?2004h>     recordUsage();
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> // Update the existing switchToCoolDown function
+[?2004l[?2004h> function switchToCoolDown() {
+[?2004l[?2004h>     const material = CONFIG.materials[state.settings.material];
+[?2004l[?2004h>     const heater = CONFIG.heaters[state.settings.heater];
+[?2004l[?2004h>     
+[?2004l[?2004h>     const coolDownTime = Math.round(material.coolDown * heater.modifier);
+[?2004l[?2004h>     
+[?2004l[?2004h>     state.timer.mode = 'cool';
+[?2004l[?2004h>     state.timer.timeLeft = coolDownTime;
+[?2004l[?2004h>     state.timer.totalTime = coolDownTime;
+[?2004l[?2004h>     
+[?2004l[?2004h>     if (elements.timerMode) elements.timerMode.textContent = 'COOL DOWN';
+[?2004l[?2004h>     updateTimerDisplay();
+[?2004l[?2004h>     
+[?2004l[?2004h> [K> [K> [H[2J> cat >> js/app.js << 'EOF'
+
+// Add this function to update formula display
+function updateFormulaDisplay(heatTime, coolTime, material, heater) { 
+    const formulaDisplay = document.querySelector('.formula-display'); 
+    if (!formulaDisplay) return;
+    
+    const actualHeatTime = heatTime || Math.round(material.heatUp * heater.modifier); 
+    const actualCoolTime = coolTime || Math.round(material.coolDown * heater.modifier); 
+    
+    // Update individual elements
+    document.getElementById('formula-material').textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1); 
+    document.getElementById(
+    const heater = CONFIG.heaters[state.settings.heater]; 
+    
+    const heatUpTime = Math.round(material.heatUp * heater.modifier); 
+    const coolDownTime = Math.round(material.coolDown * heater.modifier); 
+    
+    state.timer.mode = 'heat';
+    state.timer.timeLeft = heatUpTime;
+    state.timer.totalTime = heatUpTime;
+    
+    if (elements.timerMode) elements.timerMode.textContent = 'HEAT UP'; 
+    updateTimerDisplay();
+    
+    // Update formula with actual values
+    updateFormulaDisplay(null, null, material, heater);
+    
+    // Record usage
+    recordUsage();
+}
+
+// Update the existing switchToCoolDown function
+function switchToCoolDown() {
+    const material = CONFIG.materials[state.settings.material]; 
+    const heater = CONFIG.heaters[state.settings.heater]; 
+    
+    const coolDownTime = Math.round(material.coolDown * heater.modifier); 
+    
+    state.timer.mode = 'cool';
+    state.timer.timeLeft = coolDownTime;
+    state.timer.totalTime = coolDownTime;
+    
+    if (elements.timerMode) elements.timerMode.textContent = 'COOL DOWN'; 
+    updateTimerDisplay();
+    
+[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[C[C[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[C[Ccat >> js/app.js << 'EOF'
+[?2004l[?2004h> 
+[?2004l[?2004h> // Add this function to update formula display
+[?2004l[?2004h> function updateFormulaDisplay(heatTime, coolTime, material, heater) {
+[?2004l[?2004h>     const formulaDisplay = document.querySelector('.formula-display');
+[?2004l[?2004h>     if (!formulaDisplay) return;
+[?2004l[?2004h>     
+[?2004l[?2004h>     const actualHeatTime = heatTime || Math.round(material.heatUp * heater.modifier);
+[?2004l[?2004h>     const actualCoolTime = coolTime || Math.round(material.coolDown * heater.modifier);
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Update individual elements
+[?2004l[?2004h>     document.getElementById('formula-material').textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1);
+[?2004l[?2004h>     document.getElementById('formula-heater').textContent = state.settings.heater.charAt(0).toUpperCase() + state.settings.heater.slice(1);
+[?2004l[?2004h>     document.getElementById('formula-heat-time').textContent = `${actualHeatTime}s (${material.heatUp}s × ${heater.modifier})`;
+[?2004l[?2004h>     document.getElementById('formula-cool-time').textContent = `${actualCoolTime}s (${material.coolDown}s × ${heater.modifier})`;
+[?2004l[?2004h>     document.getElementById('formula-total-time').textContent = `${actualHeatTime + actualCoolTime}s`;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> // Update the existing initializeTimer function
+[?2004l[?2004h> function initializeTimer() {
+[?2004l[?2004h>     const material = CONFIG.materials[state.settings.material];
+[?2004l[?2004h>     const heater = CONFIG.heaters[state.settings.heater];
+[?2004l[?2004h>     
+[?2004l[?2004h>     const heatUpTime = Math.round(material.heatUp * heater.modifier);
+[?2004l[?2004h>     const coolDownTime = Math.round(material.coolDown * heater.modifier);
+[?2004l[?2004h>     
+[?2004l[?2004h>     state.timer.mode = 'heat';
+[?2004l[?2004h>     state.timer.timeLeft = heatUpTime;
+[?2004l[?2004h>     state.timer.totalTime = heatUpTime;
+[?2004l[?2004h>     
+[?2004l[?2004h>     if (elements.timerMode) elements.timerMode.textContent = 'HEAT UP';
+[?2004l[?2004h>     updateTimerDisplay();
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Update formula with actual values
+[?2004l[?2004h>     updateFormulaDisplay(null, null, material, heater);
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Record usage
+[?2004l[?2004h>     recordUsage();
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> // Update the existing switchToCoolDown function
+[?2004l[?2004h> function switchToCoolDown() {
+[?2004l[?2004h>     const material = CONFIG.materials[state.settings.material];
+[?2004l[?2004h>     const heater = CONFIG.heaters[state.settings.heater];
+[?2004l[?2004h>     
+[?2004l[?2004h>     const coolDownTime = Math.round(material.coolDown * heater.modifier);
+[?2004l[?2004h>     
+[?2004l[?2004h>     state.timer.mode = 'cool';
+[?2004l[?2004h>     state.timer.timeLeft = coolDownTime;
+[?2004l[?2004h>     state.timer.totalTime = coolDownTime;
+[?2004l[?2004h>     
+[?2004l[?2004h>     if (elements.timerMode) elements.timerMode.textContent = 'COOL DOWN';
+[?2004l[?2004h>     updateTimerDisplay();
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Update formula to show cool down time
+[?2004l[?2004h>     updateFormulaDisplay(null, null, material, heater);
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> // Also update when settings change
+[?2004l[?2004h> function updateSettingsDisplay() {
+[?2004l[?2004h>     if (elements.currentMaterial) {
+[?2004l[?2004h>         elements.currentMaterial.textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1);
+[?2004l[?2004h>     }
+[?2004l[?2004h>     if (elements.currentConcentrate) {
+[?2004l[?2004h>         elements.currentConcentrate.textContent = state.settings.concentrate.charAt(0).toUpperCase() + state.settings.concentrate.slice(1);
+[?2004l[?2004h>     }
+[?2004l[?2004h>     if (elements.currentHeater) {
+[?2004l[?2004h>         elements.currentHeater.textContent = state.settings.heater.charAt(0).toUpperCase() + state.settings.heater.slice(1);
+[?2004l[?2004h>     }
+[?2004l[?2004h>     
+[?2004l[?2004h>     // Update formula display when settings change
+[?2004l[?2004h>     const material = CONFIG.materials[state.settings.material];
+[?2004l[?2004h>     const heater = CONFIG.heaters[state.settings.heater];
+[?2004l[?2004h>     updateFormulaDisplay(null, null, material, heater);
+[?2004l[?2004h> }
+[?2004l[?2004h> EOF
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cat >> css/style.css << 'EOF'
+[?2004l[?2004h> 
+[?2004l[?2004h> .formula-display {
+[?2004l[?2004h>     margin: 20px 0;
+[?2004l[?2004h>     padding: 15px;
+[?2004l[?2004h>     background: #2a2a2a;
+[?2004l[?2004h>     border-radius: 10px;
+[?2004l[?2004h>     border-left: 4px solid #4CAF50;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .formula-line {
+[?2004l[?2004h>     font-family: monospace;
+[?2004l[?2004h>     margin: 5px 0;
+[?2004l[?2004h>     color: #ccc;
+[?2004l[?2004h>     font-size: 14px;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .formula-display h4 {
+[?2004l[?2004h>     margin: 0 0 10px 0;
+[?2004l[?2004h>     color: #4CAF50;
+[?2004l[?2004h>     border-bottom: 1px solid #444;
+[?2004l[?2004h>     padding-bottom: 5px;
+[?2004l[?2004h> }
+[?2004l[?2004h> EOF
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cd ~/DabTimer && git add . 
