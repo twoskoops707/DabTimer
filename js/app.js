@@ -1,123 +1,103 @@
-console.log("Dab Timer App Starting...");
+console.log("Dab Timer - Simple Init");
 
-// Simple state management
-const state = {
-    currentTab: 'home-screen',
-    settings: {
-        material: 'quartz',
-        concentrate: 'shatter',
-        heater: 'torch'
-    }
-};
-
-// Wait for full load
-window.addEventListener('load', function() {
-    console.log("Window fully loaded");
-    initializeApp();
+// Wait for FULL DOM readiness
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM fully loaded and parsed");
+    
+    // Initialize with delay to ensure everything is ready
+    setTimeout(initializeApp, 100);
 });
 
 function initializeApp() {
-    console.log("Initializing application...");
+    console.log("Initializing app...");
+    
+    // Check if essential elements exist
+    const homeScreen = document.getElementById('home-screen');
+    if (!homeScreen) {
+        console.error("Home screen not found!");
+        return;
+    }
+    
+    console.log("Home screen found, setting up...");
     
     // Set up basic functionality
     setupOptionButtons();
-    setupTabNavigation();
     setupStartButton();
-    
-    // Start the clock
+    setupTabNavigation();
     updateClock();
-    setInterval(updateClock, 1000);
     
-    console.log("App initialized successfully!");
+    console.log("App initialized successfully");
 }
 
 function setupOptionButtons() {
     const optionButtons = document.querySelectorAll('.option-btn');
+    console.log("Found", optionButtons.length, "option buttons");
     
     optionButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const value = this.dataset.value;
-            const group = this.closest('.setting-group');
+            // Remove active class from siblings in same group
+            const parent = this.parentElement;
+            const siblings = parent.querySelectorAll('.option-btn');
+            siblings.forEach(btn => btn.classList.remove('active'));
             
-            if (group) {
-                // Remove active class from siblings
-                const siblings = group.querySelectorAll('.option-btn');
-                siblings.forEach(btn => btn.classList.remove('active'));
-                
-                // Add active class to clicked button
-                this.classList.add('active');
-                
-                // Update state based on setting group
-                const groupTitle = group.querySelector('h3');
-                if (groupTitle) {
-                    const title = groupTitle.textContent;
-                    if (title.includes('Material')) {
-                        state.settings.material = value;
-                    } else if (title.includes('Concentrate')) {
-                        state.settings.concentrate = value;
-                    } else if (title.includes('Heating')) {
-                        state.settings.heater = value;
-                    }
-                    console.log("Settings updated:", state.settings);
-                }
-            }
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            console.log("Selected:", this.dataset.setting, "=", this.dataset.value);
         });
     });
+}
+
+function setupStartButton() {
+    const startBtn = document.getElementById('start-timer-btn');
+    if (startBtn) {
+        startBtn.addEventListener('click', function() {
+            console.log("Start timer clicked");
+            switchToTab('timer-screen');
+        });
+    } else {
+        console.error("Start button not found");
+    }
 }
 
 function setupTabNavigation() {
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     
+    console.log("Setting up", tabButtons.length, "tab buttons");
+    
     tabButtons.forEach(button => {
         button.addEventListener('click', function() {
             const tabId = this.dataset.tab;
             console.log("Switching to tab:", tabId);
             
-            // Update active tab button
+            // Update buttons
             tabButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
             
-            // Update active tab content
+            // Update content
             tabContents.forEach(content => {
                 content.classList.remove('active');
                 if (content.id === tabId) {
                     content.classList.add('active');
-                    state.currentTab = tabId;
                 }
             });
         });
     });
 }
 
-function setupStartButton() {
-    const startButton = document.getElementById('start-timer-from-home');
-    if (startButton) {
-        startButton.addEventListener('click', function() {
-            console.log("Starting timer with settings:", state.settings);
-            // Switch to timer tab
-            switchToTab('timer-screen');
-            
-            // Start a basic timer (60 seconds for testing)
-            startBasicTimer(60);
-        });
-    }
-}
-
 function switchToTab(tabId) {
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     
-    // Update active tab button
-    tabButtons.forEach(btn => {
-        if (btn.dataset.tab === tabId) {
-            btn.classList.add('active');
+    tabButtons.forEach(button => {
+        if (button.dataset.tab === tabId) {
+            button.classList.add('active');
         } else {
-            btn.classList.remove('active');
+            button.classList.remove('active');
         }
     });
     
-    // Update active tab content
     tabContents.forEach(content => {
         if (content.id === tabId) {
             content.classList.add('active');
@@ -125,52 +105,22 @@ function switchToTab(tabId) {
             content.classList.remove('active');
         }
     });
-    
-    state.currentTab = tabId;
-}
-
-function startBasicTimer(seconds) {
-    const timerElement = document.getElementById('timer');
-    if (!timerElement) return;
-    
-    let timeLeft = seconds;
-    
-    // Update timer display immediately
-    updateTimerDisplay(timeLeft);
-    
-    // Start countdown
-    const interval = setInterval(() => {
-        timeLeft--;
-        
-        if (timeLeft <= 0) {
-            clearInterval(interval);
-            timerElement.textContent = "Done!";
-            timerElement.style.color = "var(--primary-color)";
-        } else {
-            updateTimerDisplay(timeLeft);
-        }
-    }, 1000);
-}
-
-function updateTimerDisplay(seconds) {
-    const timerElement = document.getElementById('timer');
-    if (timerElement) {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        timerElement.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
-        timerElement.style.color = "var(--text-primary)";
-    }
 }
 
 function updateClock() {
-    const clockElement = document.getElementById('current-time');
-    if (clockElement) {
+    const clock = document.getElementById('current-time');
+    if (clock) {
         const now = new Date();
-        clockElement.textContent = now.toLocaleTimeString([], { 
-            hour: '2-digit', 
-            minute: '2-digit' 
-        });
+        clock.textContent = now.toLocaleTimeString();
+        
+        // Update every minute instead of every second to reduce load
+        setTimeout(updateClock, 60000);
     }
 }
 
-console.log("App script loaded");
+// Basic error handling
+window.addEventListener('error', function(e) {
+    console.error("JavaScript error:", e.error);
+});
+
+console.log("Script loaded successfully");
