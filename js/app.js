@@ -381,3 +381,185 @@ function updateOptionButtons() {
         }
     });
 }
+
+// Calendar/Analytics Functions
+function setupCalendar() {
+    // Setup time range buttons
+    const timeRangeBtns = document.querySelectorAll('.time-range-btn');
+    timeRangeBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const range = this.dataset.range;
+            timeRangeBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            updateCalendarDisplay(range);
+        });
+    });
+
+    // Setup date navigation
+    const prevBtn = document.getElementById('prev-period');
+    const nextBtn = document.getElementById('next-period');
+    
+    if (prevBtn) prevBtn.addEventListener('click', () => navigatePeriod(-1));
+    if (nextBtn) nextBtn.addEventListener('click', () => navigatePeriod(1));
+
+    // Initial calendar update
+    updateCalendarDisplay('week');
+}
+
+function updateCalendarDisplay(range) {
+    // Update the calendar based on selected time range
+    updateStats();
+    updateCharts();
+    updateHistory();
+    updateCurrentPeriodDisplay(range);
+}
+
+function updateStats() {
+    // Calculate and display statistics
+    const totalSessions = calculateTotalSessions();
+    const sessionsPerDay = calculateSessionsPerDay();
+    const favoriteConcentrate = calculateFavoriteConcentrate();
+    
+    if (document.getElementById('total-sessions')) {
+        document.getElementById('total-sessions').textContent = totalSessions;
+    }
+    if (document.getElementById('sessions-per-day')) {
+        document.getElementById('sessions-per-day').textContent = sessionsPerDay.toFixed(1);
+    }
+    if (document.getElementById('fav-concentrate')) {
+        document.getElementById('fav-concentrate').textContent = favoriteConcentrate;
+    }
+}
+
+function calculateTotalSessions() {
+    let total = 0;
+    for (const date in state.usage) {
+        total += state.usage[date].count;
+    }
+    return total;
+}
+
+function calculateSessionsPerDay() {
+    const dates = Object.keys(state.usage);
+    if (dates.length === 0) return 0;
+    
+    const totalSessions = calculateTotalSessions();
+    return totalSessions / dates.length;
+}
+
+function calculateFavoriteConcentrate() {
+    const concentrateCount = {};
+    let maxCount = 0;
+    let favorite = 'None';
+    
+    for (const date in state.usage) {
+        for (const conc in state.usage[date].concentrates) {
+            concentrateCount[conc] = (concentrateCount[conc] || 0) + state.usage[date].concentrates[conc];
+            if (concentrateCount[conc] > maxCount) {
+                maxCount = concentrateCount[conc];
+                favorite = conc.charAt(0).toUpperCase() + conc.slice(1);
+            }
+        }
+    }
+    
+    return favorite;
+}
+
+function updateCharts() {
+    // Placeholder for chart updates
+    // Would use Chart.js or similar library here
+    console.log("Charts would be updated here");
+}
+
+function updateHistory() {
+    const historyList = document.getElementById('history-list');
+    if (!historyList) return;
+    
+    // Clear existing history
+    historyList.innerHTML = '';
+    
+    // Get sorted dates (newest first)
+    const dates = Object.keys(state.usage).sort((a, b) => new Date(b) - new Date(a));
+    
+    // Add recent activity items
+    dates.slice(0, 5).forEach(date => {
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        historyItem.innerHTML = `
+            <span class="history-date">${formatDate(date)}</span>
+            <span class="history-count">${state.usage[date].count} sessions</span>
+        `;
+        historyList.appendChild(historyItem);
+    });
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+    });
+}
+
+function updateCurrentPeriodDisplay(range) {
+    const periodElement = document.getElementById('current-period');
+    if (periodElement) {
+        const now = new Date();
+        let displayText = '';
+        
+        switch (range) {
+            case 'week':
+                displayText = `Week of ${now.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}`;
+                break;
+            case 'month':
+                displayText = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                break;
+            case 'year':
+                displayText = now.getFullYear().toString();
+                break;
+            default:
+                displayText = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        }
+        
+        periodElement.textContent = displayText;
+    }
+}
+
+function navigatePeriod(direction) {
+    // Handle period navigation
+    console.log("Navigating period:", direction);
+    // Implementation would depend on current view state
+}
+
+// Add calendar setup to initialization
+function initializeApp() {
+    console.log("Initializing full application...");
+    
+    // Initialize elements
+    elements = {
+        currentTime: document.getElementById('current-time'),
+        timerMode: document.getElementById('timer-mode'),
+        timer: document.getElementById('timer'),
+        timerProgress: document.getElementById('timer-progress'),
+        startTimer: document.getElementById('start-timer'),
+        resetTimer: document.getElementById('reset-timer'),
+        currentMaterial: document.getElementById('current-material'),
+        currentConcentrate: document.getElementById('current-concentrate'),
+        currentHeater: document.getElementById('current-heater')
+    };
+    
+    // Setup functionality
+    setupOptions();
+    setupStartButton();
+    setupTabs();
+    setupTimerControls();
+    setupCalendar(); // Added calendar setup
+    startClock();
+    
+    // Load saved data
+    loadSettings();
+    loadUsageData();
+    
+    console.log("Full app initialized");
+}
