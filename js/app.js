@@ -1,49 +1,47 @@
-console.log("Dab Timer - Simple Init");
+console.log("Dab Timer - Clean Start");
 
-// Wait for FULL DOM readiness
+// Wait for full DOM readiness
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("DOM fully loaded and parsed");
-    
-    // Initialize with delay to ensure everything is ready
-    setTimeout(initializeApp, 100);
+    console.log("DOM ready, starting app in 100ms...");
+    setTimeout(initApp, 100);
 });
 
-function initializeApp() {
+function initApp() {
     console.log("Initializing app...");
     
-    // Check if essential elements exist
+    // Check if home screen exists
     const homeScreen = document.getElementById('home-screen');
     if (!homeScreen) {
         console.error("Home screen not found!");
+        showError("Home screen not loaded");
         return;
     }
     
-    console.log("Home screen found, setting up...");
+    console.log("Home screen found");
     
-    // Set up basic functionality
-    setupOptionButtons();
+    // Setup basic functionality
+    setupOptions();
     setupStartButton();
-    setupTabNavigation();
-    updateClock();
+    setupTabs();
+    startClock();
     
     console.log("App initialized successfully");
 }
 
-function setupOptionButtons() {
-    const optionButtons = document.querySelectorAll('.option-btn');
-    console.log("Found", optionButtons.length, "option buttons");
+function setupOptions() {
+    const options = document.querySelectorAll('.option-btn');
+    console.log("Setting up", options.length, "options");
     
-    optionButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Remove active class from siblings in same group
+    options.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remove active from siblings
             const parent = this.parentElement;
             const siblings = parent.querySelectorAll('.option-btn');
-            siblings.forEach(btn => btn.classList.remove('active'));
+            siblings.forEach(sib => sib.classList.remove('active'));
             
-            // Add active class to clicked button
+            // Add active to clicked
             this.classList.add('active');
-            
-            console.log("Selected:", this.dataset.setting, "=", this.dataset.value);
+            console.log("Selected:", this.dataset.value);
         });
     });
 }
@@ -52,30 +50,26 @@ function setupStartButton() {
     const startBtn = document.getElementById('start-timer-btn');
     if (startBtn) {
         startBtn.addEventListener('click', function() {
-            console.log("Start timer clicked");
+            console.log("Starting timer...");
             switchToTab('timer-screen');
         });
-    } else {
-        console.error("Start button not found");
     }
 }
 
-function setupTabNavigation() {
-    const tabButtons = document.querySelectorAll('.tab-btn');
+function setupTabs() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     
-    console.log("Setting up", tabButtons.length, "tab buttons");
-    
-    tabButtons.forEach(button => {
-        button.addEventListener('click', function() {
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
             const tabId = this.dataset.tab;
-            console.log("Switching to tab:", tabId);
+            console.log("Switching to:", tabId);
             
             // Update buttons
-            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
-            // Update content
+            // Update contents
             tabContents.forEach(content => {
                 content.classList.remove('active');
                 if (content.id === tabId) {
@@ -87,40 +81,56 @@ function setupTabNavigation() {
 }
 
 function switchToTab(tabId) {
-    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     
-    tabButtons.forEach(button => {
-        if (button.dataset.tab === tabId) {
-            button.classList.add('active');
-        } else {
-            button.classList.remove('active');
-        }
+    tabBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabId);
     });
     
     tabContents.forEach(content => {
-        if (content.id === tabId) {
-            content.classList.add('active');
-        } else {
-            content.classList.remove('active');
-        }
+        content.classList.toggle('active', content.id === tabId);
     });
+}
+
+function startClock() {
+    const clock = document.getElementById('current-time');
+    if (clock) {
+        updateClock();
+        setInterval(updateClock, 60000); // Update every minute
+    }
 }
 
 function updateClock() {
     const clock = document.getElementById('current-time');
     if (clock) {
         const now = new Date();
-        clock.textContent = now.toLocaleTimeString();
-        
-        // Update every minute instead of every second to reduce load
-        setTimeout(updateClock, 60000);
+        clock.textContent = now.toLocaleTimeString([], { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
     }
 }
 
-// Basic error handling
-window.addEventListener('error', function(e) {
-    console.error("JavaScript error:", e.error);
-});
+function showError(msg) {
+    const errorDiv = document.createElement('div');
+    errorDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #ff4444;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 5px;
+        z-index: 10000;
+        font-family: Arial, sans-serif;
+    `;
+    errorDiv.textContent = msg;
+    document.body.appendChild(errorDiv);
+}
 
-console.log("Script loaded successfully");
+// Error handling
+window.addEventListener('error', function(e) {
+    console.error("Global error:", e.error);
+});
