@@ -221,7 +221,7 @@ function setupEventListeners() {
     elements.getStarted.addEventListener('click', () => {
         elements.splashScreen.classList.remove('active');
         elements.app.classList.add('active');
-        switchTab('setup-screen');
+        switchTab('home-screen');
     });
     
     // Custom time inputs
@@ -262,7 +262,6 @@ function switchTab(tabId) {
         }
     });
     
-    state.currentTab = tabId;
 }
 
 // Update settings display
