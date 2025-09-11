@@ -131,18 +131,18 @@ const elements = {
 
 // Initialize the app
 function initApp() {
-    updateCurrentTime();
-    setInterval(updateCurrentTime, 1000);
+    safeUpdateCurrentTime();
+    setInterval(safeUpdateCurrentTime, 1000);
     
     // Load saved settings and usage data
     loadSettings();
     loadUsageData();
     
     // Setup event listeners
-    setupEventListeners();
+    safeSetupEventListeners();
     
     // Update UI based on settings
-    updateSettingsDisplay();
+    safeUpdateSettingsDisplay();
     
     // Set initial custom time values
     elements.customHeatInput.value = state.settings.customHeat;
@@ -151,6 +151,7 @@ function initApp() {
 
 // Update current time display
 function updateCurrentTime() {
+    if (!elements.currentTime) return;
     const now = new Date();
     elements.currentTime.textContent = now.toLocaleTimeString([], { 
         hour: '2-digit', 
@@ -189,7 +190,7 @@ function setupEventListeners() {
                 state.settings.rigType = button.dataset.value;
             }
             
-            updateSettingsDisplay();
+            safeUpdateSettingsDisplay();
             saveSettings();
         });
     });
@@ -207,7 +208,7 @@ function setupEventListeners() {
             
             // Update settings
             state.settings.rigType = rigType;
-            updateSettingsDisplay();
+            safeUpdateSettingsDisplay();
             saveSettings();
         });
     });
@@ -266,6 +267,7 @@ function switchTab(tabId) {
 
 // Update settings display
 function updateSettingsDisplay() {
+    if (!elements.currentMaterial) return;
     elements.currentMaterial.textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1);
     elements.currentConcentrate.textContent = state.settings.concentrate.charAt(0).toUpperCase() + state.settings.concentrate.slice(1);
     elements.currentHeater.textContent = state.settings.heater.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
@@ -883,4 +885,26 @@ function generatePieChart(concentrateDistribution) {
     }
     
     pieChart.appendChild(legend);
+}
+// Safety check function
+function checkElements() {
+    return elements && elements.currentTime && elements.currentMaterial && elements.tabButtons;
+}
+
+// Safe version of updateCurrentTime
+function safeUpdateCurrentTime() {
+    if (!checkElements()) return;
+    safeUpdateCurrentTime();
+}
+
+// Safe version of updateSettingsDisplay
+function safeUpdateSettingsDisplay() {
+    if (!checkElements()) return;
+    safeUpdateSettingsDisplay();
+}
+
+// Safe version of setupEventListeners
+function safeSetupEventListeners() {
+    if (!checkElements()) return;
+    safeSetupEventListeners();
 }
