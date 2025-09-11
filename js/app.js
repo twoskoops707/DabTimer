@@ -282,8 +282,10 @@ function updateTimerDisplay() {
 }
 
 function playAlarmSound() {
-    // Would play actual sound file in production
-    console.log("Alarm sound should play here");
+    // Play the alarm sound using audio.js
+    if (typeof window.playAlarmSound === "function") {
+        window.playAlarmSound();
+    }
 }
 
 function showNotification(message) {
@@ -561,7 +563,7 @@ function initializeApp() {
 
 // Import chart functions
 function updateCharts() {
-    // This will be handled by charts.js
+    // Charts are handled by charts.js
     if (typeof updateCharts === "function") {
         window.updateCharts();
     }
