@@ -35,26 +35,26 @@
                         <div class="setting-card">
                             <h3>Material</h3>
                             <div class="option-buttons">
-                                <button class="option-btn active" data-value="quartz">Quartz</button>
-                                <button class="option-btn" data-value="titanium">Titanium</button>
-                                <button class="option-btn" data-value="ceramic">Ceramic</button>
+                                <button class="option-btn active" data-setting="material" data-value="quartz">Quartz</button>
+                                <button class="option-btn" data-setting="material" data-value="titanium">Titanium</button>
+                                <button class="option-btn" data-setting="material" data-value="ceramic">Ceramic</button>
                             </div>
                         </div>
 
                         <div class="setting-card">
                             <h3>Concentrate</h3>
                             <div class="option-buttons">
-                                <button class="option-btn active" data-value="shatter">Shatter</button>
-                                <button class="option-btn" data-value="wax">Wax</button>
-                                <button class="option-btn" data-value="resin">Live Resin</button>
+                                <button class="option-btn active" data-setting="concentrate" data-value="shatter">Shatter</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="wax">Wax</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="resin">Live Resin</button>
                             </div>
                         </div>
 
                         <div class="setting-card">
                             <h3>Heating</h3>
                             <div class="option-buttons">
-                                <button class="option-btn active" data-value="torch">Torch</button>
-                                <button class="option-btn" data-value="lighter">Lighter</button>
+                                <button class="option-btn active" data-setting="heater" data-value="torch">Torch</button>
+                                <button class="option-btn" data-setting="heater" data-value="lighter">Lighter</button>
                             </div>
                         </div>
                     </div>
@@ -92,6 +92,12 @@
                             <p>Concentrate: <span id="current-concentrate">Shatter</span></p>
                             <p>Heater: <span id="current-heater">Torch</span></p>
                         </div>
+                    <div class="formula-display" style="margin-top: 20px; padding: 15px; background: #2a2a2a; border-radius: 10px;">
+                        <h4>Heating Formula</h4>
+                        <div class="formula-line">t = (m × c × ΔT) / P</div>
+                        <div class="formula-line">Where m = mass, c = specific heat</div>
+                        <div class="formula-line">ΔT = temp difference, P = power</div>
+                    </div>
                     </div>
                 </div>
             </div>

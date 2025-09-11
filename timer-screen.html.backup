@@ -25,12 +25,6 @@
                             <p>Concentrate: <span id="current-concentrate">Shatter</span></p>
                             <p>Heater: <span id="current-heater">Torch</span></p>
                         </div>
-                    <div class="formula-display" style="margin-top: 20px; padding: 15px; background: #2a2a2a; border-radius: 10px;">
-                        <h4>Heating Formula</h4>
-                        <div class="formula-line">t = (m × c × ΔT) / P</div>
-                        <div class="formula-line">Where m = mass, c = specific heat</div>
-                        <div class="formula-line">ΔT = temp difference, P = power</div>
-                    </div>
                     </div>
                     
                     <div class="custom-time-section">

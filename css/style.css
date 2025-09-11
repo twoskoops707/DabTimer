@@ -764,3 +764,25 @@ main {
     font-weight: 600;
     color: var(--primary-color);
 }
+
+.formula-display {
+    margin: 20px 0;
+    padding: 15px;
+    background: #2a2a2a;
+    border-radius: 10px;
+    border-left: 4px solid #4CAF50;
+}
+
+.formula-line {
+    font-family: monospace;
+    margin: 5px 0;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.formula-display h4 {
+    margin: 0 0 10px 0;
+    color: #4CAF50;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+}
