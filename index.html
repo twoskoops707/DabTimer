@@ -70,12 +70,31 @@
             <!-- Timer Screen -->
             <div id="timer-screen" class="tab-content">
                 <div class="timer-container">
-                    <h2>Timer Screen</h2>
-                    <p>Timer functionality will be here</p>
+                    <div class="timer-display">
+                        <div id="timer-mode">HEAT UP</div>
+                        <div id="timer" class="digital">0:30</div>
+                        <div class="progress-container">
+                            <div id="timer-progress" class="progress-bar"></div>
+                        </div>
+                    </div>
+                    <div class="timer-controls">
+                        <button id="start-timer" class="btn-primary">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                        <button id="reset-timer" class="btn-secondary">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                    <div class="current-settings">
+                        <h3>Current Settings</h3>
+                        <div class="settings-display">
+                            <p>Material: <span id="current-material">Quartz</span></p>
+                            <p>Concentrate: <span id="current-concentrate">Shatter</span></p>
+                            <p>Heater: <span id="current-heater">Torch</span></p>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <!-- Calendar Screen -->
             <div id="calendar-screen" class="tab-content">
                 <div class="calendar-container">
                     <h2>Calendar Screen</h2>
