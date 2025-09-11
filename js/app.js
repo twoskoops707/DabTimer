@@ -1,6 +1,5 @@
-console.log("Dab Timer - Clean Start");
+console.log("Dab Timer - Fresh Start");
 
-// Simple initialization after DOM load
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM ready");
     initializeApp();
@@ -9,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeApp() {
     console.log("Initializing app...");
     
-    // Set up basic functionality
+    // Setup basic functionality
     setupOptions();
     setupStartButton();
     setupTabs();
@@ -22,12 +21,9 @@ function setupOptions() {
     const options = document.querySelectorAll('.option-btn');
     options.forEach(btn => {
         btn.addEventListener('click', function() {
-            // Remove active from siblings
             const parent = this.parentElement;
             const siblings = parent.querySelectorAll('.option-btn');
             siblings.forEach(sib => sib.classList.remove('active'));
-            
-            // Add active to clicked
             this.classList.add('active');
         });
     });
@@ -50,11 +46,9 @@ function setupTabs() {
         btn.addEventListener('click', function() {
             const tabId = this.dataset.tab;
             
-            // Update buttons
             tabBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
-            // Update contents
             tabContents.forEach(content => {
                 content.classList.remove('active');
                 if (content.id === tabId) {
@@ -93,8 +87,3 @@ function updateClock() {
         });
     }
 }
-
-// Error handling
-window.addEventListener('error', function(e) {
-    console.error("Error:", e.error);
-});

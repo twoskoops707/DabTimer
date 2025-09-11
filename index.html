@@ -2,31 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dab Timer Premium</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Splash Screen -->
     <!-- Main App -->
-<!-- Calculation Splash Screen -->
-            <div class="formula-display">
-            </div>
-            <div class="loading-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </div>
-</div>
     <div id="app" class="screen active">
         <header>
             <div class="header-content">
                 <div class="logo-small">
-                    <i class="fas fa-cannabis"></i>
                     <i class="fas fa-cannabis"></i>
                     <span>DAB TIMER</span>
                 </div>
@@ -35,3 +22,85 @@
         </header>
 
         <main>
+            <!-- Home Screen -->
+            <div id="home-screen" class="tab-content active">
+                <div class="home-container">
+                    <div class="home-header">
+                        <i class="fas fa-cannabis"></i>
+                        <h1>DAB TIMER</h1>
+                        <p>PREMIUM EDITION</p>
+                    </div>
+
+                    <div class="settings-grid">
+                        <div class="setting-card">
+                            <h3>Material</h3>
+                            <div class="option-buttons">
+                                <button class="option-btn active" data-value="quartz">Quartz</button>
+                                <button class="option-btn" data-value="titanium">Titanium</button>
+                                <button class="option-btn" data-value="ceramic">Ceramic</button>
+                            </div>
+                        </div>
+
+                        <div class="setting-card">
+                            <h3>Concentrate</h3>
+                            <div class="option-buttons">
+                                <button class="option-btn active" data-value="shatter">Shatter</button>
+                                <button class="option-btn" data-value="wax">Wax</button>
+                                <button class="option-btn" data-value="resin">Live Resin</button>
+                            </div>
+                        </div>
+
+                        <div class="setting-card">
+                            <h3>Heating</h3>
+                            <div class="option-buttons">
+                                <button class="option-btn active" data-value="torch">Torch</button>
+                                <button class="option-btn" data-value="lighter">Lighter</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="start-timer-btn" class="btn-primary large">
+                            <i class="fas fa-play"></i> Start Timer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timer Screen -->
+            <div id="timer-screen" class="tab-content">
+                <div class="timer-container">
+                    <h2>Timer Screen</h2>
+                    <p>Timer functionality will be here</p>
+                </div>
+            </div>
+
+            <!-- Calendar Screen -->
+            <div id="calendar-screen" class="tab-content">
+                <div class="calendar-container">
+                    <h2>Calendar Screen</h2>
+                    <p>Calendar functionality will be here</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-bar">
+            <button class="tab-btn active" data-tab="home-screen">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </button>
+            <button class="tab-btn" data-tab="timer-screen">
+                <i class="fas fa-stopwatch"></i>
+                <span>Timer</span>
+            </button>
+            <button class="tab-btn" data-tab="calendar-screen">
+                <i class="fas fa-calendar"></i>
+                <span>Calendar</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
