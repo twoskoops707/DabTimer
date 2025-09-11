@@ -1480,3 +1480,23 @@ main {
     flex: 1;
     overflow-y: auto;
 }
+/* Force home screen to display */
+#home-screen.active {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Hide any calculation elements */
+[class*="calculat"], [class*="load"], [class*="formula"] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* Ensure all home screen elements are visible */
+.home-container > * {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}

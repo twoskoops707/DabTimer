@@ -1,37 +1,25 @@
 console.log("Dab Timer - Clean Start");
 
-// Wait for full DOM readiness
+// Simple initialization after DOM load
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("DOM ready, starting app in 100ms...");
-    setTimeout(initApp, 100);
+    console.log("DOM ready");
+    initializeApp();
 });
 
-function initApp() {
+function initializeApp() {
     console.log("Initializing app...");
     
-    // Check if home screen exists
-    const homeScreen = document.getElementById('home-screen');
-    if (!homeScreen) {
-        console.error("Home screen not found!");
-        showError("Home screen not loaded");
-        return;
-    }
-    
-    console.log("Home screen found");
-    
-    // Setup basic functionality
+    // Set up basic functionality
     setupOptions();
     setupStartButton();
     setupTabs();
     startClock();
     
-    console.log("App initialized successfully");
+    console.log("App initialized");
 }
 
 function setupOptions() {
     const options = document.querySelectorAll('.option-btn');
-    console.log("Setting up", options.length, "options");
-    
     options.forEach(btn => {
         btn.addEventListener('click', function() {
             // Remove active from siblings
@@ -41,7 +29,6 @@ function setupOptions() {
             
             // Add active to clicked
             this.classList.add('active');
-            console.log("Selected:", this.dataset.value);
         });
     });
 }
@@ -50,7 +37,6 @@ function setupStartButton() {
     const startBtn = document.getElementById('start-timer-btn');
     if (startBtn) {
         startBtn.addEventListener('click', function() {
-            console.log("Starting timer...");
             switchToTab('timer-screen');
         });
     }
@@ -63,7 +49,6 @@ function setupTabs() {
     tabBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             const tabId = this.dataset.tab;
-            console.log("Switching to:", tabId);
             
             // Update buttons
             tabBtns.forEach(b => b.classList.remove('active'));
@@ -94,11 +79,8 @@ function switchToTab(tabId) {
 }
 
 function startClock() {
-    const clock = document.getElementById('current-time');
-    if (clock) {
-        updateClock();
-        setInterval(updateClock, 60000); // Update every minute
-    }
+    updateClock();
+    setInterval(updateClock, 60000);
 }
 
 function updateClock() {
@@ -112,25 +94,7 @@ function updateClock() {
     }
 }
 
-function showError(msg) {
-    const errorDiv = document.createElement('div');
-    errorDiv.style.cssText = `
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #ff4444;
-        color: white;
-        padding: 15px 20px;
-        border-radius: 5px;
-        z-index: 10000;
-        font-family: Arial, sans-serif;
-    `;
-    errorDiv.textContent = msg;
-    document.body.appendChild(errorDiv);
-}
-
 // Error handling
 window.addEventListener('error', function(e) {
-    console.error("Global error:", e.error);
+    console.error("Error:", e.error);
 });
