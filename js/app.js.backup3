@@ -108,34 +108,21 @@ let state = {
 };
 
 // DOM Elements
-// Initialize DOM elements after page load
-function initializeElements() {
-    return {
-        splashScreen: document.getElementById("splash-screen"),
-        app: document.getElementById("app"),
-        currentTime: document.getElementById("current-time"),
-        timerMode: document.getElementById("timer-mode"),
-        timer: document.getElementById("timer"),
-        timerProgress: document.getElementById("timer-progress"),
-        startTimer: document.getElementById("start-timer"),
-        resetTimer: document.getElementById("reset-timer"),
-        currentMaterial: document.getElementById("current-material"),
-        currentConcentrate: document.getElementById("current-concentrate"),
-        currentHeater: document.getElementById("current-heater"),
-        tabButtons: document.querySelectorAll(".tab-btn"),
-        tabContents: document.querySelectorAll(".tab-content"),
-        optionButtons: document.querySelectorAll(".option-btn"),
-        getStarted: document.getElementById("get-started"),
-        customHeatInput: document.getElementById("custom-heat"),
-        customCoolInput: document.getElementById("custom-cool"),
-        applyCustomTimes: document.getElementById("apply-custom-times")
-    };
-function initApp() {
-    // Initialize DOM elements after page load
-    elements = initializeElements();
-}
-
-let elements = {};
+const elements = {
+    splashScreen: document.getElementById('splash-screen'),
+    app: document.getElementById('app'),
+    currentTime: document.getElementById('current-time'),
+    timerMode: document.getElementById('timer-mode'),
+    timer: document.getElementById('timer'),
+    timerProgress: document.getElementById('timer-progress'),
+    startTimer: document.getElementById('start-timer'),
+    resetTimer: document.getElementById('reset-timer'),
+    currentMaterial: document.getElementById('current-material'),
+    currentConcentrate: document.getElementById('current-concentrate'),
+    currentHeater: document.getElementById('current-heater'),
+    tabButtons: document.querySelectorAll('.tab-btn'),
+    tabContents: document.querySelectorAll('.tab-content'),
+    optionButtons: document.querySelectorAll('.option-btn'),
     getStarted: document.getElementById('get-started'),
     customHeatInput: document.getElementById('custom-heat'),
     customCoolInput: document.getElementById('custom-cool'),
