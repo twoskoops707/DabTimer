@@ -37,13 +37,6 @@ body {
 }
 
 /* Splash Screen */
-#splash-screen {
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-color) 100%);
-    color: white;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
 
 .splash-content {
     padding: 20px;

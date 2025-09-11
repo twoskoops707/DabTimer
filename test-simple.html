@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .tab-content { 
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+        .tab-content.active { 
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Test</h1>
+    <div class="tab-content active">
+        <h2>Home Screen</h2>
+        <p>If you can see this, the app is working!</p>
+        <p>Current time: <span id="current-time">--:--</span></p>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
