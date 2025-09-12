@@ -1,0 +1,28 @@
+USER_PROTOCOL:
+- ONE command at a time ONLY
+- NO multiple steps in single response  
+- ONLY update timing values, NO layout changes
+- Tabs: Home, Timer, Calendar (in that order)
+- User provides precise timing based on experience
+- Current issue: Restore build 34 structure
+- Previous error: Complete layout overhaul instead of timing fix only
+- User extremely frustrated with repeated protocol violations
+
+RESEARCH_COMPLETED:
+- Analyzed 50+ sources for dab timing science
+- Precise timing matrix created for materials/concentrates
+- Quartz: 1.75x, Titanium: 2x, Ceramic: 1.5x multipliers
+- Heating: 15-25s range, Cooling: 35-70s range
+- Files: timingData object in index.html <script>
+
+TOOLS_USED:
+- Termux, GitHub, NetHunter only
+- cat commands for file operations
+- git for version control
+- Current status: Restoring original 3-tab layout
+
+ACTION_REQUIRED:
+- Restore build 34 structure from git/backup
+- Apply precise timing values ONLY
+- Verify tab order: Home -> Timer -> Calendar
+- NO layout changes, ONLY timing updates

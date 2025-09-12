@@ -1,28 +1,17 @@
 {
-  "name": "dab-timer-pro",
-  "version": "2.0.0",
-  "description": "A precision timer for dabbing with different materials and concentrates",
-  "main": "app.js",
+  "name": "dab-timer",
+  "version": "1.0.0",
+  "description": "A timer app for dabbing sessions",
+  "main": "index.html",
   "scripts": {
-    "start": "electron .",
-    "build": "electron-builder"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Your Name",
-  "license": "MIT",
-  "devDependencies": {
-    "electron": "^22.0.0",
-    "electron-builder": "^23.0.0"
-  },
-  "build": {
-    "appId": "com.yourname.dabtimerpro",
-    "productName": "Dab Timer Pro",
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "app.js",
-      "index.html",
-      "package.json"
-    ]
-  }
+  "keywords": [
+    "dab",
+    "timer",
+    "cannabis",
+    "concentrates"
+  ],
+  "author": "twoskoops707",
+  "license": "MIT"
 }
