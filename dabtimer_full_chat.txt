@@ -956,4 +956,204 @@ index.html.backup.final    verify-structure.html
 [?2004l[?2004h>     padding-bottom: 5px;
 [?2004l[?2004h> }
 [?2004l[?2004h> EOF
-[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cd ~/DabTimer && git add . 
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cd ~/DabTimer && git add . && git commit -m "JSM test push" && git push origin main
+[?2004l[main 238be08] JSM test push
+ 7 files changed, 1846 insertions(+), 2 deletions(-)
+ create mode 100644 dabtimer_full_chat.txtl
+ create mode 100644 js/custom-times.js
+Enumerating objects: 19, done.
+Counting objects:   5% (1/19)Counting objects:  10% (2/19)Counting objects:  15% (3/19)Counting objects:  21% (4/19)Counting objects:  26% (5/19)Counting objects:  31% (6/19)Counting objects:  36% (7/19)Counting objects:  42% (8/19)Counting objects:  47% (9/19)Counting objects:  52% (10/19)Counting objects:  57% (11/19)Counting objects:  63% (12/19)Counting objects:  68% (13/19)Counting objects:  73% (14/19)Counting objects:  78% (15/19)Counting objects:  84% (16/19)Counting objects:  89% (17/19)Counting objects:  94% (18/19)Counting objects: 100% (19/19)Counting objects: 100% (19/19), done.
+Delta compression using up to 8 threads
+Compressing objects:  10% (1/10)Compressing objects:  20% (2/10)Compressing objects:  30% (3/10)Compressing objects:  40% (4/10)Compressing objects:  50% (5/10)Compressing objects:  60% (6/10)Compressing objects:  70% (7/10)Compressing objects:  80% (8/10)Compressing objects:  90% (9/10)Compressing objects: 100% (10/10)Compressing objects: 100% (10/10), done.
+Writing objects:   9% (1/11)Writing objects:  18% (2/11)Writing objects:  27% (3/11)Writing objects:  36% (4/11)Writing objects:  45% (5/11)Writing objects:  54% (6/11)Writing objects:  63% (7/11)Writing objects:  72% (8/11)Writing objects:  81% (9/11)Writing objects:  90% (10/11)Writing objects: 100% (11/11)Writing objects: 100% (11/11), 12.02 KiB | 3.00 MiB/s, done.
+Total 11 (delta 7), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/7)[Kremote: Resolving deltas:  14% (1/7)[Kremote: Resolving deltas:  28% (2/7)[Kremote: Resolving deltas:  42% (3/7)[Kremote: Resolving deltas:  57% (4/7)[Kremote: Resolving deltas:  71% (5/7)[Kremote: Resolving deltas:  85% (6/7)[Kremote: Resolving deltas: 100% (7/7)[Kremote: Resolving deltas: 100% (7/7), completed with 5 local objects.[K
+To https://github.com/twoskoops707/DabTimer.git
+   36a3165..238be08  main -> main
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m cat >> css/style.css << 'EOF'
+[?2004l[?2004h> 
+[?2004l[?2004h> /* Header Settings Menu */
+[?2004l[?2004h> .header-settings {
+[?2004l[?2004h>     position: relative;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .settings-menu-btn {
+[?2004l[?2004h>     background: none;
+[?2004l[?2004h>     border: none;
+[?2004l[?2004h>     color: #4CAF50;
+[?2004l[?2004h>     font-size: 18px;
+[?2004l[?2004h>     cursor: pointer;
+[?2004l[?2004h>     padding: 5px;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .settings-dropdown {
+[?2004l[?2004h>     display: none;
+[?2004l[?2004h>     position: absolute;
+[?2004l[?2004h>     top: 100%;
+[?2004l[?2004h>     right: 0;
+[?2004l[?2004h>     background: #2a2a2a;
+[?2004l[?2004h>     border: 1px solid #444;
+[?2004l[?2004h>     border-radius: 5px;
+[?2004l[?2004h>     padding: 10px;
+[?2004l[?2004h>     min-width: 150px;
+[?2004l[?2004h>     z-index: 1000;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .settings-dropdown.active {
+[?2004l[?2004h>     display: block;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .settings-option {
+[?2004l[?2004h>     display: flex;
+[?2004l[?2004h>     justify-content: space-between;
+[?2004l[?2004h>     align-items: center;
+[?2004l[?2004h>     padding: 8px 0;
+[?2004l[?2004h>     border-bottom: 1px solid #444;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .settings-option:last-child {
+[?2004l[?2004h>     border-bottom: none;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .settings-option label {
+[?2004l[?2004h>     color: #ccc;
+[?2004l[?2004h>     font-size: 14px;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .switch {
+[?2004l[?2004h>     position: relative;
+[?2004l[?2004h>     display: inline-block;
+[?2004l[?2004h>     width: 40px;
+[?2004l[?2004h>     height: 20px;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .switch input {
+[?2004l[?2004h>     opacity: 0;
+[?2004l[?2004h>     width: 0;
+[?2004l[?2004h>     height: 0;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .slider {
+[?2004l[?2004h>     position: absolute;
+[?2004l[?2004h>     cursor: pointer;
+[?2004l[?2004h>     top: 0;
+[?2004l[?2004h>     left: 0;
+[?2004l[?2004h>     right: 0;
+[?2004l[?2004h>     bottom: 0;
+[?2004l[?2004h>     background-color: #666;
+[?2004l[?2004h>     transition: .4s;
+[?2004l[?2004h>     border-radius: 20px;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> .slider:before {
+[?2004l[?2004h>     position: absolute;
+[?2004l[?2004h>     content: "";
+[?2004l[?2004h>     height: 16px;
+[?2004l[?2004h>     width: 16px;
+[?2004l[?2004h>     left: 2px;
+[?2004l[?2004h>     bottom: 2px;
+[?2004l[?2004h>     background-color: white;
+[?2004l[?2004h>     transition: .4s;
+[?2004l[?2004h>     border-radius: 50%;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> input:checked + .slider {
+[?2004l[?2004h>     background-color: #4CAF50;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> input:checked + .slider:before {
+[?2004l[?2004h>     transform: translateX(20px);
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> input:focus + .slider {
+[?2004l[?2004h>     box-shadow: 0 0 1px #4CAF50;
+[?2004l[?2004h> }
+[?2004l[?2004h> EOF
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m # Add the modified CSS file
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m git add css/style.css
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m 
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m # Commit the changes
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m git commit -m "Add completed settings menu CSS with toggle switch functionality"
+[?2004l[main 8a1e242] Add completed settings menu CSS with toggle switch functionality
+ 1 file changed, 97 insertions(+)
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m 
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m # Push to GitHub
+[?2004l[?2004h[0;32m~/DabTimer[0m [0;97m$[0m git push origin main
+[?2004lEnumerating objects: 7, done.
+Counting objects:  14% (1/7)Counting objects:  28% (2/7)Counting objects:  42% (3/7)Counting objects:  57% (4/7)Counting objects:  71% (5/7)Counting objects:  85% (6/7)Counting objects: 100% (7/7)Counting objects: 100% (7/7), done.
+Delta compression using up to 8 threads
+Compressing objects:  33% (1/3)Compressing objects:  66% (2/3)Compressing objects: 100% (3/3)Compressing objects: 100% (3/3), done.
+Writing objects:  25% (1/4)Writing objects:  50% (2/4)Writing objects:  75% (3/4)Writing objects: 100% (4/4)Writing objects: 100% (4/4), 478 bytes | 478.00 KiB/s, done.
+Total 4 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/2)[Kremote: Resolving deltas:  50% (1/2)[Kremote: Resolving deltas: 100% (2/2)[Kremote: Resolving deltas: 100% (2/2), completed with 2 local objects.[K
+To https://github.com/twoskoops707/DabTimer.git
+   238be08..8a1e242  main -> main
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m grep -n "tab-content" index.html
+[?2004l26:            <div id="home-screen" class="tab-content active">
+76:            <div id="timer-screen" class="tab-content">
+110:            <div id="calendar-screen" class="tab-content">
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m grep -n "tab-btn\|data-tab" index.html
+[?2004l195:            <button class="tab-btn active" data-tab="home-screen">
+199:            <button class="tab-btn" data-tab="timer-screen">
+203:            <button class="tab-btn" data-tab="calendar-screen">
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m sed -n '76,109p' index.html
+[?2004l            <div id="timer-screen" class="tab-content">
+                <div class="timer-container">
+                    <div class="timer-display">
+                        <div id="timer-mode">HEAT UP</div>
+                        <div id="timer" class="digital">0:30</div>
+                        <div class="progress-container">
+                            <div id="timer-progress" class="progress-bar"></div>
+                        </div>
+                    </div>
+                    <div class="timer-controls">
+                        <button id="start-timer" class="btn-primary">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                        <button id="reset-timer" class="btn-secondary">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                    <div class="current-settings">
+                        <h3>Current Settings</h3>
+                        <div class="settings-display">
+                            <p>Material: <span id="current-material">Quartz</span></p>
+                            <p>Concentrate: <span id="current-concentrate">Shatter</span></p>
+                            <p>Heater: <span id="current-heater">Torch</span></p>
+                        </div>
+                    <div class="formula-display" style="margin-top: 20px; padding: 15px; background: #2a2a2a; border-radius: 10px;">
+                        <h4>Heating Formula</h4>
+                        <div class="formula-line">t = (m × c × ΔT) / P</div>
+                        <div class="formula-line">Where m = mass, c = specific heat</div>
+                        <div class="formula-line">ΔT = temp difference, P = power</div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Calendar Screen -->
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m grep -n "switchToTab\|addEventListener.*tab" js/app.js
+[?2004l113:            switchToTab('timer-screen');
+139:            switchToTab(tabId);
+144:function switchToTab(tabId) {
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m sed -n '144,160p' js/app.js
+[?2004lfunction switchToTab(tabId) {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabId);
+    });
+    
+    tabContents.forEach(content => {
+        content.classList.toggle('active', content.id === tabId);
+    });
+    
+    state.currentTab = tabId;
+}
+
+function updateSettingsDisplay() {
+    if (elements.currentMaterial) {
+[?2004h[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m [K[0;32m~/DabTimer[0m [0;97m$[0m grep -n "tabBtn\|tab.*click\|setupTabs" js/app.js
+[?2004l71:    setupTabs();
+132:function setupTabs() {
+133:    const tabBtns = document.que

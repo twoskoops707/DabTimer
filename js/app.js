@@ -16,6 +16,16 @@ const CONFIG = {
         diamonds: { idealTemp: '400-500°F' },
         sauce: { idealTemp: '380-450°F' },
         crumble: { idealTemp: '360-430°F' }
+        budder: { idealTemp: '350-420°F' },,
+        diamonds: { idealTemp: '400-500°F' },,
+        sauce: { idealTemp: '380-450°F' },,
+        crumble: { idealTemp: '360-430°F' },
+        diamonds: { idealTemp: '400-500°F' },
+        sauce: { idealTemp: '380-450°F' },
+        crumble: { idealTemp: '360-430°F' }
+        sauce: { idealTemp: '380-450°F' },
+        crumble: { idealTemp: '360-430°F' }
+        crumble: { idealTemp: '360-430°F' }
     },
     heaters: {
         torch: { modifier: 1.0 },
