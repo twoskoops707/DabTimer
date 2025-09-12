@@ -28,7 +28,7 @@
                     <div class="home-header">
                         <i class="fas fa-cannabis"></i>
                         <h1>DAB TIMER</h1>
-                        <p>PREMIUM EDITION</p>
+                        <p></p>
                     </div>
 
                     <div class="settings-grid">
@@ -96,12 +96,17 @@
                             <p>Material: <span id="current-material">Quartz</span></p>
                             <p>Concentrate: <span id="current-concentrate">Shatter</span></p>
                             <p>Heater: <span id="current-heater">Torch</span></p>
-                        </div>
-                    <div class="formula-display" style="margin-top: 20px; padding: 15px; background: #2a2a2a; border-radius: 10px;">
-                        <h4>Heating Formula</h4>
+                    <div class="formula-display">
+                        <h4>Scientific Heating Formula</h4>
                         <div class="formula-line">t = (m × c × ΔT) / P</div>
-                        <div class="formula-line">Where m = mass, c = specific heat</div>
-                        <div class="formula-line">ΔT = temp difference, P = power</div>
+                        <div class="formula-line">Material: <span id="formula-material">Quartz</span></div>
+                        <div class="formula-line">Concentrate: <span id="formula-concentrate">Shatter</span></div>
+                        <div class="formula-line">Heater: <span id="formula-heater">Torch</span></div>
+                        <div class="formula-line">Heat Time: <span id="formula-heat-time">30s</span></div>
+                        <div class="formula-line">Cool Time: <span id="formula-cool-time">45s</span></div>
+                        <div class="formula-line">Total Cycle: <span id="formula-total-time">75s</span></div>
+                    </div>
+                        </div>
                     </div>
                     </div>
                 </div>
@@ -212,13 +217,11 @@
     <script src="js/audio.js"></script>
     <script src="js/app.js"></script>
     <script src="js/custom-times.js"></script>
+    <script src="js/science.js"></script>
 </body>
 </html>
 
 <!-- Add this inside the timer-container div, after the current-settings div -->
-<div class="formula-display">
-    <h4>Heating Formula</h4>
-    <div class="formula-line">t = (m × c × ΔT) / P</div>
     <div class="formula-line">Material: <span id="formula-material">Quartz</span></div>
     <div class="formula-line">Heater: <span id="formula-heater">Torch</span></div>
     <div class="formula-line">Heat Up: <span id="formula-heat-time">30s</span></div>

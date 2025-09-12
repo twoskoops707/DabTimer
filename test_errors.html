@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error Test</title>
+</head>
+<body>
+    <h1>Open Browser Developer Tools (F12)</h1>
+    <p>Check Console for JavaScript errors</p>
+    
+    <script>
+        console.log("Testing JavaScript execution...");
+        try {
+            // Test basic functions
+            const testElement = document.createElement('div');
+            console.log("DOM manipulation works");
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    </script>
+</body>
+</html>
