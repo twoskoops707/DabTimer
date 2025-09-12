@@ -161,19 +161,26 @@ function calculateHeatTime(material, heater, concentrate) {
     };
     
     const heaterModifiers = {
-        torch: 1.0,
-        lighter: 2.0,
-        enail: 0.8,
-        ebanger: 0.9
+}
+function calculateCoolTime(material, concentrate) {
+    const coolTimes = {
+        quartz: {
+            shatter: 52, wax: 55, resin: 58, rosin: 57,
+            budder: 54, diamonds: 60, sauce: 59, crumble: 56
+        },
+        titanium: {
+            shatter: 65, wax: 68, resin: 72, rosin: 70,
+            budder: 67, diamonds: 75, sauce: 73, crumble: 69
+        },
+        ceramic: {
+            shatter: 58, wax: 61, resin: 65, rosin: 63,
+            budder: 60, diamonds: 68, sauce: 66, crumble: 62
+        }
     };
-    
-    const baseTime = baseTimes[material]?.[concentrate] || 30;
-    const modifier = heaterModifiers[heater] || 1.0;
-    
-    return Math.round(baseTime * modifier);
+    return coolTimes[material]?.[concentrate] || 60;
 }
 
-function calculateCoolTime(material, heatTime) {
+function calculateCoolTime(material, concentrate) {
     const coolMultipliers = {
         quartz: 1.5,
         titanium: 3.0,
@@ -190,7 +197,7 @@ function updateFormulaDisplay() {
     const concentrate = state.settings.concentrate;
     
     const heatTime = calculateHeatTime(material, heater, concentrate);
-    const coolTime = calculateCoolTime(material, heatTime);
+    const coolTime = calculateCoolTime(material, concentrate);
     const totalTime = heatTime + coolTime;
     
     // Update formula display
@@ -272,7 +279,7 @@ function initializeTimer() {
     const concentrate = state.settings.concentrate;
     
     const heatTime = calculateHeatTime(material, heater, concentrate);
-    const coolTime = calculateCoolTime(material, heatTime);
+    const coolTime = calculateCoolTime(material, concentrate);
     
     // Set timer values based on scientific calculations
     state.timer = {
@@ -441,7 +448,7 @@ function calculateHeatTime(material, heater, concentrate) {
     return Math.round(baseTime * modifier);
 }
 
-function calculateCoolTime(material, heatTime) {
+function calculateCoolTime(material, concentrate) {
     const coolMultipliers = {
         quartz: 1.3,     // Quartz cools faster
         titanium: 2.0,   // Titanium holds heat longer
@@ -529,7 +536,7 @@ function initializeTimer() {
     const concentrate = state.settings.concentrate;
     
     const heatTime = calculateHeatTime(material, heater, concentrate);
-    const coolTime = calculateCoolTime(material, heatTime);
+    const coolTime = calculateCoolTime(material, concentrate);
     
     state.timer = {
         isRunning: false,
@@ -543,32 +550,6 @@ function initializeTimer() {
     updateFormulaDisplay();
 }
 
-function startTimer() {
-    if (state.timer.isRunning) return;
-    
-    state.timer.isRunning = true;
-    const startBtn = document.getElementById('start-timer');
-    if (startBtn) startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-    
-    state.timer.interval = setInterval(() => {
-        state.timer.timeLeft--;
-        updateTimerDisplay();
-        
-        if (state.timer.timeLeft <= 0) {
-            clearInterval(state.timer.interval);
-            alert('Timer completed!');
-            resetTimer();
-        }
-    }, 1000);
-}
-
-function resetTimer() {
-    if (state.timer.interval) clearInterval(state.timer.interval);
-    state.timer.isRunning = false;
-    const startBtn = document.getElementById('start-timer');
-    if (startBtn) startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
-    initializeTimer();
-}
 
 function updateTimerDisplay() {
     const timerElement = document.getElementById('timer');
