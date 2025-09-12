@@ -1,181 +1,216 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dab Timer</title>
-    <link rel="stylesheet" href="css/style.css?v=1">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Open+Sans&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <title>Dab Timer Pro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #121212;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #1e1e1e;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+    h1 {
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+    .timer-display {
+      font-size: 48px;
+      margin: 20px 0;
+      color: #4CAF50;
+      font-weight: bold;
+    }
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #333;
+      color: white;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #4CAF50;
+    }
+    button:active {
+      background-color: #367c39;
+    }
+    select, input {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 8px;
+      background-color: #333;
+      color: white;
+      border: 1px solid #444;
+    }
+    .section {
+      margin: 15px 0;
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #252525;
+    }
+    .active {
+      background-color: #4CAF50;
+    }
+    .stop-btn {
+      background-color: #f44336;
+    }
+    .stop-btn:hover {
+      background-color: #da190b;
+    }
+  </style>
 </head>
 <body>
-    <div id="app" class="screen active">
-        <header>
-            <div class="header-content">
-                <div class="logo-small">
-                    <i class="fas fa-cannabis"></i>
-                    <span>DAB TIMER</span>
-                </div>
-                <div class="time-display" id="current-time">12:00</div>
-            </div>
-        </header>
-
-        <main>
-            <!-- Home Screen -->
-            <div id="home-screen" class="tab-content active">
-                <div class="home-container">
-                    <div class="home-header">
-                        <i class="fas fa-cannabis"></i>
-                        <h1>DAB TIMER</h1>
-                    </div>
-
-                    <div class="settings-grid">
-                        <div class="setting-card">
-                            <h3>Material</h3>
-                            <div class="option-buttons">
-                                <button class="option-btn active" data-setting="material" data-value="quartz">Quartz</button>
-                                <button class="option-btn" data-setting="material" data-value="titanium">Titanium</button>
-                                <button class="option-btn" data-setting="material" data-value="ceramic">Ceramic</button>
-                            </div>
-                        </div>
-
-                        <div class="setting-card">
-                            <h3>Concentrate</h3>
-                            <div class="option-buttons">
-                                <button class="option-btn active" data-setting="concentrate" data-value="shatter">Shatter</button>
-                                <button class="option-btn" data-setting="concentrate" data-value="wax">Wax</button>
-                                <button class="option-btn" data-setting="concentrate" data-value="resin">Resin</button>
-                                <button class="option-btn" data-setting="concentrate" data-value="rosin">Rosin</button>
-                                <button class="option-btn" data-setting="concentrate" data-value="budder">Budder</button>
-                                <button class="option-btn" data-setting="concentrate" data-value="diamonds">Diamonds</button>
-                                <button class="option-btn" data-setting="concentrate" data-value="sauce">Sauce</button>
-                                <button class="option-btn" data-setting="concentrate" data-value="crumble">Crumble</button>
-                            </div>
-                        </div>
-
-                        <div class="setting-card">
-                            <h3>Heating</h3>
-                            <div class="option-buttons">
-                                <button class="option-btn active" data-setting="heater" data-value="torch">Torch</button>
-                                <button class="option-btn" data-setting="heater" data-value="lighter">Lighter</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="action-buttons">
-                        <button id="start-timer-btn" class="btn-primary large">
-                            <i class="fas fa-play"></i> Start Timer
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Timer Screen -->
-            <div id="timer-screen" class="tab-content">
-                <div class="timer-container">
-                    <div class="timer-display">
-                        <div id="timer-mode">HEAT UP</div>
-                        <div id="timer" class="digital">0:30</div>
-                        <div class="progress-container">
-                            <div id="timer-progress" class="progress-bar"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="timer-controls">
-                        <button id="start-timer" class="btn-primary">
-                            <i class="fas fa-play"></i> Start
-                        </button>
-                        <button id="reset-timer" class="btn-secondary">
-                            <i class="fas fa-redo"></i> Reset
-                        </button>
-                    </div>
-                    <div class="formula-display">
-                        <h4>Scientific Heating Formula</h4>
-                        <div class="formula-line">t = (m × c × ΔT) / P</div>
-                        <div class="formula-line">Material: <span id="formula-material">Quartz</span></div>
-                        <div class="formula-line">Concentrate: <span id="formula-concentrate">Shatter</span></div>
-                        <div class="formula-line">Heater: <span id="formula-heater">Torch</span></div>
-                        <div class="formula-line">Heat Time: <span id="formula-heat-time">30s</span></div>
-                        <div class="formula-line">Cool Time: <span id="formula-cool-time">45s</span></div>
-                        <div class="formula-line">Total Cycle: <span id="formula-total-time">75s</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Calendar Screen -->
-            <div id="calendar-screen" class="tab-content">
-                <div class="calendar-container">
-                    <h2>Dab Analytics</h2>
-                    <!-- Calendar content here -->
-                    <div class="calendar-controls">
-                        <div class="time-range-selector">
-                            <button class="time-range-btn active" data-range="week">Week</button>
-                            <button class="time-range-btn" data-range="month">Month</button>
-                            <button class="time-range-btn" data-range="year">Year</button>
-                        </div>
-                        
-                        <div class="date-navigation">
-                            <button id="prev-period"><i class="fas fa-chevron-left"></i></button>
-                            <h3 id="current-period">September 2023</h3>
-                            <button id="next-period"><i class="fas fa-chevron-right"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="stats-container">
-                        <div class="stat-card">
-                            <h3>Usage Frequency</h3>
-                            <div class="bar-chart" id="usage-frequency-chart"></div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <h3>Concentrate Preference</h3>
-                            <div class="pie-chart" id="concentrate-preference-chart"></div>
-                        </div>
-                        
-                        <div class="stat-card full-width">
-                            <h3>Monthly Summary</h3>
-                            <div class="stats-grid">
-                                <div class="stat">
-                                    <span class="stat-value" id="total-sessions">0</span>
-                                    <span class="stat-label">Total Sessions</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-value" id="sessions-per-day">0</span>
-                                    <span class="stat-label">Sessions per Day</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-value" id="fav-concentrate">None</span>
-                                    <span class="stat-label">Favorite Concentrate</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="usage-history">
-                        <h3>Recent Activity</h3>
-                        <div class="history-list" id="history-list"></div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Tab Navigation -->
-        <nav class="tab-bar">
-            <button class="tab-btn active" data-tab="home-screen">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </button>
-            <button class="tab-btn" data-tab="timer-screen">
-                <i class="fas fa-stopwatch"></i>
-                <span>Timer</span>
-            </button>
-            <button class="tab-btn" data-tab="calendar-screen">
-                <i class="fas fa-calendar"></i>
-                <span>Calendar</span>
-            </button>
-        </nav>
+  <div class="container">
+    <h1>Dab Timer Pro</h1>
+    
+    <div class="section">
+      <label for="material">Nail Material:</label>
+      <select id="material">
+        <option value="quartz">Quartz (1mm)</option>
+        <option value="titanium">Titanium (1mm)</option>
+        <option value="ceramic">Ceramic (1mm)</option>
+      </select>
     </div>
+    
+    <div class="section">
+      <label for="concentrate">Concentrate Type:</label>
+      <select id="concentrate">
+        <option value="live_resin">Live Resin/Rosin</option>
+        <option value="shatter">Shatter</option>
+        <option value="wax">Wax/Budder</option>
+        <option value="distillate">Distillate</option>
+        <option value="bho">BHO</option>
+      </select>
+    </div>
+    
+    <div class="timer-display" id="timer">00:00</div>
+    
+    <div class="button-group">
+      <button id="heat-btn">Start Heating</button>
+      <button id="cool-btn">Start Cooling</button>
+    </div>
+    
+    <div>
+      <button id="stop" class="stop-btn">Stop Timer</button>
+    </div>
+  </div>
 
-    <script src="js/app.js?v=1"></script>
+  <script>
+    const { ipcRenderer } = require('electron');
+    
+    let timerInterval = null;
+    let currentMode = null; // 'heating' or 'cooling'
+    let timeRemaining = 0;
+    
+    // Precise timing data based on research and experience
+    const timingData = {
+      quartz: {
+        live_resin: { heat: 25, cool: 60 },
+        shatter: { heat: 30, cool: 45 },
+        wax: { heat: 28, cool: 50 },
+        distillate: { heat: 35, cool: 35 },
+        bho: { heat: 32, cool: 42 }
+      },
+      titanium: {
+        live_resin: { heat: 20, cool: 70 },
+        shatter: { heat: 25, cool: 55 },
+        wax: { heat: 23, cool: 60 },
+        distillate: { heat: 30, cool: 45 },
+        bho: { heat: 27, cool: 50 }
+      },
+      ceramic: {
+        live_resin: { heat: 22, cool: 55 },
+        shatter: { heat: 27, cool: 40 },
+        wax: { heat: 25, cool: 45 },
+        distillate: { heat: 32, cool: 38 },
+        bho: { heat: 29, cool: 43 }
+      }
+    };
+    
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    function startHeating() {
+      const material = document.getElementById('material').value;
+      const concentrate = document.getElementById('concentrate').value;
+      const heatTime = timingData[material][concentrate].heat;
+      
+      timeRemaining = heatTime;
+      currentMode = 'heating';
+      
+      document.getElementById('timer').textContent = formatTime(timeRemaining);
+      document.getElementById('heat-btn').classList.add('active');
+      document.getElementById('cool-btn').classList.remove('active');
+      
+      ipcRenderer.send('start-timer', timeRemaining);
+    }
+    
+    function startCooling() {
+      const material = document.getElementById('material').value;
+      const concentrate = document.getElementById('concentrate').value;
+      const coolTime = timingData[material][concentrate].cool;
+      
+      timeRemaining = coolTime;
+      currentMode = 'cooling';
+      
+      document.getElementById('timer').textContent = formatTime(timeRemaining);
+      document.getElementById('cool-btn').classList.add('active');
+      document.getElementById('heat-btn').classList.remove('active');
+      
+      ipcRenderer.send('start-timer', timeRemaining);
+    }
+    
+    function stopTimer() {
+      ipcRenderer.send('stop-timer');
+      document.getElementById('timer').textContent = '00:00';
+      document.getElementById('heat-btn').classList.remove('active');
+      document.getElementById('cool-btn').classList.remove('active');
+      currentMode = null;
+    }
+    
+    ipcRenderer.on('timer-update', (event, timeRemaining) => {
+      document.getElementById('timer').textContent = formatTime(timeRemaining);
+    });
+    
+    ipcRenderer.on('timer-end', () => {
+      document.getElementById('timer').textContent = '00:00';
+      document.getElementById('heat-btn').classList.remove('active');
+      document.getElementById('cool-btn').classList.remove('active');
+      
+      if (currentMode === 'heating') {
+        // Auto-start cooling after heating completes
+        startCooling();
+      } else {
+        alert('Dab ready! Enjoy!');
+      }
+      
+      currentMode = null;
+    });
+    
+    document.getElementById('heat-btn').addEventListener('click', startHeating);
+    document.getElementById('cool-btn').addEventListener('click', startCooling);
+    document.getElementById('stop').addEventListener('click', stopTimer);
+  </script>
 </body>
 </html>
