@@ -1,316 +1,393 @@
 console.log("Dab Timer - Clean Version");
 
-// App Configuration
+// Constants
+const DEBOUNCE_DELAY = 300;
+const TIMER_INTERVAL = 200;
+const MIN_HEAT_TIME = 5;
+const MAX_HEAT_TIME = 300;
+const MIN_COOL_TIME = 5;
+const MAX_COOL_TIME = 600;
+const BASE_TEMP = 177;
+const BASE_TIME = 20;
+
+// App Configuration with validation
 const CONFIG = {
     materials: {
-        quartz: { heatUp: 30, coolDown: 45 },
-        titanium: { heatUp: 20, coolDown: 60 },
-        ceramic: { heatUp: 45, coolDown: 50 }
+        quartz: { specificHeat: 0.84, density: 2.65, thicknessFactor: 1.0, coolMultiplier: 1.5 },
+        titanium: { specificHeat: 0.52, density: 4.51, thicknessFactor: 0.8, coolMultiplier: 2.2 },
+        ceramic: { specificHeat: 1.05, density: 2.5, thicknessFactor: 1.2, coolMultiplier: 1.8 }
     },
     concentrates: {
-        shatter: { idealTemp: '315-400°F' },
-        wax: { idealTemp: '350-450°F' },
-        resin: { idealTemp: '400-500°F' },
-        rosin: { idealTemp: '380-450°F' },
-        budder: { idealTemp: '350-420°F' },
-        diamonds: { idealTemp: '400-500°F' },
-        sauce: { idealTemp: '380-450°F' },
-        crumble: { idealTemp: '360-430°F' }
+        shatter: { idealTemp: 157 },
+        wax: { idealTemp: 177 },
+        resin: { idealTemp: 204 },
+        rosin: { idealTemp: 190 },
+        budder: { idealTemp: 177 },
+        diamonds: { idealTemp: 204 },
+        sauce: { idealTemp: 190 },
+        crumble: { idealTemp: 182 }
     },
     heaters: {
-        torch: { modifier: 1.0 },
-        lighter: { modifier: 2.0 }
+        torch: { efficiency: 0.85 },
+        lighter: { efficiency: 0.45 }
     }
 };
 
-// App State
+// Validate configuration on load
+function validateConfig() {
+    const errors = [];
+    
+    // Validate materials
+    Object.entries(CONFIG.materials).forEach(([key, value]) => {
+        if (value.specificHeat <= 0 || value.density <= 0 || value.thicknessFactor <= 0 || value.coolMultiplier <= 0) {
+            errors.push(`Invalid material properties for ${key}`);
+        }
+    });
+    
+    // Validate concentrates
+    Object.entries(CONFIG.concentrates).forEach(([key, value]) => {
+        if (typeof value.idealTemp !== 'number' || value.idealTemp <= 0) {
+            errors.push(`Invalid idealTemp for ${key}`);
+        }
+    });
+    
+    // Validate heaters
+    Object.entries(CONFIG.heaters).forEach(([key, value]) => {
+        if (value.efficiency <= 0 || value.efficiency > 1) {
+            errors.push(`Invalid efficiency for ${key}`);
+        }
+    });
+    
+    if (errors.length > 0) {
+        console.error('Configuration errors:', errors);
+        return false;
+    }
+    return true;
+}
+
+// App State with validation
 let state = {
     currentTab: 'home-screen',
     settings: {
+        material: 'quartz',
+        concentrate: 'shatter',
+        heater: 'torch'
+    },
     timer: {
         isRunning: false,
         mode: 'heat',
         timeLeft: 0,
-        totalTime: 0,
         heatTime: 0,
-        coolTime: 0
+        coolTime: 0,
+        interval: null,
+        lastUpdate: Date.now()
     },
-        material: 'quartz',
-        concentrate: 'shatter',
-        heater: 'torch'
-    }
+    clockInterval: null,
+    lastOptionClick: 0,
+    isInitialized: false
 };
+
+// Helper functions
+function capitalize(str) {
+    return typeof str === 'string' && str.length > 0 ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+}
+
+function getElement(id) {
+    const element = document.getElementById(id);
+    if (!element) {
+        console.warn(`Element not found: ${id}`);
+    }
+    return element;
+}
+
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
+
+// Safe DOM operations
+function safeTextContent(element, text) {
+    if (element && typeof text !== 'undefined') {
+        element.textContent = text;
+    }
+}
+
+function safeSetAttribute(element, attr, value) {
+    if (element) {
+        element.setAttribute(attr, value);
+    }
+}
+
+function safeToggleClass(element, className, condition) {
+    if (element) {
+        element.classList.toggle(className, condition);
+    }
+}
 
 // Initialize the app
 function initializeApp() {
+    if (state.isInitialized) {
+        console.warn('App already initialized');
+        return;
+    }
+    
     console.log("Initializing app...");
-    updateClock();
+    
+    if (!validateConfig()) {
+        console.error('Invalid configuration - using fallback values');
+    }
+    
+    startClock();
     setupTabNavigation();
     setupOptionButtons();
-    updateSettingsDisplay(); // Initialize formula display
     setupTimer();
-    updateFormulaDisplay();
+    loadSettings();
+    updateAllDisplays();
+    
+    state.isInitialized = true;
     console.log("App initialized");
 }
 
 // Clock functions
 function updateClock() {
-    const clockElement = document.getElementById('current-time');
+    const clockElement = getElement('current-time');
     if (clockElement) {
         const now = new Date();
-        clockElement.textContent = now.toLocaleTimeString([], { 
-            hour: '2-digit', 
-            minute: '2-digit' 
-        });
+        clockElement.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 }
 
 function startClock() {
+    if (state.clockInterval) {
+        clearInterval(state.clockInterval);
+    }
     updateClock();
-    setInterval(updateClock, 30000);
+    state.clockInterval = setInterval(updateClock, 1000);
 }
 
 // Tab navigation
 function setupTabNavigation() {
     const tabBtns = document.querySelectorAll('.tab-btn');
+    if (tabBtns.length === 0) return;
+    
     tabBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            switchToTab(this.dataset.tab);
-        });
+        // Remove existing listeners to prevent duplicates
+        btn.replaceWith(btn.cloneNode(true));
     });
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', handleTabClick);
+        btn.addEventListener('keydown', handleTabKeydown);
+    });
+}
+
+function handleTabClick() {
+    const tabId = this.dataset.tab;
+    if (tabId && getElement(tabId)) {
+        switchToTab(tabId);
+    }
+}
+
+function handleTabKeydown(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+    }
 }
 
 function switchToTab(tabId) {
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
+    if (!tabId || !getElement(tabId)) return;
     
-    tabBtns.forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.dataset.tab === tabId) btn.classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        const isActive = btn.dataset.tab === tabId;
+        safeToggleClass(btn, 'active', isActive);
+        safeSetAttribute(btn, 'aria-selected', isActive.toString());
     });
-    
-    tabContents.forEach(content => {
-        content.classList.remove('active');
-        if (content.id === tabId) content.classList.add('active');
+
+    document.querySelectorAll('.tab-content').forEach(content => {
+        const isActive = content.id === tabId;
+        safeToggleClass(content, 'active', isActive);
+        safeSetAttribute(content, 'aria-hidden', (!isActive).toString());
     });
-    
+
     state.currentTab = tabId;
+    
+    if (tabId === 'timer-screen') {
+        updateTimerDisplay();
+    }
 }
 
 // Option buttons
-
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initializeApp);
-
-// Fix option selection to update displayed values
 function setupOptionButtons() {
-    const options = document.querySelectorAll('.option-btn');
-    options.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const settingType = this.dataset.setting;
-            const value = this.dataset.value;
-            
-            if (settingType && value) {
-                // Remove active class from siblings
-                const parent = this.parentElement;
-                const siblings = parent.querySelectorAll('.option-btn');
-                siblings.forEach(sib => sib.classList.remove('active'));
-                
-                // Add active class to clicked button
-                this.classList.add('active');
-                
-                // Update state
-                state.settings[settingType] = value;
-                
-                // Update displayed values
-                updateSettingsDisplay();
-                
-                console.log("Setting changed:", settingType, "=", value);
+    const optionButtons = document.querySelectorAll('.option-btn');
+    if (optionButtons.length === 0) return;
+    
+    optionButtons.forEach(btn => {
+        btn.addEventListener('click', handleOptionClick);
+        btn.addEventListener('keydown', handleOptionKeydown);
+    });
+}
+
+function handleOptionClick() {
+    const now = Date.now();
+    if (now - state.lastOptionClick < DEBOUNCE_DELAY) return;
+    state.lastOptionClick = now;
+    
+    const parent = this.parentElement;
+    if (!parent) return;
+    
+    const settingType = this.dataset.setting;
+    const value = this.dataset.value;
+    
+    if (!settingType || !value) return;
+    
+    // Validate against CONFIG
+    if (!isValidSetting(settingType, value)) return;
+
+    updateOptionGroupState(parent, this, settingType, value);
+    updateAppState(settingType, value);
+}
+
+function handleOptionKeydown(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+    }
+}
+
+function isValidSetting(type, value) {
+    switch(type) {
+        case 'material': return !!CONFIG.materials[value];
+        case 'concentrate': return !!CONFIG.concentrates[value];
+        case 'heater': return !!CONFIG.heaters[value];
+        default: return false;
+    }
+}
+
+function updateOptionGroupState(parent, clickedBtn, settingType, value) {
+    const siblings = parent.querySelectorAll('.option-btn');
+    siblings.forEach(sib => {
+        safeToggleClass(sib, 'active', sib === clickedBtn);
+        safeSetAttribute(sib, 'aria-pressed', (sib === clickedBtn).toString());
+    });
+}
+
+function updateAppState(settingType, value) {
+    state.settings[settingType] = value;
+    saveSettings();
+    updateAllDisplays();
+    
+    if (!state.timer.isRunning && state.currentTab === 'timer-screen') {
+        initializeTimer();
+    }
+}
+
+function updateAllDisplays() {
+    updateSettingsDisplay();
+    updateFormulaDisplay();
+}
+
+function updateSettingsDisplay() {
+    const { material, concentrate, heater } = state.settings;
+    
+    safeTextContent(getElement('current-material'), capitalize(material));
+    safeTextContent(getElement('current-concentrate'), capitalize(concentrate));
+    safeTextContent(getElement('current-heater'), capitalize(heater));
+}
+
+// Scientific calculations
+function calculateHeatTime(material, heater, concentrate) {
+    const materialProps = CONFIG.materials[material] || CONFIG.materials.quartz;
+    const concentrateTemp = (CONFIG.concentrates[concentrate] || CONFIG.concentrates.shatter).idealTemp;
+    const heaterEff = (CONFIG.heaters[heater] || CONFIG.heaters.torch).efficiency;
+
+    const materialFactor = (materialProps.specificHeat * materialProps.density * materialProps.thicknessFactor) / 
+                          (CONFIG.materials.quartz.specificHeat * CONFIG.materials.quartz.density * CONFIG.materials.quartz.thicknessFactor);
+    const tempFactor = concentrateTemp / BASE_TEMP;
+    const efficiencyFactor = CONFIG.heaters.torch.efficiency / heaterEff;
+
+    const result = Math.round(BASE_TIME * materialFactor * tempFactor * efficiencyFactor);
+    return clamp(result, MIN_HEAT_TIME, MAX_HEAT_TIME);
+}
+
+function calculateCoolTime(material, heatTime) {
+    const materialProps = CONFIG.materials[material] || CONFIG.materials.quartz;
+    const result = Math.round(heatTime * materialProps.coolMultiplier);
+    return clamp(result, MIN_COOL_TIME, MAX_COOL_TIME);
+}
+
+function updateFormulaDisplay() {
+    const { material, heater, concentrate } = state.settings;
+    const heatTime = calculateHeatTime(material, heater, concentrate);
+    const coolTime = calculateCoolTime(material, heatTime);
+
+    const elements = {
+        material: getElement('formula-material'),
+        concentrate: getElement('formula-concentrate'),
+        heater: getElement('formula-heater'),
+        heatTime: getElement('formula-heat-time'),
+        coolTime: getElement('formula-cool-time'),
+        totalTime: getElement('formula-total-time')
+    };
+
+    safeTextContent(elements.material, capitalize(material));
+    safeTextContent(elements.concentrate, capitalize(concentrate));
+    safeTextContent(elements.heater, capitalize(heater));
+    safeTextContent(elements.heatTime, `${heatTime}s`);
+    safeTextContent(elements.coolTime, `${coolTime}s`);
+    safeTextContent(elements.totalTime, `${heatTime + coolTime}s`);
+}
+
+// Timer functionality
+function setupTimer() {
+    const startBtn = getElement('start-timer-btn');
+    const timerStartBtn = getElement('start-timer');
+    const resetBtn = getElement('reset-timer');
+    
+    if (!startBtn || !timerStartBtn || !resetBtn) return;
+    
+    startBtn.addEventListener('click', handleStartTimer);
+    timerStartBtn.addEventListener('click', handleTimerControl);
+    resetBtn.addEventListener('click', handleResetTimer);
+    
+    // Keyboard support
+    [startBtn, timerStartBtn, resetBtn].forEach(btn => {
+        btn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                btn.click();
             }
         });
     });
 }
 
-function updateSettingsDisplay() {
-    // Update current settings display
-    const materialEl = document.getElementById('current-material');
-    const concentrateEl = document.getElementById('current-concentrate');
-    const heaterEl = document.getElementById('current-heater');
-    
-    if (materialEl) materialEl.textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1);
-    if (concentrateEl) concentrateEl.textContent = state.settings.concentrate.charAt(0).toUpperCase() + state.settings.concentrate.slice(1);
-    if (heaterEl) heaterEl.textContent = state.settings.heater.charAt(0).toUpperCase() + state.settings.heater.slice(1);
+function handleStartTimer() {
+    switchToTab('timer-screen');
+    initializeTimer();
 }
 
-// Scientific calculations for dab timing
-function calculateHeatTime(material, heater, concentrate) {
-    const baseTimes = {
-        quartz: { 
-            shatter: 30, wax: 35, resin: 40, rosin: 38, 
-            budder: 36, diamonds: 42, sauce: 39, crumble: 37
-        },
-        titanium: { 
-            shatter: 20, wax: 25, resin: 30, rosin: 28,
-            budder: 26, diamonds: 32, sauce: 29, crumble: 27
-        },
-        ceramic: { 
-            shatter: 45, wax: 50, resin: 55, rosin: 53,
-            budder: 51, diamonds: 57, sauce: 54, crumble: 52
-        }
-    };
-    
-    const heaterModifiers = {
-}
-function calculateCoolTime(material, concentrate) {
-    const coolTimes = {
-        quartz: {
-            shatter: 52, wax: 55, resin: 58, rosin: 57,
-            budder: 54, diamonds: 60, sauce: 59, crumble: 56
-        },
-        titanium: {
-            shatter: 65, wax: 68, resin: 72, rosin: 70,
-            budder: 67, diamonds: 75, sauce: 73, crumble: 69
-        },
-        ceramic: {
-            shatter: 58, wax: 61, resin: 65, rosin: 63,
-            budder: 60, diamonds: 68, sauce: 66, crumble: 62
-        }
-    };
-    return coolTimes[material]?.[concentrate] || 60;
+function handleTimerControl() {
+    toggleTimer();
 }
 
-function calculateCoolTime(material, concentrate) {
-    const coolMultipliers = {
-        quartz: 1.5,
-        titanium: 3.0,
-        ceramic: 1.2
-    };
-    
-    const multiplier = coolMultipliers[material] || 1.5;
-    return Math.round(heatTime * multiplier);
+function handleResetTimer() {
+    resetTimer();
 }
-
-function updateFormulaDisplay() {
-    const material = state.settings.material;
-    const heater = state.settings.heater;
-    const concentrate = state.settings.concentrate;
-    
-    const heatTime = calculateHeatTime(material, heater, concentrate);
-    const coolTime = calculateCoolTime(material, concentrate);
-    const totalTime = heatTime + coolTime;
-    
-    // Update formula display
-    document.getElementById('formula-material').textContent = material.charAt(0).toUpperCase() + material.slice(1);
-    document.getElementById('formula-concentrate').textContent = concentrate.charAt(0).toUpperCase() + concentrate.slice(1);
-    document.getElementById('formula-heater').textContent = heater.charAt(0).toUpperCase() + heater.slice(1);
-    document.getElementById('formula-heat-time').textContent = `${heatTime}s`;
-    document.getElementById('formula-cool-time').textContent = `${coolTime}s`;
-    document.getElementById('formula-total-time').textContent = `${totalTime}s`;
-}
-
-// Update formula when settings change
-function updateSettingsDisplay() {
-    // Update current settings display
-    const materialEl = document.getElementById('current-material');
-    const concentrateEl = document.getElementById('current-concentrate');
-    const heaterEl = document.getElementById('current-heater');
-    
-    if (materialEl) materialEl.textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1);
-    if (concentrateEl) concentrateEl.textContent = state.settings.concentrate.charAt(0).toUpperCase() + state.settings.concentrate.slice(1);
-    if (heaterEl) heaterEl.textContent = state.settings.heater.charAt(0).toUpperCase() + state.settings.heater.slice(1);
-    
-    // Update formula display
-    updateFormulaDisplay();
-}
-
-// --- PATCH: Flash progress bar when timer completes ---
-const originalCompleteTimer = completeTimer;
-completeTimer = function() {
-    originalCompleteTimer();
-
-    // Flash the progress bar 3 times
-    let flashes = 0;
-    const flashInterval = setInterval(() => {
-        elements.timerProgress.style.backgroundColor =
-            elements.timerProgress.style.backgroundColor === 'red' ? '' : 'red';
-        flashes++;
-        if (flashes >= 6) {
-            clearInterval(flashInterval);
-            elements.timerProgress.style.backgroundColor = ''; // reset
-        }
-    }, 300);
-};
-// --- END PATCH ---
-
-// Timer functionality
-
-
-
-// Add timer to state
-state.timer = {
-    isRunning: false,
-    mode: 'heat',
-    timeLeft: 0,
-    totalTime: 0,
-    heatTime: 0,
-    coolTime: 0
-};
-
-// Add to initializeApp
-function initializeApp() {
-    console.log("Initializing app...");
-    updateClock();
-    setupTabNavigation();
-    setupOptionButtons();
-    updateSettingsDisplay(); // Initialize formula display
-    setupTimer();
-    updateFormulaDisplay();
-    console.log("App initialized");
-}
-
-// Complete timer functionality
-let timerInterval = null;
-
 
 function initializeTimer() {
-    const material = state.settings.material;
-    const heater = state.settings.heater;
-    const concentrate = state.settings.concentrate;
-    
-    const heatTime = calculateHeatTime(material, heater, concentrate);
-    const coolTime = calculateCoolTime(material, concentrate);
-    
-    // Set timer values based on scientific calculations
+    const heatTime = calculateHeatTime(state.settings.material, state.settings.heater, state.settings.concentrate);
+    const coolTime = calculateCoolTime(state.settings.material, heatTime);
+
     state.timer = {
         isRunning: false,
         mode: 'heat',
         timeLeft: heatTime,
-        totalTime: heatTime,
         heatTime: heatTime,
-        coolTime: coolTime
+        coolTime: coolTime,
+        interval: null,
+        lastUpdate: Date.now()
     };
-    
-    // Update timer display
     updateTimerDisplay();
-    
-    // Setup timer controls
-    setupTimerControls();
-    
-    console.log("Timer initialized:", heatTime + "s heat", coolTime + "s cool");
-}
-
-function setupTimerControls() {
-    const startBtn = document.getElementById('start-timer');
-    const resetBtn = document.getElementById('reset-timer');
-    
-    if (startBtn) {
-        startBtn.addEventListener('click', toggleTimer);
-    }
-    
-    if (resetBtn) {
-        resetBtn.addEventListener('click', resetTimer);
-    }
+    updateTimerButtons();
 }
 
 function toggleTimer() {
@@ -324,35 +401,48 @@ function toggleTimer() {
 function startTimer() {
     if (state.timer.isRunning) return;
     
-    state.timer.isRunning = true;
-    const startBtn = document.getElementById('start-timer');
-    if (startBtn) {
-        startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-    }
+    clearTimerInterval();
     
-    timerInterval = setInterval(() => {
-        state.timer.timeLeft--;
+    state.timer.isRunning = true;
+    state.timer.lastUpdate = Date.now();
+    updateTimerButtons();
+
+    state.timer.interval = setInterval(updateTimerTick, TIMER_INTERVAL);
+}
+
+function updateTimerTick() {
+    const now = Date.now();
+    const elapsedSeconds = Math.floor((now - state.timer.lastUpdate) / 1000);
+    
+    if (elapsedSeconds > 0) {
+        state.timer.timeLeft = Math.max(0, state.timer.timeLeft - elapsedSeconds);
+        state.timer.lastUpdate = now;
         updateTimerDisplay();
-        
+
         if (state.timer.timeLeft <= 0) {
-            if (state.timer.mode === 'heat') {
-                switchToCoolDown();
-            } else {
-                completeTimer();
-            }
+            handleTimerCompletion();
         }
-    }, 1000);
+    }
+}
+
+function handleTimerCompletion() {
+    if (state.timer.mode === 'heat') {
+        switchToCoolDown();
+    } else {
+        completeTimer();
+    }
 }
 
 function pauseTimer() {
-    if (!state.timer.isRunning) return;
-    
+    clearTimerInterval();
     state.timer.isRunning = false;
-    clearInterval(timerInterval);
-    
-    const startBtn = document.getElementById('start-timer');
-    if (startBtn) {
-        startBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+    updateTimerButtons();
+}
+
+function clearTimerInterval() {
+    if (state.timer.interval) {
+        clearInterval(state.timer.interval);
+        state.timer.interval = null;
     }
 }
 
@@ -364,198 +454,135 @@ function resetTimer() {
 function switchToCoolDown() {
     state.timer.mode = 'cool';
     state.timer.timeLeft = state.timer.coolTime;
-    state.timer.totalTime = state.timer.coolTime;
-    
-    const timerMode = document.getElementById('timer-mode');
-    if (timerMode) {
-        timerMode.textContent = 'COOL DOWN';
-    }
-    
+    state.timer.lastUpdate = Date.now();
     updateTimerDisplay();
+    updateTimerButtons();
 }
 
 function completeTimer() {
     pauseTimer();
-    
-    const startBtn = document.getElementById('start-timer');
-    if (startBtn) {
-        startBtn.innerHTML = '<i class="fas fa-play"></i> Start Again';
-    }
-    
-    // Play sound and show notification
-    playAlarmSound();
-    showNotification('Dab time! Your concentrate is at the perfect temperature.');
-}
-
-function updateTimerDisplay() {
-    const timerElement = document.getElementById('timer');
-    const timerModeElement = document.getElementById('timer-mode');
-    const progressElement = document.getElementById('timer-progress');
-    
-    if (timerElement && state.timer) {
-        const minutes = Math.floor(state.timer.timeLeft / 60);
-        const seconds = state.timer.timeLeft % 60;
-        timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-    }
-    
-    if (timerModeElement && state.timer) {
-        timerModeElement.textContent = state.timer.mode.toUpperCase();
-    }
-    
-    if (progressElement && state.timer && state.timer.totalTime > 0) {
-        const progress = ((state.timer.totalTime - state.timer.timeLeft) / state.timer.totalTime) * 100;
-        progressElement.style.width = `${progress}%`;
-    }
-}
-
-// Stub functions for audio and notifications
-function playAlarmSound() {
-    console.log("Playing alarm sound");
-}
-
-function showNotification(message) {
-    console.log("Notification:", message);
-    alert(message);
-}
-
-// Scientific calculations for dab timing (1mm thickness)
-function calculateHeatTime(material, heater, concentrate) {
-    const baseTimes = {
-        quartz: { 
-            shatter: 20, wax: 22, resin: 25, rosin: 23, 
-            budder: 21, diamonds: 26, sauce: 24, crumble: 22
-        },
-        titanium: { 
-            shatter: 15, wax: 17, resin: 20, rosin: 18,
-            budder: 16, diamonds: 21, sauce: 19, crumble: 17
-        },
-        ceramic: { 
-            shatter: 30, wax: 32, resin: 35, rosin: 33,
-            budder: 31, diamonds: 36, sauce: 34, crumble: 32
-        }
-    };
-    
-    const heaterModifiers = {
-        torch: 1.0,
-        lighter: 1.8,    // Less efficient
-        enail: 0.7,      // More efficient
-        ebanger: 0.8     // More efficient
-    };
-    
-    const baseTime = baseTimes[material]?.[concentrate] || 20;
-    const modifier = heaterModifiers[heater] || 1.0;
-    
-    return Math.round(baseTime * modifier);
-}
-
-function calculateCoolTime(material, concentrate) {
-    const coolMultipliers = {
-        quartz: 1.3,     // Quartz cools faster
-        titanium: 2.0,   // Titanium holds heat longer
-        ceramic: 1.5     // Ceramic holds heat moderately
-    };
-    
-    const multiplier = coolMultipliers[material] || 1.5;
-    return Math.round(heatTime * multiplier);
-}
-
-// Universal timer functionality
-function setupTimerButtons() {
-    // Home screen start button
-    const homeStartBtn = document.getElementById('start-timer-btn');
-    if (homeStartBtn) {
-        homeStartBtn.addEventListener('click', function() {
-            switchToTab('timer-screen');
-            initializeTimer();
-        });
-    }
-    
-    // Timer screen start button
-    const timerStartBtn = document.getElementById('start-timer');
-    if (timerStartBtn) {
-        timerStartBtn.addEventListener('click', function() {
-            if (!state.timer || state.timer.timeLeft === 0) {
-                initializeTimer();
-            }
-            toggleTimer();
-        });
-    }
-    
-    // Timer screen reset button
-    const resetBtn = document.getElementById('reset-timer');
-    if (resetBtn) {
-        resetBtn.addEventListener('click', resetTimer);
-    }
-}
-
-// Update initializeApp to use the universal setup
-function initializeApp() {
-    console.log("Initializing app...");
-    updateClock();
-    setupTabNavigation();
-    setupOptionButtons();
-    setupTimerButtons(); // Use universal timer setup
-    updateSettingsDisplay(); // Initialize formula display
-    setupTimer();
-    updateFormulaDisplay();
-    console.log("App initialized");
-}
-
-// Simple timer functionality
-function setupTimer() {
-    // Home screen start button
-    const startBtn = document.getElementById('start-timer-btn');
-    if (startBtn) {
-        startBtn.addEventListener('click', function() {
-            switchToTab('timer-screen');
-            initializeTimer();
-        });
-    }
-    
-    // Timer screen controls
-    const timerStartBtn = document.getElementById('start-timer');
-    const timerResetBtn = document.getElementById('reset-timer');
-    
-    if (timerStartBtn) {
-        timerStartBtn.addEventListener('click', function() {
-            if (!state.timer || state.timer.timeLeft === 0) {
-                initializeTimer();
-            }
-            startTimer();
-        });
-    }
-    
-    if (timerResetBtn) {
-        timerResetBtn.addEventListener('click', resetTimer);
-    }
-}
-
-function initializeTimer() {
-    const material = state.settings.material;
-    const heater = state.settings.heater;
-    const concentrate = state.settings.concentrate;
-    
-    const heatTime = calculateHeatTime(material, heater, concentrate);
-    const coolTime = calculateCoolTime(material, concentrate);
-    
-    state.timer = {
-        isRunning: false,
-        mode: 'heat',
-        timeLeft: heatTime,
-        totalTime: heatTime,
-        interval: null
-    };
-    
+    state.timer.timeLeft = 0;
     updateTimerDisplay();
-    updateFormulaDisplay();
+    updateTimerButtons();
 }
 
-
 function updateTimerDisplay() {
-    const timerElement = document.getElementById('timer');
-    if (timerElement && state.timer) {
+    const timerElement = getElement('timer');
+    const timerModeElement = getElement('timer-mode');
+    const progressElement = getElement('timer-progress');
+
+    if (timerElement) {
         const minutes = Math.floor(state.timer.timeLeft / 60);
         const seconds = state.timer.timeLeft % 60;
         timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
     }
+    
+    safeTextContent(timerModeElement, state.timer.mode.toUpperCase());
+
+    if (progressElement && state.timer.heatTime > 0) {
+        const totalTime = state.timer.mode === 'heat' ? state.timer.heatTime : state.timer.coolTime;
+        const progress = clamp(((totalTime - state.timer.timeLeft) / totalTime) * 100, 0, 100);
+        progressElement.style.width = `${progress}%`;
+        safeSetAttribute(progressElement, 'aria-valuenow', Math.round(progress).toString());
+    }
 }
+
+function updateTimerButtons() {
+    const startBtn = getElement('start-timer');
+    const resetBtn = getElement('reset-timer');
+    
+    if (startBtn) {
+        startBtn.disabled = false;
+        startBtn.innerHTML = state.timer.isRunning ? 
+            '<i class="fas fa-pause"></i> Pause' : 
+            '<i class="fas fa-play"></i> Start';
+        safeSetAttribute(startBtn, 'aria-label', state.timer.isRunning ? 'Pause timer' : 'Start timer');
+    }
+    
+    if (resetBtn) {
+        resetBtn.disabled = state.timer.isRunning;
+        safeSetAttribute(resetBtn, 'aria-disabled', state.timer.isRunning.toString());
+    }
+}
+
+// Settings persistence
+function saveSettings() {
+    try {
+        localStorage.setItem('dabTimerSettings', JSON.stringify(state.settings));
+    } catch (e) {
+        console.warn('Could not save settings to localStorage');
+    }
+}
+
+function loadSettings() {
+    try {
+        const saved = localStorage.getItem('dabTimerSettings');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            
+            // Validate loaded settings
+            if (isValidSetting('material', parsed.material)) {
+                state.settings.material = parsed.material;
+            }
+            if (isValidSetting('concentrate', parsed.concentrate)) {
+                state.settings.concentrate = parsed.concentrate;
+            }
+            if (isValidSetting('heater', parsed.heater)) {
+                state.settings.heater = parsed.heater;
+            }
+            
+            updateOptionButtonsUI();
+        }
+    } catch (e) {
+        console.warn('Could not load settings from localStorage');
+    }
+}
+
+function updateOptionButtonsUI() {
+    Object.entries(state.settings).forEach(([settingType, value]) => {
+        const buttons = document.querySelectorAll(`.option-btn[data-setting="${settingType}"]`);
+        buttons.forEach(btn => {
+            const isActive = btn.dataset.value === value;
+            safeToggleClass(btn, 'active', isActive);
+            safeSetAttribute(btn, 'aria-pressed', isActive.toString());
+        });
+    });
+}
+
+// Cleanup function
+function cleanupApp() {
+    clearTimerInterval();
+    if (state.clockInterval) {
+        clearInterval(state.clockInterval);
+        state.clockInterval = null;
+    }
+    
+    // Remove event listeners
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.removeEventListener('click', handleTabClick);
+        btn.removeEventListener('keydown', handleTabKeydown);
+    });
+    
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.removeEventListener('click', handleOptionClick);
+        btn.removeEventListener('keydown', handleOptionKeydown);
+    });
+    
+    state.isInitialized = false;
+}
+
+// Handle page visibility
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden && state.timer.isRunning) {
+        state.timer.lastUpdate = Date.now();
+    }
+});
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(initializeApp, 100);
+});
+
+// Handle page unload
+window.addEventListener('beforeunload', cleanupApp);
+window.addEventListener('unload', cleanupApp);
