@@ -2,7 +2,15 @@ console.log("Dab Timer - Clean Version");
 
 // Constants
 const DEBOUNCE_DELAY = 300;
-const TIMER_INTERVAL = 200;
+const TIMER_INTERVAL_MS = 1000;
+const COMPLETION_COLOR = "#4CAF50";
+const COMPLETION_FLASH_DURATION = 2000;
+const PROGRESS_RESET_VALUE = "0%";
+const MIN_EFFICIENCY_FACTOR = 0.5;
+const MAX_EFFICIENCY_FACTOR = 3;
+const MIN_EFFICIENCY_FACTOR = 0.5;
+const MAX_EFFICIENCY_FACTOR = 3;
+const TIMER_INTERVAL = 1000;
 const MIN_HEAT_TIME = 5;
 const MAX_HEAT_TIME = 300;
 const MIN_COOL_TIME = 5;
@@ -125,6 +133,7 @@ function safeToggleClass(element, className, condition) {
 
 // Initialize the app
 function initializeApp() {
+    updateOptionButtonsUI();
     if (state.isInitialized) {
         console.warn('App already initialized');
         return;
@@ -166,16 +175,30 @@ function startClock() {
 
 // Tab navigation
 function setupTabNavigation() {
+    // Remove existing listeners to prevent duplicates
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.removeEventListener('click', handleTabClick);
+        btn.removeEventListener('keydown', handleTabKeydown);
+    });
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.removeEventListener('click', handleOptionClick);
+        btn.removeEventListener('keydown', handleOptionKeydown);
+    });
     const tabBtns = document.querySelectorAll('.tab-btn');
     if (tabBtns.length === 0) return;
     
     tabBtns.forEach(btn => {
         // Remove existing listeners to prevent duplicates
-        btn.replaceWith(btn.cloneNode(true));
     });
     
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', handleTabClick);
+        // Add aria-controls for accessibility
+        if (btn.dataset.tab) {
+        }
+        // Add aria-controls for accessibility
+        if (btn.dataset.tab) {
+        }
         btn.addEventListener('keydown', handleTabKeydown);
     });
 }
@@ -303,7 +326,7 @@ function calculateHeatTime(material, heater, concentrate) {
     const materialFactor = (materialProps.specificHeat * materialProps.density * materialProps.thicknessFactor) / 
                           (CONFIG.materials.quartz.specificHeat * CONFIG.materials.quartz.density * CONFIG.materials.quartz.thicknessFactor);
     const tempFactor = concentrateTemp / BASE_TEMP;
-    const efficiencyFactor = CONFIG.heaters.torch.efficiency / heaterEff;
+    const efficiencyFactor = clamp(heaterEff > 0 ? CONFIG.heaters.torch.efficiency / heaterEff : 1, MIN_EFFICIENCY_FACTOR, MAX_EFFICIENCY_FACTOR);
 
     const result = Math.round(BASE_TIME * materialFactor * tempFactor * efficiencyFactor);
     return clamp(result, MIN_HEAT_TIME, MAX_HEAT_TIME);
@@ -407,12 +430,14 @@ function startTimer() {
     state.timer.lastUpdate = Date.now();
     updateTimerButtons();
 
-    state.timer.interval = setInterval(updateTimerTick, TIMER_INTERVAL);
+    state.timer.interval = setInterval(updateTimerTick, TIMER_INTERVAL_MS);
 }
 
 function updateTimerTick() {
     const now = Date.now();
-    const elapsedSeconds = Math.floor((now - state.timer.lastUpdate) / 1000);
+    const delta = now - state.timer.lastUpdate;
+        const elapsedSeconds = Math.max(1, Math.floor(delta / 1000));
+        state.timer.lastUpdate = now - (delta % 1000);  // Compensate for drift
     
     if (elapsedSeconds > 0) {
         state.timer.timeLeft = Math.max(0, state.timer.timeLeft - elapsedSeconds);
@@ -464,9 +489,22 @@ function completeTimer() {
     state.timer.timeLeft = 0;
     updateTimerDisplay();
     updateTimerButtons();
+    // Visual completion indicator
+    }
+    // Visual completion indicator
+    }
 }
 
 function updateTimerDisplay() {
+function updateProgressBar(progress) {
+    requestAnimationFrame(() => {
+        const progressElement = document.getElementById("timer-progress");
+        if (progressElement) {
+            updateProgressBar(progress);
+        }
+    });
+}
+
     const timerElement = getElement('timer');
     const timerModeElement = getElement('timer-mode');
     const progressElement = getElement('timer-progress');
@@ -481,8 +519,8 @@ function updateTimerDisplay() {
 
     if (progressElement && state.timer.heatTime > 0) {
         const totalTime = state.timer.mode === 'heat' ? state.timer.heatTime : state.timer.coolTime;
-        const progress = clamp(((totalTime - state.timer.timeLeft) / totalTime) * 100, 0, 100);
-        progressElement.style.width = `${progress}%`;
+        const progress = totalTime > 0 ? clamp(((totalTime - state.timer.timeLeft) / totalTime) * 100, 0, 100) : 0;
+        updateProgressBar(progress);
         safeSetAttribute(progressElement, 'aria-valuenow', Math.round(progress).toString());
     }
 }
@@ -500,8 +538,8 @@ function updateTimerButtons() {
     }
     
     if (resetBtn) {
-        resetBtn.disabled = state.timer.isRunning;
-        safeSetAttribute(resetBtn, 'aria-disabled', state.timer.isRunning.toString());
+        resetBtn.disabled = false;
+        safeSetAttribute(resetBtn, 'aria-disabled', 'false');
     }
 }
 
@@ -511,6 +549,9 @@ function saveSettings() {
         localStorage.setItem('dabTimerSettings', JSON.stringify(state.settings));
     } catch (e) {
         console.warn('Could not save settings to localStorage');
+        // Optional: Add visual feedback for storage errors
+        console.warn('LocalStorage unavailable - settings not saved');
+}
     }
 }
 
@@ -580,7 +621,7 @@ document.addEventListener('visibilitychange', function() {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(initializeApp, 100);
+    initializeApp();
 });
 
 // Handle page unload
