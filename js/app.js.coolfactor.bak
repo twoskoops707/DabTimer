@@ -330,12 +330,11 @@ function calculateHeatTime(material, heater, concentrate) {
 }
 
 function calculateCoolTime(material, heatTime) {
-  const mat = CONFIG.materials[material] || CONFIG.materials.quartz;
-  const materialBias = { quartz: 0.9, titanium: 1.1, ceramic: 1.0 }[material] || 1.0;
-  const raw = Math.round(heatTime * mat.coolMultiplier * materialBias);
-  const adjusted = Math.max(raw, 50);
-  return adjusted;
-}
+  const materialProps = CONFIG.materials[material] || CONFIG.materials.quartz;
+  const concentrate = state.settings.concentrate;
+  const multiplier = concentrate === "diamonds" ? 1.5 : 2.0;
+  const result = Math.round(heatTime * multiplier);
+  return clamp(result, MIN_COOL_TIME, MAX_COOL_TIME);
 }
 
 function updateFormulaDisplay() {
