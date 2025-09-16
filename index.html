@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dab Timer</title>
-    <link rel="stylesheet" href="css/style.css?v=1">
+    <link rel="stylesheet" href="css/style.css?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -80,7 +80,7 @@
                             <div id="timer-progress" class="progress-bar"></div>
                         </div>
                     </div>
-                    
+
                     <div class="timer-controls">
                         <button id="start-timer" class="btn-primary">
                             <i class="fas fa-play"></i> Start
@@ -106,32 +106,32 @@
             <div id="calendar-screen" class="tab-content">
                 <div class="calendar-container">
                     <h2>Dab Analytics</h2>
-                    <!-- Calendar content here -->
+                    
                     <div class="calendar-controls">
                         <div class="time-range-selector">
                             <button class="time-range-btn active" data-range="week">Week</button>
                             <button class="time-range-btn" data-range="month">Month</button>
                             <button class="time-range-btn" data-range="year">Year</button>
                         </div>
-                        
+
                         <div class="date-navigation">
                             <button id="prev-period"><i class="fas fa-chevron-left"></i></button>
-                            <h3 id="current-period">September 2023</h3>
+                            <h3 id="current-period">Current Period</h3>
                             <button id="next-period"><i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
-                    
+
                     <div class="stats-container">
                         <div class="stat-card">
                             <h3>Usage Frequency</h3>
                             <div class="bar-chart" id="usage-frequency-chart"></div>
                         </div>
-                        
+
                         <div class="stat-card">
                             <h3>Concentrate Preference</h3>
                             <div class="pie-chart" id="concentrate-preference-chart"></div>
                         </div>
-                        
+
                         <div class="stat-card full-width">
                             <h3>Monthly Summary</h3>
                             <div class="stats-grid">
@@ -150,7 +150,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="usage-history">
                         <h3>Recent Activity</h3>
                         <div class="history-list" id="history-list"></div>
@@ -176,6 +176,7 @@
         </nav>
     </div>
 
-    <script src="js/app.js?v=1"></script>
+    <script src="js/app.js?v=2"></script>
+    <script src="js/calendar.js?v=2"></script>
 </body>
 </html>
