@@ -9,9 +9,24 @@ const COMPLETION_FLASH_DURATION = 2000;
 // App Configuration with validated values
 const CONFIG = {
   materials: {
-    quartz: { coolTime: 55 },
-    titanium: { coolTime: 68 },
-    ceramic: { coolTime: 62 }
+    quartz: { 
+      mass: 25, 
+      specificHeat: 0.75, 
+      hotTemp: 500,
+      tau: 45 
+    },
+    titanium: { 
+      mass: 20, 
+      specificHeat: 0.52, 
+      hotTemp: 550,
+      tau: 55 
+    },
+    ceramic: { 
+      mass: 25, 
+      specificHeat: 0.84, 
+      hotTemp: 500,
+      tau: 50 
+    }
   },
   concentrates: {
     shatter: { idealTemp: 157 },
@@ -24,10 +39,8 @@ const CONFIG = {
     crumble: { idealTemp: 182 }
   },
   heaters: {
-    torch: { modifier: 1.0 },
-    lighter: { modifier: 1.8 },
-    enail: { modifier: 0.7 },
-    ebanger: { modifier: 0.8 }
+    butane: { power: 350 },
+    propane: { power: 500 }
   }
 };
 
@@ -37,7 +50,7 @@ let state = {
   settings: {
     material: 'quartz',
     concentrate: 'shatter',
-    heater: 'torch'
+    heater: 'butane'
   },
   timer: {
     isRunning: false,
@@ -84,30 +97,48 @@ function clamp(value, min, max) {
 }
 
 // Timer calculations
-function calculateHeatTime(material, heater, concentrate) {
-  const baseTimes = {
-    quartz: { 
-      shatter: 18, wax: 20, resin: 22, rosin: 22, 
-      budder: 19, diamonds: 23, sauce: 21, crumble: 20 
-    },
-    titanium: { 
-      shatter: 15, wax: 18, resin: 20, rosin: 20, 
-      budder: 16, diamonds: 21, sauce: 19, crumble: 17 
-    },
-    ceramic: { 
-      shatter: 16, wax: 18, resin: 20, rosin: 20, 
-      budder: 17, diamonds: 21, sauce: 19, crumble: 18 
-    }
-  };
-
-  const baseTime = baseTimes[material]?.[concentrate] || 20;
-  const modifier = CONFIG.heaters[heater]?.modifier || 1.0;
+function calculateHeatTime(material, heater) {
+  const materialConfig = CONFIG.materials[material];
+  const heaterConfig = CONFIG.heaters[heater];
   
-  return clamp(Math.round(baseTime * modifier), 5, 300);
+  if (!materialConfig || !heaterConfig) {
+    return 20; // default fallback
+  }
+  
+  const mass = materialConfig.mass;
+  const specificHeat = materialConfig.specificHeat;
+  const hotTemp = materialConfig.hotTemp;
+  const power = heaterConfig.power;
+  
+  const roomTemp = 25;
+  const deltaT = hotTemp - roomTemp;
+  const energy = mass * specificHeat * deltaT; // in Joules
+  const timeSeconds = energy / power;
+  
+  return Math.max(5, Math.min(30, Math.round(timeSeconds)));
 }
 
-function calculateCoolTime(material) {
-  return CONFIG.materials[material]?.coolTime || 60;
+function calculateCoolTime(material, concentrate) {
+  const materialConfig = CONFIG.materials[material];
+  const concentrateConfig = CONFIG.concentrates[concentrate];
+  
+  if (!materialConfig || !concentrateConfig) {
+    return 60; // default fallback
+  }
+  
+  const hotTemp = materialConfig.hotTemp;
+  const tau = materialConfig.tau;
+  const idealTemp = concentrateConfig.idealTemp;
+  const roomTemp = 25;
+  
+  if (idealTemp <= roomTemp) {
+    return 0;
+  }
+  
+  const ratio = (hotTemp - roomTemp) / (idealTemp - roomTemp);
+  const timeSeconds = tau * Math.log(ratio);
+  
+  return Math.max(55, Math.min(100, Math.round(timeSeconds)));
 }
 
 // Clock functions
@@ -213,8 +244,8 @@ function updateFormulaDisplay() {
   const heater = state.settings.heater;
   const concentrate = state.settings.concentrate;
 
-  const heatTime = calculateHeatTime(material, heater, concentrate);
-  const coolTime = calculateCoolTime(material);
+  const heatTime = calculateHeatTime(material, heater);
+  const coolTime = calculateCoolTime(material, concentrate);
   const totalTime = heatTime + coolTime;
 
   safeTextContent(getElement('formula-material'), material.charAt(0).toUpperCase() + material.slice(1));
@@ -265,8 +296,8 @@ function initializeTimer() {
   const heater = state.settings.heater;
   const concentrate = state.settings.concentrate;
 
-  const heatTime = calculateHeatTime(material, heater, concentrate);
-  const coolTime = calculateCoolTime(material);
+  const heatTime = calculateHeatTime(material, heater);
+  const coolTime = calculateCoolTime(material, concentrate);
 
   state.timer = {
     isRunning: false,
@@ -294,7 +325,7 @@ function startTimer() {
   state.timer.intervalId = setInterval(() => {
     state.timer.timeLeft--;
 
-    if (state.timer.timeLeft <= 0) {
+  if (state.timer.timeLeft <= 0) {
       if (state.timer.mode === 'heat') {
         // Switch to cool mode
         state.timer.mode = 'cool';
