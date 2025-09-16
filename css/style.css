@@ -59,6 +59,9 @@ header {
 }
 
 .time-display {
+    font-size: 1.1rem;
+    min-width: 80px;
+    text-align: right;
     font-size: 1.2rem;
 }
 
