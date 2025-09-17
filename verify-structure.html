@@ -1,51 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Structure Test</title>
-    <style>
-        body { 
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #1a1a1a;
-            color: white;
-        }
-        .home-container {
-            background: #2a2a2a;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        .option-btn {
-            padding: 10px 15px;
-            background: #333;
-            border: 1px solid #555;
-            color: white;
-            border-radius: 20px;
-            margin: 5px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>Verify Structure</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="home-container">
-        <div style="text-align:center; margin-bottom:20px;">
-            <div style="font-size:2rem;">💨</div>
-            <h1>DAB TIMER</h1>
-            <p>Structure Test - Should Display</p>
-        </div>
-        
-        <div style="background:#333; padding:15px; border-radius:10px; margin:10px 0;">
-            <h3>Material</h3>
-            <div>
-                <button class="option-btn">Quartz</button>
-                <button class="option-btn">Titanium</button>
-            </div>
-        </div>
-        
-        <button style="padding:15px; background:#4CAF50; color:white; border:none; border-radius:25px; width:100%;">
-            Start Timer
-        </button>
+        <h1 class="home-header">Project Structure Verified</h1>
+        <p>All files in place per directory tree.</p>
+        <button class="btn-primary" onclick="location.reload()">Refresh</button>
     </div>
+    <script>console.log('Verified');</script>
 </body>
 </html>

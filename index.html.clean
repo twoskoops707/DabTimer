@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dab Timer</title>
-    <link rel="stylesheet" href="css/style.css?v=1">
+    <link rel="stylesheet" href="css/style.css?v=3">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div id="app" class="screen active">
@@ -46,14 +48,18 @@
                                 <button class="option-btn" data-setting="concentrate" data-value="wax">Wax</button>
                                 <button class="option-btn" data-setting="concentrate" data-value="resin">Resin</button>
                                 <button class="option-btn" data-setting="concentrate" data-value="rosin">Rosin</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="budder">Budder</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="diamonds">Diamonds</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="sauce">Sauce</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="crumble">Crumble</button>
                             </div>
                         </div>
 
                         <div class="setting-card">
                             <h3>Heating</h3>
                             <div class="option-buttons">
-                                <button class="option-btn active" data-setting="heater" data-value="torch">Torch</button>
-                                <button class="option-btn" data-setting="heater" data-value="lighter">Lighter</button>
+                                <button class="option-btn active" data-setting="heater" data-value="butane">Butane Torch</button>
+                                <button class="option-btn" data-setting="heater" data-value="propane">Propane Torch</button>
                             </div>
                         </div>
                     </div>
@@ -68,6 +74,15 @@
 
             <!-- Timer Screen -->
             <div id="timer-screen" class="tab-content">
+        <div class="timer-header">
+            <div class="timer-logo">
+                <i class="fas fa-cannabis"></i>
+                <span>DAB TIMER</span>
+            </div>
+            <button id="custom-time-btn" class="menu-btn">
+                <i class="fas fa-sliders-h"></i>
+            </button>
+        </div>
                 <div class="timer-container">
                     <div class="timer-display">
                         <div id="timer-mode">HEAT UP</div>
@@ -76,7 +91,7 @@
                             <div id="timer-progress" class="progress-bar"></div>
                         </div>
                     </div>
-                    
+
                     <div class="timer-controls">
                         <button id="start-timer" class="btn-primary">
                             <i class="fas fa-play"></i> Start
@@ -85,6 +100,16 @@
                             <i class="fas fa-redo"></i> Reset
                         </button>
                     </div>
+                    <div class="formula-display">
+                        <h4>Scientific Heating Formula</h4>
+                        <div class="formula-line">t = (m × c × ΔT) / P</div>
+                        <div class="formula-line">Material: <span id="formula-material">Quartz</span></div>
+                        <div class="formula-line">Concentrate: <span id="formula-concentrate">Shatter</span></div>
+                        <div class="formula-line">Heater: <span id="formula-heater">Butane Torch</span></div>
+                        <div class="formula-line">Heat Time: <span id="formula-heat-time">30s</span></div>
+                        <div class="formula-line">Cool Time: <span id="formula-cool-time">45s</span></div>
+                        <div class="formula-line">Total Cycle: <span id="formula-total-time">75s</span></div>
+                    </div>
                 </div>
             </div>
 
@@ -92,11 +117,79 @@
             <div id="calendar-screen" class="tab-content">
                 <div class="calendar-container">
                     <h2>Dab Analytics</h2>
-                    <!-- Calendar content here -->
+                    
+                    <div class="calendar-controls">
+                        <div class="time-range-selector">
+                            <button class="time-range-btn active" data-range="week">Week</button>
+                            <button class="time-range-btn" data-range="month">Month</button>
+                            <button class="time-range-btn" data-range="year">Year</button>
+                        </div>
+
+                        <div class="date-navigation">
+                            <button id="prev-period"><i class="fas fa-chevron-left"></i></button>
+                            <h3 id="current-period">Current Period</h3>
+                            <button id="next-period"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <h3>Usage Frequency</h3>
+                            <div class="bar-chart" id="usage-frequency-chart"></div>
+                        </div>
+
+                        <div class="stat-card">
+                            <h3>Concentrate Preference</h3>
+                            <div class="pie-chart" id="concentrate-preference-chart"></div>
+                        </div>
+
+                        <div class="stat-card full-width">
+                            <h3>Monthly Summary</h3>
+                            <div class="stats-grid">
+                                <div class="stat">
+                                    <span class="stat-value" id="total-sessions">0</span>
+                                    <span class="stat-label">Total Sessions</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value" id="sessions-per-day">0</span>
+                                    <span class="stat-label">Sessions per Day</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value" id="fav-concentrate">None</span>
+                                    <span class="stat-label">Favorite Concentrate</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="usage-history">
+                        <h3>Recent Activity</h3>
+                        <div class="history-list" id="history-list"></div>
+                    </div>
                 </div>
             </div>
         </main>
 
+        <!-- Custom Time Modal -->
+        <div id="custom-time-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Custom Timer Settings</h3>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label for="custom-heat-time">Heat Time (seconds)</label>
+                        <input type="number" id="custom-heat-time" min="5" max="300" value="30">
+                    </div>
+                    <div class="input-group">
+                        <label for="custom-cool-time">Cool Time (seconds)</label>
+                        <input type="number" id="custom-cool-time" min="30" max="120" value="45">
+                    </div>
+                    <button id="apply-custom-times" class="btn-primary">Apply Custom Times</button>
+                </div>
+            </div>
+        </div>
         <!-- Tab Navigation -->
         <nav class="tab-bar">
             <button class="tab-btn active" data-tab="home-screen">
@@ -114,6 +207,17 @@
         </nav>
     </div>
 
-    <script src="js/app.js?v=1"></script>
+    <script src="js/app.js?v=3"></script>
+    <script src="js/calendar-core.js?v=3"></script>
+    <script src="js/calendar-charts.js?v=3"></script>
+    <script src="js/calendar-fix.js?v=3"></script>
 </body>
 </html>
+
+<!-- Completion Animation -->
+<div id="completion-animation" class="completion-hidden">
+    <div class="animation-content">
+        <i class="fas fa-cannabis animation-logo"></i>
+        <div class="enjoy-text">enjoy</div>
+    </div>
+</div>

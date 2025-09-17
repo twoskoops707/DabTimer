@@ -1,30 +1,18 @@
-            <!-- Timer Screen -->
-            <div id="timer-screen" class="tab-content">
-                <div class="timer-container">
-                    <div class="timer-display">
-                        <div id="timer-mode">HEAT UP</div>
-                        <div id="timer" class="digital">0:30</div>
-                        <div class="progress-container">
-                            <div id="timer-progress" class="progress-bar"></div>
-                        </div>
-                    </div>
-                    <div class="timer-controls">
-                        <button id="start-timer" class="btn-primary">
-                            <i class="fas fa-play"></i> Start
-                        </button>
-                        <button id="reset-timer" class="btn-secondary">
-                            <i class="fas fa-redo"></i> Reset
-                        </button>
-                    </div>
-                    <div class="formula-display">
-                        <h4>Scientific Heating Formula</h4>
-                        <div class="formula-line">t = (m × c × ΔT) / P</div>
-                        <div class="formula-line">Material: <span id="formula-material">Quartz</span></div>
-                        <div class="formula-line">Concentrate: <span id="formula-concentrate">Shatter</span></div>
-                        <div class="formula-line">Heater: <span id="formula-heater">Torch</span></div>
-                        <div class="formula-line">Heat Time: <span id="formula-heat-time">30s</span></div>
-                        <div class="formula-line">Cool Time: <span id="formula-cool-time">45s</span></div>
-                        <div class="formula-line">Total Cycle: <span id="formula-total-time">75s</span></div>
-                    </div>
-                </div>
+<div id="fix-timer" class="screen">
+    <header>
+        <div class="header-content">
+            <div class="logo-small">Timer Fix</div>
+            <div class="time-display"></div>
+        </div>
+    </header>
+    <main>
+        <div class="timer-container">
+            <div class="timer-display">
+                <div id="timer-mode">Debug Mode</div>
+                <div id="timer" class="digital">00:00</div>
             </div>
+            <button class="btn-secondary">Reset</button>
+        </div>
+    </main>
+    <script src="js/timer-fix.js"></script>
+</div>

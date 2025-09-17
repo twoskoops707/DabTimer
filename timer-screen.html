@@ -1,51 +1,25 @@
-            <!-- Timer Screen -->
-            <div id="timer-screen" class="tab-content">
-                <div class="timer-container">
-                    <div class="timer-display">
-                        <div id="timer-mode">HEAT UP</div>
-                        <div id="timer" class="digital">0:30</div>
-                        <div class="progress-container">
-                            <div id="timer-progress" class="progress-bar"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="timer-controls">
-                        <button id="start-timer" class="btn-primary">
-                            <i class="fas fa-play"></i> Start
-                        </button>
-                        <button id="reset-timer" class="btn-secondary">
-                            <i class="fas fa-redo"></i> Reset
-                        </button>
-                    </div>
-                    
-                    <div class="current-settings">
-                        <h3>Current Settings</h3>
-                        <div class="settings-display">
-                            <p>Material: <span id="current-material">Quartz</span></p>
-                            <p>Concentrate: <span id="current-concentrate">Shatter</span></p>
-                            <p>Heater: <span id="current-heater">Torch</span></p>
-                        </div>
-                    <div class="formula-display" style="margin-top: 20px; padding: 15px; background: #2a2a2a; border-radius: 10px;">
-                        <h4>Heating Formula</h4>
-                        <div class="formula-line">t = (m × c × ΔT) / P</div>
-                        <div class="formula-line">Where m = mass, c = specific heat</div>
-                        <div class="formula-line">ΔT = temp difference, P = power</div>
-                    </div>
-                    </div>
-                    
-                    <div class="custom-time-section">
-                        <h3>Custom Times (Seconds)</h3>
-                        <div class="custom-time-inputs">
-                            <div class="input-group">
-                                <label for="custom-heat">Heat Time:</label>
-                                <input type="number" id="custom-heat" min="10" max="180" value="30">
-                            </div>
-                            <div class="input-group">
-                                <label for="custom-cool">Cool Time:</label>
-                                <input type="number" id="custom-cool" min="10" max="180" value="45">
-                            </div>
-                            <button id="apply-custom-times" class="btn-secondary">Apply Custom Times</button>
-                        </div>
-                    </div>
+<div id="timer" class="screen">
+    <header>
+        <div class="header-content">
+            <div class="logo-small">DabTimer</div>
+            <div class="time-display" id="current-time"></div>
+        </div>
+    </header>
+    <main>
+        <div class="timer-container">
+            <div class="timer-display">
+                <div id="timer-mode">Simple Timer</div>
+                <div id="timer" class="digital">05:00</div>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
                 </div>
             </div>
+            <div class="timer-controls">
+                <button class="btn-primary">Start</button>
+                <button class="btn-secondary">Pause</button>
+                <button class="btn-secondary">Reset</button>
+            </div>
+        </div>
+    </main>
+    <script src="js/timer-simple.js"></script>
+</div>

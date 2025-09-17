@@ -40,7 +40,8 @@ jobs:
         cd DabTimerAndroid
         # Remove default www content and copy our files
         rm -rf www/*
-        cp -r ../css ../js ../img ../sounds ../index.html www/
+        cp -r ../css ../js ../index.html www/
+        # cp -r ../img ../sounds www/  # Removed as unused
         cp ../config.xml .
 
     - name: Add Android platform
