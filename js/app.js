@@ -523,3 +523,115 @@ function initializeApp() {
     setupCustomTimeModal(); // Add this line
     console.log("App initialized");
 }
+
+// Completion animation functions
+function showCompletionAnimation() {
+    const animation = document.getElementById('completion-animation');
+    if (animation) {
+        animation.className = 'completion-visible';
+        
+        // Hide animation after 3 seconds
+        setTimeout(() => {
+            hideCompletionAnimation();
+        }, 3000);
+    }
+}
+
+function hideCompletionAnimation() {
+    const animation = document.getElementById('completion-animation');
+    if (animation) {
+        animation.className = 'completion-hidden';
+    }
+}
+
+// Update the completeTimer function to show animation
+function completeTimer() {
+    pauseTimer();
+    updateProgressBar(100);
+    
+    // Visual feedback
+    const progressElement = getElement('timer-progress');
+    if (progressElement) {
+        progressElement.style.backgroundColor = '#4CAF50';
+        state.timer.flashTimeoutId = setTimeout(() => {
+            progressElement.style.backgroundColor = '';
+            state.timer.flashTimeoutId = null;
+        }, COMPLETION_FLASH_DURATION);
+    }
+    
+    // Show completion animation
+    showCompletionAnimation();
+    
+    // Log the completed session
+    if (typeof logDabSession === "function") {
+        const session = logDabSession(
+            state.settings.material,
+            state.settings.concentrate,
+            state.settings.heater,
+            state.timer.heatTime,
+            state.timer.coolTime
+        );
+        console.log("Session logged:", session);
+    } else {
+        console.log("Calendar module not loaded - session not logged");
+    }
+}
+
+// Enhanced modal functionality
+function setupCustomTimeModal() {
+    const modal = document.getElementById('custom-time-modal');
+    const customTimeBtn = document.getElementById('custom-time-btn');
+    const closeModal = document.querySelector('.close-modal');
+    const applyBtn = document.getElementById('apply-custom-times');
+    
+    // Ensure elements exist before adding event listeners
+    if (customTimeBtn && modal) {
+        customTimeBtn.addEventListener('click', function() {
+            modal.style.display = 'block';
+            
+            // Pre-fill with current timer values
+            const heatInput = document.getElementById('custom-heat-time');
+            const coolInput = document.getElementById('custom-cool-time');
+            
+            if (heatInput) heatInput.value = state.timer.heatTime || 30;
+            if (coolInput) coolInput.value = state.timer.coolTime || 45;
+        });
+    }
+    
+    if (closeModal && modal) {
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+    }
+    
+    if (applyBtn) {
+        applyBtn.addEventListener('click', function() {
+            const heatTime = parseInt(document.getElementById('custom-heat-time').value) || 30;
+            const coolTime = parseInt(document.getElementById('custom-cool-time').value) || 45;
+            
+            // Validate inputs
+            if (heatTime < 5 || heatTime > 300 || coolTime < 30 || coolTime > 120) {
+                alert('Please enter valid times: Heat (5-300s), Cool (30-120s)');
+                return;
+            }
+            
+            // Apply custom times
+            applyCustomTimes(heatTime, coolTime);
+            modal.style.display = 'none';
+        });
+    }
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modal.style.display === 'block') {
+            modal.style.display = 'none';
+        }
+    });
+}

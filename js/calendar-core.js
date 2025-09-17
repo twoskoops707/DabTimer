@@ -37,7 +37,7 @@ const Calendar = {
             btn.addEventListener('click', function() {
                 timeRangeBtns.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                Calendar.currentRange = this.dataset.range;
+                Calendar.currentRange = this.getAttribute("data-range");
                 Calendar.updateAnalytics();
             });
         });

@@ -1410,3 +1410,95 @@ input:focus + .slider {
 #apply-custom-times {
     margin-top: 10px;
 }
+
+/* Ensure timer header is visible */
+.timer-header {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--card-background);
+    border-bottom: 1px solid #333;
+}
+
+.timer-logo {
+    display: flex;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.timer-logo i {
+    margin-right: 8px;
+    font-size: 1.5rem;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.menu-btn:hover {
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+/* Completion Animation */
+.completion-hidden {
+    display: none;
+}
+
+.completion-visible {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.animation-content {
+    text-align: center;
+    animation: scaleIn 1s ease-in-out;
+}
+
+.animation-logo {
+    font-size: 4rem;
+    color: #4CAF50;
+    animation: spin 2s ease-in-out;
+}
+
+.enjoy-text {
+    font-family: cursive;
+    font-size: 2rem;
+    color: white;
+    margin-top: 20px;
+    animation: fadeIn 1s ease-in-out 0.5s both;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg) scale(0); }
+    70% { transform: rotate(360deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+}
