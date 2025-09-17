@@ -447,3 +447,79 @@ function cleanup() {
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', initializeApp);
 window.addEventListener('beforeunload', cleanup);
+
+// Custom Time Modal functionality
+function setupCustomTimeModal() {
+    const modal = document.getElementById('custom-time-modal');
+    const customTimeBtn = document.getElementById('custom-time-btn');
+    const closeModal = document.querySelector('.close-modal');
+    const applyBtn = document.getElementById('apply-custom-times');
+    
+    if (customTimeBtn) {
+        customTimeBtn.addEventListener('click', function() {
+            modal.style.display = 'block';
+        });
+    }
+    
+    if (closeModal) {
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+    }
+    
+    if (applyBtn) {
+        applyBtn.addEventListener('click', function() {
+            const heatTime = parseInt(document.getElementById('custom-heat-time').value) || 30;
+            const coolTime = parseInt(document.getElementById('custom-cool-time').value) || 45;
+            
+            // Apply custom times
+            applyCustomTimes(heatTime, coolTime);
+            modal.style.display = 'none';
+        });
+    }
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+function applyCustomTimes(heatTime, coolTime) {
+    // Update the timer with custom times
+    pauseTimer();
+    clearFlash();
+    
+    state.timer = {
+        isRunning: false,
+        mode: 'heat',
+        timeLeft: heatTime,
+        heatTime: heatTime,
+        coolTime: coolTime,
+        intervalId: null,
+        flashTimeoutId: null
+    };
+    
+    updateTimerDisplay();
+    updateFormulaDisplay();
+    updateProgressBar(0);
+    resetProgressBarColor();
+    
+    // Update formula display with custom times
+    safeTextContent(getElement('formula-heat-time'), `${heatTime}s`);
+    safeTextContent(getElement('formula-cool-time'), `${coolTime}s`);
+    safeTextContent(getElement('formula-total-time'), `${heatTime + coolTime}s`);
+}
+
+// Add this to the initializeApp function
+function initializeApp() {
+    console.log("Initializing app...");
+    startClock();
+    setupTabNavigation();
+    setupOptionButtons();
+    updateSettingsDisplay();
+    setupTimer();
+    setupCustomTimeModal(); // Add this line
+    console.log("App initialized");
+}
