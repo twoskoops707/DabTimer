@@ -42,7 +42,7 @@ jobs:
         rm -rf www/*
         cp -r ../css ../js ../index.html www/
         # cp -r ../img ../sounds www/  # Removed as unused
-        cp config.xml www/  # Copy existing config.xml to www directory
+        cp ../config.xml .
 
     - name: Add Android platform
       run: |
