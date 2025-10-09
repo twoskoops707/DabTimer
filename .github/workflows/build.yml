@@ -54,8 +54,7 @@ jobs:
     
     - name: Decode Keystore
       run: |
-        echo "${{ secrets.RELEASE_KEY }}" | base64 --decode > android/release-key.keystore
-    
+        echo "${{ secrets.RELEASE_KEY }}" | base64 --decode > android/app/release-key.keystore
     - name: Build Android Release APK
       run: |
         cd android
