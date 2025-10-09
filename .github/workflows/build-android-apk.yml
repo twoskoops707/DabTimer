@@ -1,0 +1,44 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Decode keystore
+      run: |
+        mkdir -p android/app
+        echo "${{ secrets.RELEASE_KEY }}" | base64 --decode > android/app/release-key.keystore
+
+    - name: Build APK
+      working-directory: android
+      run: |
+        ./gradlew assembleRelease \
+          -Pandroid.injected.signing.store.file=app/release-key.keystore \
+          -Pandroid.injected.signing.store.password="${{ secrets.KEYSTORE_PASSWORD }}" \
+          -Pandroid.injected.signing.key.alias="${{ secrets.KEY_ALIAS }}" \
+          -Pandroid.injected.signing.key.password="${{ secrets.KEY_PASSWORD }}"
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-apk
+        path: android/app/build/outputs/apk/release/app-release.apk
