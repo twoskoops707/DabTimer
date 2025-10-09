@@ -148,8 +148,7 @@ function updateClock() {
     const now = new Date();
     clockElement.textContent = now.toLocaleTimeString([], { 
       hour: '2-digit', 
-      minute: '2-digit',
-      second: '2-digit'
+      minute: '2-digit'
     });
   }
 }
@@ -529,9 +528,137 @@ function initializeApp() {
     updateSettingsDisplay();
     setupTimer();
     setupCustomTimerInputs();
+    setupSettings();
+    updateHomeDisplay();
     console.log("App initialized");
 }
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', initializeApp);
 window.addEventListener('beforeunload', cleanup);
+
+
+// Settings functionality
+function setupSettings() {
+    // Custom timer from settings
+    const applySettingsBtn = getElement('apply-settings-times');
+    if (applySettingsBtn) {
+        applySettingsBtn.addEventListener('click', function() {
+            const heatInput = getElement('settings-heat-time');
+            const coolInput = getElement('settings-cool-time');
+
+            const heatTime = parseInt(heatInput.value, 10);
+            const coolTime = parseInt(coolInput.value, 10);
+
+            if (isNaN(heatTime) || isNaN(coolTime) || heatTime < 5 || heatTime > 300 || coolTime < 30 || coolTime > 120) {
+                alert('Please enter valid times: Heat (5-300s), Cool (30-120s)');
+                return;
+            }
+
+            applyCustomTimes(heatTime, coolTime);
+            updateHomeDisplay();
+            alert('Custom times have been applied!');
+        });
+    }
+
+    // Theme switching
+    const themeBtns = document.querySelectorAll('.theme-btn');
+    themeBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const theme = this.dataset.theme;
+            applyTheme(theme);
+            
+            // Update active state
+            themeBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Save theme preference
+            localStorage.setItem('dabTimerTheme', theme);
+        });
+    });
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('dabTimerTheme');
+    if (savedTheme) {
+        applyTheme(savedTheme);
+        themeBtns.forEach(btn => {
+            if (btn.dataset.theme === savedTheme) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+}
+
+// Apply color theme
+function applyTheme(theme) {
+    const root = document.documentElement;
+    
+    const themes = {
+        green: {
+            primary: '#00E676',
+            primaryDark: '#00C853',
+            secondary: '#00BFA5'
+        },
+        blue: {
+            primary: '#2196F3',
+            primaryDark: '#1976D2',
+            secondary: '#00BCD4'
+        },
+        purple: {
+            primary: '#9C27B0',
+            primaryDark: '#7B1FA2',
+            secondary: '#7C4DFF'
+        },
+        orange: {
+            primary: '#FF9800',
+            primaryDark: '#F57C00',
+            secondary: '#FF5722'
+        },
+        pink: {
+            primary: '#E91E63',
+            primaryDark: '#C2185B',
+            secondary: '#F06292'
+        },
+        teal: {
+            primary: '#009688',
+            primaryDark: '#00796B',
+            secondary: '#26A69A'
+        }
+    };
+
+    const selectedTheme = themes[theme];
+    if (selectedTheme) {
+        root.style.setProperty('--primary-color', selectedTheme.primary);
+        root.style.setProperty('--primary-dark', selectedTheme.primaryDark);
+        root.style.setProperty('--secondary-color', selectedTheme.secondary);
+    }
+}
+
+// Update home display with current settings
+function updateHomeDisplay() {
+    const material = state.settings.material;
+    const concentrate = state.settings.concentrate;
+    const heater = state.settings.heater;
+    
+    const heatTime = state.timer.heatTime || calculateHeatTime(material, heater);
+    const coolTime = state.timer.coolTime || calculateCoolTime(material, concentrate);
+    const totalTime = heatTime + coolTime;
+
+    // Update home screen display
+    safeTextContent(getElement('home-material'), material.charAt(0).toUpperCase() + material.slice(1));
+    safeTextContent(getElement('home-concentrate'), concentrate.charAt(0).toUpperCase() + concentrate.slice(1));
+    safeTextContent(getElement('home-heater'), heater.charAt(0).toUpperCase() + heater.slice(1));
+    safeTextContent(getElement('home-heat-time'), `${heatTime}s`);
+    safeTextContent(getElement('home-cool-time'), `${coolTime}s`);
+    safeTextContent(getElement('home-total-time'), `${totalTime}s`);
+}
+
+// Override updateSettingsDisplay to also update home
+const originalUpdateSettingsDisplay = updateSettingsDisplay;
+updateSettingsDisplay = function() {
+    originalUpdateSettingsDisplay();
+    updateHomeDisplay();
+};
+
