@@ -2,60 +2,64 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup Java
-      uses: actions/setup-java@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
       with:
-        distribution: 'temurin'
         java-version: '17'
-
+        distribution: 'temurin'
+    
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+    
+    - name: Accept Android SDK licenses
+      run: yes | sdkmanager --licenses || true
+    
+    - name: Install Android SDK components
+      run: |
+        sdkmanager "build-tools;34.0.0"
+        sdkmanager "platforms;android-35"
+    
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '18'
-
-    - name: Install Cordova
-      run: npm install -g cordova
-
-    - name: Clean existing directory
+        node-version: '20'
+    
+    - name: Install Capacitor CLI
+      run: npm install -g @capacitor/cli
+    
+    - name: Install dependencies
       run: |
-        rm -rf DabTimerAndroid || true
-
-    - name: Create Cordova project
-      run: |
-        cordova create DabTimerAndroid com.twoskoops707.dabtimer DabTimer
-
-    - name: Copy app files
-      run: |
-        cd DabTimerAndroid
-        # Remove default www content and copy our files
-        rm -rf www/*
-        cp -r ../css ../js ../index.html www/
-        # cp -r ../img ../sounds www/  # Removed as unused
-        cp ../config.xml .
-
-    - name: Add Android platform
-      run: |
-        cd DabTimerAndroid
-        cordova platform add android
-
+        if [ -f "package.json" ]; then
+          npm install
+        fi
+    
+    - name: Sync Capacitor
+      run: npx cap sync android
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x android/gradlew
+    
     - name: Build Android APK
       run: |
-        cd DabTimerAndroid
-        cordova build android
-
+        cd android
+        ./gradlew assembleDebug
+    
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: dab-timer-apk
-        path: DabTimerAndroid/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+        name: app-debug
+        path: android/app/build/outputs/apk/debug/app-debug.apk
+
