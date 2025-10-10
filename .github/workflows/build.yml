@@ -37,14 +37,8 @@ jobs:
       with:
         node-version: '20'
     
-    - name: Install Capacitor CLI
-      run: npm install -g @capacitor/cli
-    
     - name: Install dependencies
-      run: |
-        if [ -f "package.json" ]; then
-          npm install
-        fi
+      run: npm install
     
     - name: Sync Capacitor
       run: npx cap sync android
@@ -53,16 +47,37 @@ jobs:
       run: chmod +x android/gradlew
     
     - name: Decode Keystore
+      if: ${{ secrets.RELEASE_KEY != '' }}
       run: |
         echo "${{ secrets.RELEASE_KEY }}" | base64 --decode > android/app/release-key.keystore
-    - name: Build Android Release APK
+    
+    - name: Build Android Release APK (Signed)
+      if: ${{ secrets.RELEASE_KEY != '' }}
       run: |
         cd android
-        ./gradlew assembleRelease -Pandroid.injected.signing.store.file=release-key.keystore -Pandroid.injected.signing.store.password=android_store_pass -Pandroid.injected.signing.key.alias=release_key -Pandroid.injected.signing.key.password=android_key_pass
+        ./gradlew assembleRelease \
+          -Pandroid.injected.signing.store.file=app/release-key.keystore \
+          -Pandroid.injected.signing.store.password="${{ secrets.KEYSTORE_PASSWORD }}" \
+          -Pandroid.injected.signing.key.alias="${{ secrets.KEY_ALIAS }}" \
+          -Pandroid.injected.signing.key.password="${{ secrets.KEY_PASSWORD }}"
     
-    - name: Upload APK
+    - name: Build Android Debug APK (Unsigned)
+      if: ${{ secrets.RELEASE_KEY == '' }}
+      run: |
+        cd android
+        ./gradlew assembleDebug
+    
+    - name: Upload Release APK
+      if: ${{ secrets.RELEASE_KEY != '' }}
       uses: actions/upload-artifact@v4
       with:
         name: app-release
         path: android/app/build/outputs/apk/release/app-release.apk
+    
+    - name: Upload Debug APK
+      if: ${{ secrets.RELEASE_KEY == '' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-debug
+        path: android/app/build/outputs/apk/debug/app-debug.apk
 
