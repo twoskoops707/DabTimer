@@ -12,3 +12,6 @@ echo "7. Add remote: git remote add origin https://github.com/twoskoops707/DabTi
 echo "8. Push: git push -u origin main"
 echo ""
 echo "The GitHub Actions workflow will automatically build the APK!"
+echo ""
+echo "📖 Need help accessing the terminal in GitHub?"
+echo "   Check out GITHUB_TERMINAL_GUIDE.md in the repository root!"
