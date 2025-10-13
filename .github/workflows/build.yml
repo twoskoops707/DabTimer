@@ -1,75 +1,38 @@
-name: Build Android APK
+name: Android CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches:
+      - main
+      - ui-enhancements
   pull_request:
-    branches: [ main, master ]
+    branches:
+      - main
+      - ui-enhancements
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
+    - uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
       with:
-        java-version: '21'
         distribution: 'temurin'
-    
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-    
-    - name: Accept Android SDK licenses
-      run: yes | sdkmanager --licenses || true
-    
-    - name: Install Android SDK components
-      run: |
-        sdkmanager "build-tools;34.0.0"
-        sdkmanager "platforms;android-35"
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-    
-    - name: Install Capacitor CLI
-      run: npm install -g @capacitor/cli
-    
-    - name: Install dependencies
-      run: |
-        if [ -f "package.json" ]; then
-          npm install
-        fi
-    
-    - name: Sync Capacitor
-      run: npx cap sync android
-    
+        java-version: '17'
+
     - name: Grant execute permission for gradlew
       run: chmod +x android/gradlew
-    
-    - name: Decode and Force-Place Keystore
-      run: |
-        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/release-key.keystore
-        mkdir -p /home/runner/.gradle/daemon/8.11.1/
-        cp android/app/release-key.keystore /home/runner/.gradle/daemon/8.11.1/release-key.keystore
 
-    - name: Build Android Release APK
-      run: |
-        cd android
-        ./gradlew assembleRelease
-      env:
-        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    - name: Build debug APK
+      run: cd android && ./gradlew assembleDebug
 
-    - name: Upload APK
+    - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
-        name: app-release
-        path: android/app/build/outputs/apk/release/app-release.apk
+        name: app-debug-apk
+        path: android/app/build/outputs/apk/debug/app-debug.apk
 
