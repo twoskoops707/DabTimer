@@ -22,9 +22,3 @@ task clean(type: Delete) {
 
 
 
-ext {
-    compileSdkVersion = 34
-    minSdkVersion = 22
-    targetSdkVersion = 34
-}
-
