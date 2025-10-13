@@ -30,17 +30,20 @@ jobs:
         java-version: '17'
 
     - name: Grant execute permission for gradlew
-      run: chmod +x ./android/gradlew
+      run: chmod +x gradlew
+      working-directory: DabTimer/android
 
     - name: Clean build
-      run: ./android/gradlew clean
+      run: ./gradlew clean
+      working-directory: DabTimer/android
 
     - name: Build debug APK
-      run: ./android/gradlew assembleDebug
+      run: ./gradlew assembleDebug
+      working-directory: DabTimer/android
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
         name: app-debug-apk
-        path: android/app/build/outputs/apk/debug/app-debug.apk
+        path: DabTimer/android/app/build/outputs/apk/debug/app-debug.apk
 
