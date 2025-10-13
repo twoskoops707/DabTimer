@@ -50,7 +50,9 @@ let state = {
   settings: {
     material: 'quartz',
     concentrate: 'shatter',
-    heater: 'butane'
+    heater: 'butane',
+    customHeatTime: 30, // New default for custom times
+    customCoolTime: 45  // New default for custom times
   },
   timer: {
     isRunning: false,
@@ -62,7 +64,8 @@ let state = {
     flashTimeoutId: null
   },
   clockIntervalId: null,
-  lastOptionClick: 0
+  lastOptionClick: 0,
+  userName: 'User' // Default user name
 };
 
 // Helper functions
@@ -102,7 +105,7 @@ function calculateHeatTime(material, heater) {
   const heaterConfig = CONFIG.heaters[heater];
   
   if (!materialConfig || !heaterConfig) {
-    return 20; // default fallback
+    return state.settings.customHeatTime; // default fallback to custom time
   }
   
   const mass = materialConfig.mass;
@@ -123,7 +126,7 @@ function calculateCoolTime(material, concentrate) {
   const concentrateConfig = CONFIG.concentrates[concentrate];
   
   if (!materialConfig || !concentrateConfig) {
-    return 60; // default fallback
+    return state.settings.customCoolTime; // default fallback to custom time
   }
   
   const hotTemp = materialConfig.hotTemp;
@@ -187,6 +190,7 @@ function switchToTab(tabId) {
   });
 
   state.currentTab = tabId;
+  updateCombinedInfoDisplay(); // Update combined info when tab changes
 }
 
 // Option buttons with validation
@@ -214,31 +218,13 @@ function setupOptionButtons() {
         
         this.classList.add('active');
         state.settings[settingType] = value;
-        updateSettingsDisplay();
+        updateCombinedInfoDisplay(); // Update combined info on setting change
       }
     });
   });
 }
 
-function updateSettingsDisplay() {
-  const materialEl = getElement('current-material');
-  const concentrateEl = getElement('current-concentrate');
-  const heaterEl = getElement('current-heater');
-
-  if (materialEl) {
-    materialEl.textContent = state.settings.material.charAt(0).toUpperCase() + state.settings.material.slice(1);
-  }
-  if (concentrateEl) {
-    concentrateEl.textContent = state.settings.concentrate.charAt(0).toUpperCase() + state.settings.concentrate.slice(1);
-  }
-  if (heaterEl) {
-    heaterEl.textContent = state.settings.heater.charAt(0).toUpperCase() + state.settings.heater.slice(1);
-  }
-
-  updateFormulaDisplay();
-}
-
-function updateFormulaDisplay() {
+function updateCombinedInfoDisplay() {
   const material = state.settings.material;
   const heater = state.settings.heater;
   const concentrate = state.settings.concentrate;
@@ -247,6 +233,14 @@ function updateFormulaDisplay() {
   const coolTime = calculateCoolTime(material, concentrate);
   const totalTime = heatTime + coolTime;
 
+  safeTextContent(getElement('home-material'), material.charAt(0).toUpperCase() + material.slice(1));
+  safeTextContent(getElement('home-concentrate'), concentrate.charAt(0).toUpperCase() + concentrate.slice(1));
+  safeTextContent(getElement('home-heater'), heater.charAt(0).toUpperCase() + heater.slice(1));
+  safeTextContent(getElement('home-heat-time'), `${heatTime}s`);
+  safeTextContent(getElement('home-cool-time'), `${coolTime}s`);
+  safeTextContent(getElement('home-total-time'), `${totalTime}s`);
+
+  // Also update formula display on timer screen
   safeTextContent(getElement('formula-material'), material.charAt(0).toUpperCase() + material.slice(1));
   safeTextContent(getElement('formula-concentrate'), concentrate.charAt(0).toUpperCase() + concentrate.slice(1));
   safeTextContent(getElement('formula-heater'), heater.charAt(0).toUpperCase() + heater.slice(1));
@@ -309,7 +303,6 @@ function initializeTimer() {
   };
 
   updateTimerDisplay();
-  updateFormulaDisplay();
   updateProgressBar(0);
   resetProgressBarColor();
 }
@@ -326,6 +319,18 @@ function startTimer() {
 
   if (state.timer.timeLeft <= 0) {
       if (state.timer.mode === 'heat') {
+        // Show "FLAME OFF" message
+        const completionMessage = getElement('completion-message');
+        if (completionMessage) {
+          completionMessage.textContent = 'FLAME OFF';
+          completionMessage.classList.remove('hidden');
+          
+          // Hide after 2 seconds
+          setTimeout(() => {
+            completionMessage.classList.add('hidden');
+          }, 2000);
+        }
+        
         // Switch to cool mode
         state.timer.mode = 'cool';
         state.timer.timeLeft = state.timer.coolTime;
@@ -386,7 +391,7 @@ function updateTimerDisplay() {
   }
   
   if (timerModeElement) {
-    timerModeElement.textContent = state.timer.mode.toUpperCase();
+    timerModeElement.textContent = state.timer.mode === 'heat' ? 'HEAT UP' : 'COOL DOWN';
   }
 }
 
@@ -422,20 +427,11 @@ function applyCustomTimes(heatTime, coolTime) {
     pauseTimer();
     clearFlash();
     
-    state.timer = {
-        isRunning: false,
-        mode: 'heat',
-        timeLeft: heatTime,
-        heatTime: heatTime,
-        coolTime: coolTime,
-        intervalId: null,
-        flashTimeoutId: null
-    };
-    
-    updateTimerDisplay();
-    updateFormulaDisplay();
-    updateProgressBar(0);
-    resetProgressBarColor();
+    state.settings.customHeatTime = heatTime; // Store custom times in state
+    state.settings.customCoolTime = coolTime;
+
+    // Re-initialize timer with custom times
+    initializeTimer();
     
     // Update formula display with custom times
     safeTextContent(getElement('formula-heat-time'), `${heatTime}s`);
@@ -478,8 +474,26 @@ function completeTimer() {
         }, COMPLETION_FLASH_DURATION);
     }
     
-    // Show completion animation
-    showCompletionAnimation();
+    // Show completion message and leaf animation
+    const completionMessage = getElement('completion-message');
+    const completionLeaf = getElement('completion-leaf');
+    
+    if (completionMessage && completionLeaf) {
+        // Show "ENJOY" message
+        completionMessage.textContent = 'ENJOY';
+        completionMessage.classList.remove('hidden');
+        
+        // Trigger spinning leaf animation
+        completionLeaf.classList.remove('hidden');
+        completionLeaf.classList.add('animate');
+        
+        // Hide after 3 seconds
+        setTimeout(() => {
+            completionMessage.classList.add('hidden');
+            completionLeaf.classList.remove('animate');
+            completionLeaf.classList.add('hidden');
+        }, 3000);
+    }
     
     // Log the completed session
     if (typeof logDabSession === "function") {
@@ -496,169 +510,95 @@ function completeTimer() {
     }
 }
 
-// Custom Timer Inputs Functionality
-function setupCustomTimerInputs() {
-    const applyBtn = getElement('apply-custom-times');
-    
-    if (applyBtn) {
-        applyBtn.addEventListener('click', function() {
-            const heatInput = getElement('custom-heat-time');
-            const coolInput = getElement('custom-cool-time');
+// Custom Timer Inputs Functionality (moved to settings)
+function setupSettingsCustomTimerInputs() {
+  const heatTimeInput = getElement('settings-heat-time');
+  const coolTimeInput = getElement('settings-cool-time');
+  const applyBtn = getElement('apply-settings-times');
 
-            const heatTime = parseInt(heatInput.value, 10);
-            const coolTime = parseInt(coolInput.value, 10);
+  if (heatTimeInput && coolTimeInput && applyBtn) {
+    // Initialize inputs with current custom values
+    heatTimeInput.value = state.settings.customHeatTime;
+    coolTimeInput.value = state.settings.customCoolTime;
 
-            if (isNaN(heatTime) || isNaN(coolTime) || heatTime < 5 || heatTime > 300 || coolTime < 30 || coolTime > 120) {
-                alert('Please enter valid times: Heat (5-300s), Cool (30-120s)');
-                return;
-            }
+    applyBtn.addEventListener('click', () => {
+      const newHeatTime = parseInt(heatTimeInput.value);
+      const newCoolTime = parseInt(coolTimeInput.value);
 
-            applyCustomTimes(heatTime, coolTime);
-            alert('Custom times have been applied!');
-        });
+      if (!isNaN(newHeatTime) && !isNaN(newCoolTime) && newHeatTime >= 5 && newHeatTime <= 300 && newCoolTime >= 30 && newCoolTime <= 120) {
+        applyCustomTimes(newHeatTime, newCoolTime);
+        alert('Custom times applied successfully!');
+      } else {
+        alert('Please enter valid heat and cool times.');
+      }
+    });
+  }
+}
+
+// Color Theme Functionality
+function setupColorTheme() {
+  const themeOptions = document.querySelectorAll('.theme-btn');
+  themeOptions.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const theme = this.dataset.theme;
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('selectedTheme', theme);
+      themeOptions.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Apply saved theme on load
+  const savedTheme = localStorage.getItem('selectedTheme');
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const activeBtn = document.querySelector(`.theme-btn[data-theme="${savedTheme}"]`);
+    if (activeBtn) {
+      activeBtn.classList.add('active');
     }
+  }
 }
 
-// Initialize the app
-function initializeApp() {
-    console.log("Initializing app...");
-    startClock();
-    setupTabNavigation();
-    setupOptionButtons();
-    updateSettingsDisplay();
-    setupTimer();
-    setupCustomTimerInputs();
-    setupSettings();
-    updateHomeDisplay();
-    console.log("App initialized");
+// User Name Functionality
+function setupUserName() {
+  const userNameElement = getElement('user-name');
+  if (userNameElement) {
+    userNameElement.textContent = state.userName;
+    // Potentially add functionality to change user name later
+  }
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initializeApp);
+// Initialization
+document.addEventListener('DOMContentLoaded', function() {
+  startClock();
+  setupTabNavigation();
+  setupOptionButtons();
+  setupSettingsCustomTimerInputs(); // Setup custom timer for settings screen
+  setupColorTheme();
+  setupUserName(); // Setup user name display
+  initializeTimer(); // Initialize timer with default/calculated values
+  updateCombinedInfoDisplay(); // Initial display update for combined info
+});
+
 window.addEventListener('beforeunload', cleanup);
 
-
-// Settings functionality
-function setupSettings() {
-    // Custom timer from settings
-    const applySettingsBtn = getElement('apply-settings-times');
-    if (applySettingsBtn) {
-        applySettingsBtn.addEventListener('click', function() {
-            const heatInput = getElement('settings-heat-time');
-            const coolInput = getElement('settings-cool-time');
-
-            const heatTime = parseInt(heatInput.value, 10);
-            const coolTime = parseInt(coolInput.value, 10);
-
-            if (isNaN(heatTime) || isNaN(coolTime) || heatTime < 5 || heatTime > 300 || coolTime < 30 || coolTime > 120) {
-                alert('Please enter valid times: Heat (5-300s), Cool (30-120s)');
-                return;
-            }
-
-            applyCustomTimes(heatTime, coolTime);
-            updateHomeDisplay();
-            alert('Custom times have been applied!');
-        });
-    }
-
-    // Theme switching
-    const themeBtns = document.querySelectorAll('.theme-btn');
-    themeBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const theme = this.dataset.theme;
-            applyTheme(theme);
-            
-            // Update active state
-            themeBtns.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Save theme preference
-            localStorage.setItem('dabTimerTheme', theme);
-        });
-    });
-
-    // Load saved theme
-    const savedTheme = localStorage.getItem('dabTimerTheme');
-    if (savedTheme) {
-        applyTheme(savedTheme);
-        themeBtns.forEach(btn => {
-            if (btn.dataset.theme === savedTheme) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-    }
+// Calendar-related functions (to be moved/refactored into calendar-core.js or calendar-charts.js)
+// Placeholder for now, actual implementation will be in dedicated calendar files
+function logDabSession(material, concentrate, heater, heatTime, coolTime) {
+  // This function will be implemented in calendar-core.js
+  // For now, return a dummy session object
+  return {
+    id: Date.now(),
+    timestamp: new Date().toISOString(),
+    material: material,
+    concentrate: concentrate,
+    heater: heater,
+    heatTime: heatTime,
+    coolTime: coolTime,
+    totalTime: heatTime + coolTime
+  };
 }
 
-// Apply color theme
-function applyTheme(theme) {
-    const root = document.documentElement;
-    
-    const themes = {
-        green: {
-            primary: '#00E676',
-            primaryDark: '#00C853',
-            secondary: '#00BFA5'
-        },
-        blue: {
-            primary: '#2196F3',
-            primaryDark: '#1976D2',
-            secondary: '#00BCD4'
-        },
-        purple: {
-            primary: '#9C27B0',
-            primaryDark: '#7B1FA2',
-            secondary: '#7C4DFF'
-        },
-        orange: {
-            primary: '#FF9800',
-            primaryDark: '#F57C00',
-            secondary: '#FF5722'
-        },
-        pink: {
-            primary: '#E91E63',
-            primaryDark: '#C2185B',
-            secondary: '#F06292'
-        },
-        teal: {
-            primary: '#009688',
-            primaryDark: '#00796B',
-            secondary: '#26A69A'
-        }
-    };
-
-    const selectedTheme = themes[theme];
-    if (selectedTheme) {
-        root.style.setProperty('--primary-color', selectedTheme.primary);
-        root.style.setProperty('--primary-dark', selectedTheme.primaryDark);
-        root.style.setProperty('--secondary-color', selectedTheme.secondary);
-    }
-}
-
-// Update home display with current settings
-function updateHomeDisplay() {
-    const material = state.settings.material;
-    const concentrate = state.settings.concentrate;
-    const heater = state.settings.heater;
-    
-    const heatTime = state.timer.heatTime || calculateHeatTime(material, heater);
-    const coolTime = state.timer.coolTime || calculateCoolTime(material, concentrate);
-    const totalTime = heatTime + coolTime;
-
-    // Update home screen display
-    safeTextContent(getElement('home-material'), material.charAt(0).toUpperCase() + material.slice(1));
-    safeTextContent(getElement('home-concentrate'), concentrate.charAt(0).toUpperCase() + concentrate.slice(1));
-    safeTextContent(getElement('home-heater'), heater.charAt(0).toUpperCase() + heater.slice(1));
-    safeTextContent(getElement('home-heat-time'), `${heatTime}s`);
-    safeTextContent(getElement('home-cool-time'), `${coolTime}s`);
-    safeTextContent(getElement('home-total-time'), `${totalTime}s`);
-}
-
-// Override updateSettingsDisplay to also update home
-const originalUpdateSettingsDisplay = updateSettingsDisplay;
-updateSettingsDisplay = function() {
-    originalUpdateSettingsDisplay();
-    updateHomeDisplay();
-};
+// Initial call to update combined info display on load
+updateCombinedInfoDisplay();
 
