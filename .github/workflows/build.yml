@@ -28,7 +28,7 @@ jobs:
         java-version: '17'
 
     - name: Grant execute permission for gradlew
-      run: chmod +x "${GITHUB_WORKSPACE}/android/gradlew"
+      run: chmod +x $GITHUB_WORKSPACE/android/gradlew
 
     - name: Clean build
       run: "${GITHUB_WORKSPACE}/android/gradlew" clean
