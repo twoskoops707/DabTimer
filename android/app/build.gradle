@@ -4,16 +4,15 @@ plugins {
 }
 
 android {
-    namespace 'com.example.dabtimer' // <-- change to your actual package if needed
-    compileSdkVersion 34
+    namespace 'com.example.dabtimer'
+    compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.dabtimer" // <-- change to your app's ID if needed
-        minSdkVersion 21
-        targetSdkVersion 34
+        applicationId "com.example.dabtimer"
+        minSdk 21
+        targetSdk 34
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -43,5 +42,3 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
-
-// No custom or duplicate 'clean' task defined here
