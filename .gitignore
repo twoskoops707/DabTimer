@@ -1,0 +1,24 @@
+# Node
+node_modules/
+npm-debug.log
+
+# Capacitor
+.capacitor/
+
+# Build outputs
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
