@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dab Timer</title>
+    <link rel="icon" href="images/dab_timer_app_icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="images/dab_timer_app_icon.png">
+    <link rel="stylesheet" href="css/style.css?v=4">
+    <link rel="stylesheet" href="css/completion-animations.css?v=1">
+    <link rel="stylesheet" href="css/calendar-redesign.css?v=1">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="app" class="screen active">
+        <header>
+            <div class="header-content">
+                <div class="logo-small">
+                    <i class="fas fa-cannabis"></i>
+                    <span>DAB TIMER</span>
+                </div>
+                <div class="time-display" id="current-time">12:00</div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Home Screen -->
+            <div id="home-screen" class="tab-content active">
+                <div class="home-container">
+                    <div class="home-header">
+                        <i class="fas fa-cannabis"></i>
+                        <h1>DAB TIMER</h1>
+                        <p class="home-subtitle">Perfect dabs, every time</p>
+                    </div>
+
+                    <!-- User Variable Display -->
+                    <div class="user-info">
+                        <p>Welcome, <span id="user-name">User</span>!</p>
+                    </div>
+
+                    <div class="settings-grid">
+                        <!-- Material Settings (Moved from Settings Screen) -->
+                        <div class="setting-card">
+                            <h3>Material</h3>
+                            <div class="option-buttons" id="material-options">
+                                <button class="option-btn active" data-setting="material" data-value="quartz">Quartz</button>
+                                <button class="option-btn" data-setting="material" data-value="titanium">Titanium</button>
+                                <button class="option-btn" data-setting="material" data-value="ceramic">Ceramic</button>
+                            </div>
+                        </div>
+
+                        <!-- Concentrate Settings (Moved from Settings Screen) -->
+                        <div class="setting-card">
+                            <h3>Concentrate</h3>
+                            <div class="option-buttons" id="concentrate-options">
+                                <button class="option-btn active" data-setting="concentrate" data-value="shatter">Shatter</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="wax">Wax</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="resin">Resin</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="rosin">Rosin</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="budder">Budder</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="diamonds">Diamonds</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="sauce">Sauce</button>
+                                <button class="option-btn" data-setting="concentrate" data-value="crumble">Crumble</button>
+                            </div>
+                        </div>
+
+                        <!-- Heater Settings (Moved from Settings Screen) -->
+                        <div class="setting-card">
+                            <h3>Heating</h3>
+                            <div class="option-buttons" id="heater-options">
+                                <button class="option-btn active" data-setting="heater" data-value="butane">Butane Torch</button>
+                                <button class="option-btn" data-setting="heater" data-value="propane">Propane Torch</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="start-timer-btn" class="btn-primary large">
+                            <i class="fas fa-play"></i> Start Timer
+                        </button>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- Timer Screen -->
+            <div id="timer-screen" class="tab-content">
+                <div class="timer-header">
+                    <div class="timer-logo">
+                        <i class="fas fa-cannabis"></i>
+                        <span>DAB TIMER</span>
+                    </div>
+                </div>
+                <div class="timer-container">
+                    <div class="timer-display">
+                        <div id="timer-mode">HEAT UP</div>
+                        <div id="timer" class="digital">0:30</div>
+                        <div class="progress-container">
+                            <div id="timer-progress" class="progress-bar"></div>
+                        </div>
+                        <div id="completion-message" class="completion-message hidden"></div>
+                        <div id="completion-leaf" class="completion-leaf hidden">
+                            <i class="fas fa-cannabis"></i>
+                        </div>
+                    </div>
+
+                    <div class="timer-controls">
+                        <button id="start-timer" class="btn-primary">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                        <button id="reset-timer" class="btn-secondary">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+
+                    <!-- Custom Time Section (Moved below formula) -->
+                    <div class="formula-display">
+                        <h4>Scientific Heating Formula</h4>
+                        <div class="formula-line">t = (m × c × ΔT) / P</div>
+                        <div class="formula-line">Material: <span id="formula-material">Quartz</span></div>
+                        <div class="formula-line">Concentrate: <span id="formula-concentrate">Shatter</span></div>
+                        <div class="formula-line">Heater: <span id="formula-heater">Butane Torch</span></div>
+                        <div class="formula-line">Heat Time: <span id="formula-heat-time">30s</span></div>
+                        <div class="formula-line">Cool Time: <span id="formula-cool-time">45s</span></div>
+                        <div class="formula-line">Total Cycle: <span id="formula-total-time">75s</span></div>
+                    </div>
+                    <div class="custom-time-section">
+                        <div class="custom-time-inputs">
+                            <div class="input-group">
+                                <label for="custom-heat-time">Heat Time (s)</label>
+                                <input type="number" id="custom-heat-time" min="5" max="300" value="30">
+                            </div>
+                            <div class="input-group">
+                                <label for="custom-cool-time">Cool Time (s)</label>
+                                <input type="number" id="custom-cool-time" min="30" max="120" value="45">
+                            </div>
+                        </div>
+                        <button id="apply-custom-times" class="btn-secondary">Apply Custom Times</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Screen -->
+            <div id="calendar-screen" class="tab-content">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <h2><i class="fas fa-chart-line"></i> Your Dab Journey</h2>
+                        <p class="calendar-subtitle">Track your sessions and preferences</p>
+                    </div>
+                    
+                    <!-- Quick Stats Cards -->
+                    <div class="quick-stats">
+                        <div class="quick-stat-card">
+                            <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                            <div class="stat-content">
+                                <span class="stat-value" id="total-sessions">0</span>
+                                <span class="stat-label">Total Dabs</span>
+                            </div>
+                        </div>
+                        <div class="quick-stat-card">
+                            <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                            <div class="stat-content">
+                                <span class="stat-value" id="sessions-today">0</span>
+                                <span class="stat-label">Today</span>
+                            </div>
+                        </div>
+                        <div class="quick-stat-card">
+                            <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                            <div class="stat-content">
+                                <span class="stat-value" id="streak-days">0</span>
+                                <span class="stat-label">Day Streak</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Time Range Selector -->
+                    <div class="time-range-selector">
+                        <button class="time-range-btn active" data-range="week">Week</button>
+                        <button class="time-range-btn" data-range="month">Month</button>
+                        <button class="time-range-btn" data-range="year">Year</button>
+                    </div>
+
+                    <!-- Charts Section -->
+                    <div class="charts-section">
+                        <!-- Usage Frequency Chart -->
+                        <div class="chart-card">
+                            <h3><i class="fas fa-chart-bar"></i> Session Activity</h3>
+                            <canvas id="usage-frequency-chart"></canvas>
+                        </div>
+
+                        <!-- Concentrate Preference Chart -->
+                        <div class="chart-card">
+                            <h3><i class="fas fa-chart-pie"></i> Favorite Concentrates</h3>
+                            <canvas id="concentrate-preference-chart"></canvas>
+                        </div>
+
+                        <!-- Material Preference Chart -->
+                        <div class="chart-card">
+                            <h3><i class="fas fa-gem"></i> Material Breakdown</h3>
+                            <canvas id="material-preference-chart"></canvas>
+                        </div>
+
+                        <!-- Time of Day Chart -->
+                        <div class="chart-card">
+                            <h3><i class="fas fa-clock"></i> Peak Hours</h3>
+                            <canvas id="time-of-day-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="recent-activity">
+                        <h3><i class="fas fa-history"></i> Recent Sessions</h3>
+                        <div class="activity-list" id="history-list">
+                            <div class="empty-state">
+                                <i class="fas fa-cannabis"></i>
+                                <p>No sessions yet. Start your first dab!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Screen -->
+            <div id="settings-screen" class="tab-content">
+                <div class="settings-container">
+                    <h2><i class="fas fa-cog"></i> Settings</h2>
+                    
+                    <!-- Color Theme Settings -->
+                    <div class="setting-card">
+                        <h3><i class="fas fa-palette"></i> Color Theme</h3>
+                        <p class="setting-description">Choose your preferred color scheme</p>
+                        <div class="theme-options">
+                            <button class="theme-btn active" data-theme="green">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #00E676, #00BFA5);"></div>
+                                <span>Green (Default)</span>
+                            </button>
+                            <button class="theme-btn" data-theme="blue">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #2196F3, #00BCD4);"></div>
+                                <span>Blue</span>
+                            </button>
+                            <button class="theme-btn" data-theme="purple">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #9C27B0, #7C4DFF);"></div>
+                                <span>Purple</span>
+                            </button>
+                            <button class="theme-btn" data-theme="orange">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #FF9800, #FF5722);"></div>
+                                <span>Orange</span>
+                            </button>
+                            <button class="theme-btn" data-theme="pink">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #E91E63, #F06292);"></div>
+                                <span>Pink</span>
+                            </button>
+                            <button class="theme-btn" data-theme="teal">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #009688, #26A69A);"></div>
+                                <span>Teal</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Custom Timer Settings (Moved from Home Screen) -->
+                    <div class="setting-card">
+                        <h3><i class="fas fa-clock"></i> Custom Timer</h3>
+                        <p class="setting-description">Set your own heat-up and cool-down times</p>
+                        <div class="custom-time-inputs">
+                            <div class="input-group">
+                                <label for="settings-heat-time">Heat Time (seconds)</label>
+                                <input type="number" id="settings-heat-time" min="5" max="300" value="30">
+                            </div>
+                            <div class="input-group">
+                                <label for="settings-cool-time">Cool Time (seconds)</label>
+                                <input type="number" id="settings-cool-time" min="30" max="120" value="45">
+                            </div>
+                        </div>
+                        <button id="apply-settings-times" class="btn-secondary full-width">Apply Custom Times</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-bar">
+            <button class="tab-btn active" data-tab="home-screen">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </button>
+            <button class="tab-btn" data-tab="timer-screen">
+                <i class="fas fa-stopwatch"></i>
+                <span>Timer</span>
+            </button>
+            <button class="tab-btn" data-tab="calendar-screen">
+                <i class="fas fa-calendar"></i>
+                <span>Calendar</span>
+            </button>
+            <button class="tab-btn" data-tab="settings-screen">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="js/app.js?v=3"></script>
+    <script src="js/calendar-core.js?v=3"></script>
+    <script src="js/calendar-charts.js?v=3"></script>
+    <script src="js/calendar-fix.js?v=3"></script>
+</body>
+</html>
+
+<!-- Completion Animation -->
+<div id="completion-animation" class="completion-hidden">
+    <div class="animation-content">
+        <i class="fas fa-cannabis animation-logo"></i>
+        <div class="enjoy-text">enjoy</div>
+    </div>
+</div>
+
