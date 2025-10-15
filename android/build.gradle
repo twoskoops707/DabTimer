@@ -14,11 +14,14 @@ allprojects {
         google()
         mavenCentral()
     }
+    // Add this block to enforce Java 17 for all sub-projects
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:deprecation"
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-
-
