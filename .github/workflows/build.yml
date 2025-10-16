@@ -33,10 +33,12 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20' # Changed from '18' to '20'
+        node-version: '20'
 
-    - name: Install dependencies and sync Capacitor
+    - name: Clean npm cache and reinstall dependencies
       run: |
+        npm cache clean --force
+        rm -rf node_modules package-lock.json
         npm install
         ./node_modules/.bin/cap sync android
 
