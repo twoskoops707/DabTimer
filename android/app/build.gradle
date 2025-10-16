@@ -16,8 +16,6 @@ allprojects {
     }
 }
 
-// The duplicate 'clean' task definition has been removed from here.
-
 // Define version variables here
 ext {
     androidxAppCompatVersion = '1.6.1'
@@ -81,7 +79,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
-    // Corrected: Reference capacitor-android as a direct dependency with its version
     implementation "com.getcapacitor:capacitor-android:5.0.6"
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
