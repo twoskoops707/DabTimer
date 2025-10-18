@@ -4,14 +4,18 @@
   "description": "Timer app for dabbing sessions",
   "main": "index.html",
   "scripts": {
-    "build": "npm install && npx cap sync android",
-    "sync": "npx cap sync android"
+    "build": "echo 'Web assets are static in www folder' && npx cap sync android",
+    "sync": "npx cap sync android",
+    "android:build": "cd android && ./gradlew assembleDebug",
+    "android:release": "cd android && ./gradlew assembleRelease"
   },
   "author": "twoskoops707",
   "license": "MIT",
   "dependencies": {
     "@capacitor/android": "^7.4.3",
-    "@capacitor/core": "^7.4.3",
+    "@capacitor/core": "^7.4.3"
+  },
+  "devDependencies": {
     "@capacitor/cli": "^7.4.3"
   }
 }
