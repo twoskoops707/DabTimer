@@ -1,23 +1,19 @@
 {
-  "name": "com.twoscoops.dabtimer",
-  "displayName": "DabTimer",
+  "name": "dab-timer",
   "version": "1.0.0",
-  "description": "A sample Apache Cordova application that responds to the deviceready event.",
-  "main": "index.js",
+  "description": "Timer app for dabbing sessions",
+  "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "echo 'Web assets are static in www folder' && npx cap sync android",
+    "sync": "npx cap sync android",
+    "android:build": "cd android && ./gradlew assembleDebug",
+    "android:release": "cd android && ./gradlew assembleRelease"
   },
-  "keywords": [
-    "ecosystem:cordova"
-  ],
-  "author": "Apache Cordova Team",
-  "license": "Apache-2.0",
-  "cordova": {
-    "platforms": [
-      "android"
-    ]
-  },
-  "devDependencies": {
-    "cordova-android": "^9.1.0"
+  "author": "twoskoops707",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3",
+    "@capacitor/cli": "^7.4.3"
   }
 }
