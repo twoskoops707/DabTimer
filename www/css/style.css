@@ -1,21 +1,84 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #00E676;
-    --primary-dark: #00C853;
-    --primary-light: #B9F6CA;
-    --secondary-color: #00BFA5;
-    --accent-color: #7C4DFF;
     --text-primary: #FFFFFF;
     --text-secondary: #B0B0B0;
     --background: #0A0A0A;
     --card-background: linear-gradient(145deg, #1a1a1a 0%, #141414 100%);
     --card-border: #2D2D2D;
+    --font-family: 'Poppins', sans-serif;
+}
+
+[data-theme="green"] {
+    --primary-color: #00E676;
+    --primary-dark: #00C853;
+    --primary-light: #B9F6CA;
+    --secondary-color: #00BFA5;
+    --accent-color: #7C4DFF;
     --shadow-sm: 0 2px 8px rgba(0, 230, 118, 0.1);
     --shadow-md: 0 8px 24px rgba(0, 230, 118, 0.15);
     --shadow-lg: 0 16px 48px rgba(0, 230, 118, 0.2);
     --glow: 0 0 20px rgba(0, 230, 118, 0.3);
-    --font-family: 'Poppins', sans-serif;
+}
+
+[data-theme="blue"] {
+    --primary-color: #2196F3;
+    --primary-dark: #1976D2;
+    --primary-light: #BBDEFB;
+    --secondary-color: #00BCD4;
+    --accent-color: #7C4DFF;
+    --shadow-sm: 0 2px 8px rgba(33, 150, 243, 0.1);
+    --shadow-md: 0 8px 24px rgba(33, 150, 243, 0.15);
+    --shadow-lg: 0 16px 48px rgba(33, 150, 243, 0.2);
+    --glow: 0 0 20px rgba(33, 150, 243, 0.3);
+}
+
+[data-theme="purple"] {
+    --primary-color: #9C27B0;
+    --primary-dark: #7B1FA2;
+    --primary-light: #E1BEE7;
+    --secondary-color: #7C4DFF;
+    --accent-color: #FF4081;
+    --shadow-sm: 0 2px 8px rgba(156, 39, 176, 0.1);
+    --shadow-md: 0 8px 24px rgba(156, 39, 176, 0.15);
+    --shadow-lg: 0 16px 48px rgba(156, 39, 176, 0.2);
+    --glow: 0 0 20px rgba(156, 39, 176, 0.3);
+}
+
+[data-theme="orange"] {
+    --primary-color: #FF9800;
+    --primary-dark: #F57C00;
+    --primary-light: #FFE0B2;
+    --secondary-color: #FF5722;
+    --accent-color: #FFC107;
+    --shadow-sm: 0 2px 8px rgba(255, 152, 0, 0.1);
+    --shadow-md: 0 8px 24px rgba(255, 152, 0, 0.15);
+    --shadow-lg: 0 16px 48px rgba(255, 152, 0, 0.2);
+    --glow: 0 0 20px rgba(255, 152, 0, 0.3);
+}
+
+[data-theme="pink"] {
+    --primary-color: #E91E63;
+    --primary-dark: #C2185B;
+    --primary-light: #F8BBD0;
+    --secondary-color: #F06292;
+    --accent-color: #FF80AB;
+    --shadow-sm: 0 2px 8px rgba(233, 30, 99, 0.1);
+    --shadow-md: 0 8px 24px rgba(233, 30, 99, 0.15);
+    --shadow-lg: 0 16px 48px rgba(233, 30, 99, 0.2);
+    --glow: 0 0 20px rgba(233, 30, 99, 0.3);
+}
+
+[data-theme="teal"] {
+    --primary-color: #009688;
+    --primary-dark: #00796B;
+    --primary-light: #B2DFDB;
+    --secondary-color: #26A69A;
+    --accent-color: #4DB6AC;
+    --shadow-sm: 0 2px 8px rgba(0, 150, 136, 0.1);
+    --shadow-md: 0 8px 24px rgba(0, 150, 136, 0.15);
+    --shadow-lg: 0 16px 48px rgba(0, 150, 136, 0.2);
+    --glow: 0 0 20px rgba(0, 150, 136, 0.3);
 }
 
 * {

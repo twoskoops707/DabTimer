@@ -105,7 +105,7 @@ function calculateHeatTime(material, heater) {
   const heaterConfig = CONFIG.heaters[heater];
   
   if (!materialConfig || !heaterConfig) {
-    return state.settings.customHeatTime; // default fallback to custom time
+    return 30; // Default fallback time
   }
   
   const mass = materialConfig.mass;
@@ -126,7 +126,7 @@ function calculateCoolTime(material, concentrate) {
   const concentrateConfig = CONFIG.concentrates[concentrate];
   
   if (!materialConfig || !concentrateConfig) {
-    return state.settings.customCoolTime; // default fallback to custom time
+    return 45; // Default fallback time
   }
   
   const hotTemp = materialConfig.hotTemp;
@@ -229,8 +229,16 @@ function updateCombinedInfoDisplay() {
   const heater = state.settings.heater;
   const concentrate = state.settings.concentrate;
 
-  const heatTime = calculateHeatTime(material, heater);
-  const coolTime = calculateCoolTime(material, concentrate);
+  let heatTime = calculateHeatTime(material, heater);
+  let coolTime = calculateCoolTime(material, concentrate);
+
+  // Override with custom times if set and valid
+  if (state.settings.customHeatTime > 0) {
+    heatTime = state.settings.customHeatTime;
+  }
+  if (state.settings.customCoolTime > 0) {
+    coolTime = state.settings.customCoolTime;
+  }
   const totalTime = heatTime + coolTime;
 
   safeTextContent(getElement('home-material'), material.charAt(0).toUpperCase() + material.slice(1));
@@ -289,8 +297,16 @@ function initializeTimer() {
   const heater = state.settings.heater;
   const concentrate = state.settings.concentrate;
 
-  const heatTime = calculateHeatTime(material, heater);
-  const coolTime = calculateCoolTime(material, concentrate);
+  let heatTime = calculateHeatTime(material, heater);
+  let coolTime = calculateCoolTime(material, concentrate);
+
+  // Override with custom times if set and valid
+  if (state.settings.customHeatTime > 0) {
+    heatTime = state.settings.customHeatTime;
+  }
+  if (state.settings.customCoolTime > 0) {
+    coolTime = state.settings.customCoolTime;
+  }
 
   state.timer = {
     isRunning: false,
