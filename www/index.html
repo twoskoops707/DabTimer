@@ -6,12 +6,11 @@
     <title>Dab Timer</title>
     <link rel="icon" href="images/dab_timer_app_icon.png" type="image/png">
     <link rel="apple-touch-icon" href="images/dab_timer_app_icon.png">
-    <link rel="stylesheet" href="css/style.css?v=4">
+    <link rel="stylesheet" href="css/style.css?v=5">
     <link rel="stylesheet" href="css/completion-animations.css?v=1">
     <link rel="stylesheet" href="css/calendar-redesign.css?v=1">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -36,13 +35,8 @@
                         <p class="home-subtitle">Perfect dabs, every time</p>
                     </div>
 
-                    <!-- User Variable Display -->
-                    <div class="user-info">
-                        <p>Welcome, <span id="user-name">User</span>!</p>
-                    </div>
-
                     <div class="settings-grid">
-                        <!-- Material Settings (Moved from Settings Screen) -->
+                        <!-- Material Settings -->
                         <div class="setting-card">
                             <h3>Material</h3>
                             <div class="option-buttons" id="material-options">
@@ -52,7 +46,7 @@
                             </div>
                         </div>
 
-                        <!-- Concentrate Settings (Moved from Settings Screen) -->
+                        <!-- Concentrate Settings -->
                         <div class="setting-card">
                             <h3>Concentrate</h3>
                             <div class="option-buttons" id="concentrate-options">
@@ -67,7 +61,7 @@
                             </div>
                         </div>
 
-                        <!-- Heater Settings (Moved from Settings Screen) -->
+                        <!-- Heater Settings -->
                         <div class="setting-card">
                             <h3>Heating</h3>
                             <div class="option-buttons" id="heater-options">
@@ -82,19 +76,11 @@
                             <i class="fas fa-play"></i> Start Timer
                         </button>
                     </div>
-
-
                 </div>
             </div>
 
             <!-- Timer Screen -->
             <div id="timer-screen" class="tab-content">
-                <div class="timer-header">
-                    <div class="timer-logo">
-                        <i class="fas fa-cannabis"></i>
-                        <span>DAB TIMER</span>
-                    </div>
-                </div>
                 <div class="timer-container">
                     <div class="timer-display">
                         <div id="timer-mode">HEAT UP</div>
@@ -103,9 +89,6 @@
                             <div id="timer-progress" class="progress-bar"></div>
                         </div>
                         <div id="completion-message" class="completion-message hidden"></div>
-                        <div id="completion-leaf" class="completion-leaf hidden">
-                            <i class="fas fa-cannabis"></i>
-                        </div>
                     </div>
 
                     <div class="timer-controls">
@@ -117,7 +100,7 @@
                         </button>
                     </div>
 
-                    <!-- Custom Time Section (Moved below formula) -->
+                    <!-- Formula Display -->
                     <div class="formula-display">
                         <h4>Scientific Heating Formula</h4>
                         <div class="formula-line">t = (m × c × ΔT) / P</div>
@@ -127,19 +110,6 @@
                         <div class="formula-line">Heat Time: <span id="formula-heat-time">30s</span></div>
                         <div class="formula-line">Cool Time: <span id="formula-cool-time">45s</span></div>
                         <div class="formula-line">Total Cycle: <span id="formula-total-time">75s</span></div>
-                    </div>
-                    <div class="custom-time-section">
-                        <div class="custom-time-inputs">
-                            <div class="input-group">
-                                <label for="custom-heat-time">Heat Time (s)</label>
-                                <input type="number" id="custom-heat-time" min="5" max="300" value="30">
-                            </div>
-                            <div class="input-group">
-                                <label for="custom-cool-time">Cool Time (s)</label>
-                                <input type="number" id="custom-cool-time" min="30" max="120" value="45">
-                            </div>
-                        </div>
-                        <button id="apply-custom-times" class="btn-secondary">Apply Custom Times</button>
                     </div>
                 </div>
             </div>
@@ -151,7 +121,7 @@
                         <h2><i class="fas fa-chart-line"></i> Your Dab Journey</h2>
                         <p class="calendar-subtitle">Track your sessions and preferences</p>
                     </div>
-                    
+
                     <!-- Quick Stats Cards -->
                     <div class="quick-stats">
                         <div class="quick-stat-card">
@@ -228,7 +198,7 @@
             <div id="settings-screen" class="tab-content">
                 <div class="settings-container">
                     <h2><i class="fas fa-cog"></i> Settings</h2>
-                    
+
                     <!-- Color Theme Settings -->
                     <div class="setting-card">
                         <h3><i class="fas fa-palette"></i> Color Theme</h3>
@@ -261,18 +231,18 @@
                         </div>
                     </div>
 
-                    <!-- Custom Timer Settings (Moved from Home Screen) -->
+                    <!-- Custom Timer Settings -->
                     <div class="setting-card">
                         <h3><i class="fas fa-clock"></i> Custom Timer</h3>
-                        <p class="setting-description">Set your own heat-up and cool-down times</p>
+                        <p class="setting-description">Override the automatic calculations with your own times</p>
                         <div class="custom-time-inputs">
                             <div class="input-group">
                                 <label for="settings-heat-time">Heat Time (seconds)</label>
-                                <input type="number" id="settings-heat-time" min="5" max="300" value="30">
+                                <input type="number" id="settings-heat-time" min="5" max="300" placeholder="30">
                             </div>
                             <div class="input-group">
                                 <label for="settings-cool-time">Cool Time (seconds)</label>
-                                <input type="number" id="settings-cool-time" min="30" max="120" value="45">
+                                <input type="number" id="settings-cool-time" min="5" max="300" placeholder="45">
                             </div>
                         </div>
                         <button id="apply-settings-times" class="btn-secondary full-width">Apply Custom Times</button>
@@ -302,18 +272,8 @@
         </nav>
     </div>
 
-    <script src="js/app.js?v=3"></script>
+    <script src="js/app.js?v=5"></script>
     <script src="js/calendar-core.js?v=3"></script>
     <script src="js/calendar-charts.js?v=3"></script>
-    
 </body>
 </html>
-
-<!-- Completion Animation -->
-<div id="completion-animation" class="completion-hidden">
-    <div class="animation-content">
-        <i class="fas fa-cannabis animation-logo"></i>
-        <div class="enjoy-text">enjoy</div>
-    </div>
-</div>
-
