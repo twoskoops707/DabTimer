@@ -89,6 +89,9 @@
                             <div id="timer-progress" class="progress-bar"></div>
                         </div>
                         <div id="completion-message" class="completion-message hidden"></div>
+                        <div id="completion-leaf" class="completion-leaf hidden">
+                            <img src="images/cannabis_leaf.png" alt="Cannabis Leaf">
+                        </div>
                     </div>
 
                     <div class="timer-controls">
@@ -221,11 +224,11 @@
                                 <span>Orange</span>
                             </button>
                             <button class="theme-btn" data-theme="pink">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #E91E63, #F06292);"></div>
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #E91E63, #D81B60);"></div>
                                 <span>Pink</span>
                             </button>
                             <button class="theme-btn" data-theme="teal">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #009688, #26A69A);"></div>
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #009688, #00796B);"></div>
                                 <span>Teal</span>
                             </button>
                         </div>
@@ -233,36 +236,47 @@
 
                     <!-- Custom Timer Settings -->
                     <div class="setting-card">
-                        <h3><i class="fas fa-clock"></i> Custom Timer</h3>
-                        <p class="setting-description">Override the automatic calculations with your own times</p>
+                        <h3><i class="fas fa-clock"></i> Custom Times</h3>
+                        <p class="setting-description">Override calculated times with your own values</p>
                         <div class="custom-time-inputs">
                             <div class="input-group">
                                 <label for="settings-heat-time">Heat Time (seconds)</label>
-                                <input type="number" id="settings-heat-time" min="5" max="300" placeholder="30">
+                                <input type="number" id="settings-heat-time" min="5" max="300" placeholder="e.g., 30">
                             </div>
                             <div class="input-group">
                                 <label for="settings-cool-time">Cool Time (seconds)</label>
-                                <input type="number" id="settings-cool-time" min="5" max="300" placeholder="45">
+                                <input type="number" id="settings-cool-time" min="30" max="120" placeholder="e.g., 45">
                             </div>
                         </div>
                         <button id="apply-settings-times" class="btn-secondary full-width">Apply Custom Times</button>
+                        <button id="use-calculated-times" class="btn-tertiary full-width">Use Calculated Times</button>
+                    </div>
+
+                    <!-- User Name Setting -->
+                    <div class="setting-card">
+                        <h3><i class="fas fa-user"></i> User Profile</h3>
+                        <p class="setting-description">Personalize your experience</p>
+                        <div class="input-group">
+                            <label for="user-name-input">Your Name</label>
+                            <input type="text" id="user-name-input" placeholder="Enter your name">
+                        </div>
+                        <button id="save-user-name" class="btn-secondary full-width">Save Name</button>
                     </div>
                 </div>
             </div>
         </main>
 
-        <!-- Tab Navigation -->
-        <nav class="tab-bar">
+        <nav class="bottom-nav">
             <button class="tab-btn active" data-tab="home-screen">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </button>
             <button class="tab-btn" data-tab="timer-screen">
-                <i class="fas fa-stopwatch"></i>
+                <i class="fas fa-hourglass-half"></i>
                 <span>Timer</span>
             </button>
             <button class="tab-btn" data-tab="calendar-screen">
-                <i class="fas fa-calendar"></i>
+                <i class="fas fa-calendar-alt"></i>
                 <span>Calendar</span>
             </button>
             <button class="tab-btn" data-tab="settings-screen">
@@ -272,7 +286,7 @@
         </nav>
     </div>
 
-    <script src="js/app.js?v=5"></script>
+    <script src="js/app.js?v=3"></script>
     <script src="js/calendar-core.js?v=3"></script>
     <script src="js/calendar-charts.js?v=3"></script>
 </body>
