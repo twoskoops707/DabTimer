@@ -23,9 +23,9 @@ const state = {
 // Configuration - NEW TIMINGS per requirements
 const CONFIG = {
     materials: {
-        quartz: { heatUp: 13, coolDown: 70 },
-        titanium: { heatUp: 14, coolDown: 63 },
-        ceramic: { heatUp: 15, coolDown: 80 }
+        quartz: { heatUp: 12, coolDown: 60 },
+        titanium: { heatUp: 10, coolDown: 50 },
+        ceramic: { heatUp: 15, coolDown: 75 }
     },
     heaters: {
         butane: { heatModifier: 1.0, coolModifier: 1.0 },
@@ -46,11 +46,70 @@ const CONFIG = {
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✓ DOM Ready');
-    initializeApp();
+    checkAgeVerification();
 });
+
+// Check age verification status
+function checkAgeVerification() {
+    const isVerified = localStorage.getItem('ageVerified');
+    const ageScreen = document.getElementById('age-verification');
+    
+    if (isVerified === 'true') {
+        // User already verified, hide screen and init app
+        if (ageScreen) ageScreen.classList.add('hidden');
+        initializeApp();
+    } else {
+        // Show age verification
+        if (ageScreen) {
+            setupAgeVerification();
+        }
+    }
+}
+
+// Setup age verification handlers
+function setupAgeVerification() {
+    const yesBtn = document.getElementById('verify-yes');
+    const noBtn = document.getElementById('verify-no');
+    const stateSelect = document.getElementById('user-state');
+    
+    if (yesBtn) {
+        yesBtn.addEventListener('click', function() {
+            const selectedState = stateSelect.value;
+            
+            if (!selectedState) {
+                alert('Please select your state first.');
+                return;
+            }
+            
+            // Store verification
+            localStorage.setItem('ageVerified', 'true');
+            localStorage.setItem('userState', selectedState);
+            
+            // Hide age screen
+            const ageScreen = document.getElementById('age-verification');
+            if (ageScreen) {
+                ageScreen.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    ageScreen.classList.add('hidden');
+                    initializeApp();
+                }, 300);
+            }
+        });
+    }
+    
+    if (noBtn) {
+        noBtn.addEventListener('click', function() {
+            alert('You must be 21 or older to use this app.');
+            // Could redirect to a "come back when you're older" page
+        });
+    }
+}
 
 function initializeApp() {
     console.log('Initializing DabTimer...');
+    
+    // Add sample data for testing (only if no data exists)
+    addSampleDataIfNeeded();
     
     loadSettings();
     updateClock();
@@ -63,6 +122,32 @@ function initializeApp() {
     updateFormulaDisplay();
     
     console.log('✓ App Initialized Successfully');
+}
+
+// Add sample data for calendar testing
+function addSampleDataIfNeeded() {
+    const existing = localStorage.getItem('dabSessions');
+    if (!existing || JSON.parse(existing).length === 0) {
+        const sampleData = [
+            { id: Date.now() - 432000000, date: new Date(Date.now() - 432000000).toISOString(), material: "quartz", concentrate: "shatter", heater: "butane", heatTime: 12, coolTime: 60, totalTime: 72 },
+            { id: Date.now() - 414720000, date: new Date(Date.now() - 414720000).toISOString(), material: "quartz", concentrate: "wax", heater: "butane", heatTime: 12, coolTime: 58, totalTime: 70 },
+            { id: Date.now() - 345600000, date: new Date(Date.now() - 345600000).toISOString(), material: "titanium", concentrate: "diamonds", heater: "propane", heatTime: 8, coolTime: 50, totalTime: 58 },
+            { id: Date.now() - 332640000, date: new Date(Date.now() - 332640000).toISOString(), material: "ceramic", concentrate: "rosin", heater: "butane", heatTime: 15, coolTime: 75, totalTime: 90 },
+            { id: Date.now() - 320400000, date: new Date(Date.now() - 320400000).toISOString(), material: "quartz", concentrate: "sauce", heater: "butane", heatTime: 12, coolTime: 63, totalTime: 75 },
+            { id: Date.now() - 259200000, date: new Date(Date.now() - 259200000).toISOString(), material: "quartz", concentrate: "shatter", heater: "butane", heatTime: 12, coolTime: 60, totalTime: 72 },
+            { id: Date.now() - 239760000, date: new Date(Date.now() - 239760000).toISOString(), material: "titanium", concentrate: "budder", heater: "propane", heatTime: 8, coolTime: 50, totalTime: 58 },
+            { id: Date.now() - 172800000, date: new Date(Date.now() - 172800000).toISOString(), material: "ceramic", concentrate: "diamonds", heater: "butane", heatTime: 15, coolTime: 83, totalTime: 98 },
+            { id: Date.now() - 158400000, date: new Date(Date.now() - 158400000).toISOString(), material: "quartz", concentrate: "resin", heater: "propane", heatTime: 10, coolTime: 54, totalTime: 64 },
+            { id: Date.now() - 144000000, date: new Date(Date.now() - 144000000).toISOString(), material: "quartz", concentrate: "shatter", heater: "butane", heatTime: 12, coolTime: 60, totalTime: 72 },
+            { id: Date.now() - 86400000, date: new Date(Date.now() - 86400000).toISOString(), material: "titanium", concentrate: "wax", heater: "butane", heatTime: 10, coolTime: 50, totalTime: 60 },
+            { id: Date.now() - 69120000, date: new Date(Date.now() - 69120000).toISOString(), material: "quartz", concentrate: "crumble", heater: "butane", heatTime: 12, coolTime: 58, totalTime: 70 },
+            { id: Date.now() - 43200000, date: new Date(Date.now() - 43200000).toISOString(), material: "ceramic", concentrate: "sauce", heater: "propane", heatTime: 12, coolTime: 67, totalTime: 79 },
+            { id: Date.now() - 21600000, date: new Date(Date.now() - 21600000).toISOString(), material: "quartz", concentrate: "rosin", heater: "butane", heatTime: 12, coolTime: 60, totalTime: 72 },
+            { id: Date.now() - 3600000, date: new Date(Date.now() - 3600000).toISOString(), material: "titanium", concentrate: "shatter", heater: "propane", heatTime: 8, coolTime: 50, totalTime: 58 }
+        ];
+        localStorage.setItem('dabSessions', JSON.stringify(sampleData));
+        console.log('✓ Added sample calendar data');
+    }
 }
 
 // Load saved settings from localStorage
@@ -222,8 +307,8 @@ function calculateTimes() {
     let heatTime = Math.round(material.heatUp * heater.heatModifier);
     let coolTime = Math.round(material.coolDown * heater.coolModifier * concentrate.coolModifier);
     
-    // Enforce limits: Heat MAX 18s, Cool MIN 50s
-    heatTime = Math.min(heatTime, 18);
+    // Enforce limits: Heat MAX 15s, Cool MIN 50s
+    heatTime = Math.min(heatTime, 15);
     coolTime = Math.max(coolTime, 50);
     
     return { heatTime, coolTime };
@@ -235,7 +320,7 @@ function initializeTimer() {
     
     state.timer = {
         isRunning: false,
-        mode: 'heat up',
+        mode: 'heat',
         timeLeft: times.heatTime,
         totalTime: times.heatTime,
         heatTime: times.heatTime,
@@ -315,7 +400,7 @@ function resetTimer() {
 function switchToCoolDown() {
     console.log('❄️ Cool down phase');
     
-    state.timer.mode = 'cool down';
+    state.timer.mode = 'cool';
     state.timer.timeLeft = state.timer.coolTime;
     state.timer.totalTime = state.timer.coolTime;
     
@@ -353,7 +438,7 @@ function completeTimer() {
     // Show message
     const msg = document.getElementById('completion-message');
     if (msg) {
-        msg.textContent = 'enjoy';
+        msg.textContent = '🔥 Perfect! Time to dab! 🔥';
         msg.classList.remove('hidden');
         setTimeout(() => msg.classList.add('hidden'), 5000);
     }
