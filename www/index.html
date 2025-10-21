@@ -13,7 +13,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
+            <div class="age-verify-buttons">
+                <button class="btn-verify-yes" id="verify-yes">I am 21+</button>
+                <button class="btn-verify-no" id="verify-no">Under 21</button>
+            </div>
+            
+            <p class="age-verify-disclaimer">
+                By entering, you agree that you are of legal age in your state to view cannabis-related content. 
+                This app complies with Apple App Store and Google Play Store policies.
+            </p>
+        </div>
+    </div>
+
     <div id="app" class="screen active">
         <header>
             <div class="header-content">
@@ -51,35 +62,35 @@
                             <h3>Concentrate</h3>
                             <div class="option-buttons concentrate-grid" id="concentrate-options">
                                 <button class="option-btn concentrate-btn active" data-setting="concentrate" data-value="shatter">
-                                    <span class="concentrate-icon">💎</span>
+                                    <div class="concentrate-visual"></div>
                                     <span>Shatter</span>
                                 </button>
                                 <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="wax">
-                                    <span class="concentrate-icon">🧈</span>
+                                    <div class="concentrate-visual"></div>
                                     <span>Wax</span>
                                 </button>
                                 <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="resin">
-                                    <span class="concentrate-icon">🍯</span>
+                                    <div class="concentrate-visual"></div>
                                     <span>Resin</span>
                                 </button>
                                 <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="rosin">
-                                    <span class="concentrate-icon">🌿</span>
+                                    <div class="concentrate-visual"></div>
                                     <span>Rosin</span>
                                 </button>
                                 <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="budder">
-                                    <span class="concentrate-icon">🧁</span>
+                                    <div class="concentrate-visual"></div>
                                     <span>Budder</span>
                                 </button>
                                 <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="diamonds">
-                                    <span class="concentrate-icon">💠</span>
+                                    <div class="concentrate-visual"></div>
                                     <span>Diamonds</span>
                                 </button>
                                 <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="sauce">
-                                    <span class="concentrate-icon">🥫</span>
+                                    <div class="concentrate-visual"></div>
                                     <span>Sauce</span>
                                 </button>
                                 <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="crumble">
-                                    <span class="concentrate-icon">🍪</span>
+                                    <div class="concentrate-visual"></div>
                                     <span>Crumble</span>
                                 </button>
                             </div>
