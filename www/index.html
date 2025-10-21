@@ -96,8 +96,8 @@
                     </div>
 
                     <div class="action-buttons">
-                        <button id="start-timer-btn" class="btn-primary large">
-                            <i class="fas fa-play"></i> Start Timer
+                        <button id="start-timer-btn" class="btn-round">
+                            <i class="fas fa-play"></i>
                         </button>
                     </div>
                 </div>
@@ -278,14 +278,16 @@
                         <div class="custom-time-inputs">
                             <div class="input-group">
                                 <label for="settings-heat-time">Heat Time (seconds)</label>
-                                <input type="number" id="settings-heat-time" min="5" max="300" placeholder="30">
+                                <input type="number" id="settings-heat-time" min="5" max="15" placeholder="12">
                             </div>
                             <div class="input-group">
                                 <label for="settings-cool-time">Cool Time (seconds)</label>
-                                <input type="number" id="settings-cool-time" min="5" max="300" placeholder="45">
+                                <input type="number" id="settings-cool-time" min="50" max="120" placeholder="60">
                             </div>
                         </div>
-                        <button id="apply-settings-times" class="btn-secondary full-width">Apply Custom Times</button>
+                        <div class="center-button">
+                            <button id="apply-settings-times" class="btn-primary">Apply Custom Times</button>
+                        </div>
                     </div>
                 </div>
             </div>
