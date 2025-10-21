@@ -1155,8 +1155,8 @@ main {
     padding: 20px;
 }
 
-#age-verification.hidden {
-    display: none;
+#age-verification[style*="display: none"] {
+    display: none !important;
 }
 
 .age-verify-content {
