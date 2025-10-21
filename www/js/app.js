@@ -20,16 +20,26 @@ const state = {
     }
 };
 
-// Configuration - Heat/Cool times by material and heater
+// Configuration - NEW TIMINGS per requirements
 const CONFIG = {
     materials: {
-        quartz: { heatUp: 30, coolDown: 45 },
-        titanium: { heatUp: 25, coolDown: 35 },
-        ceramic: { heatUp: 35, coolDown: 50 }
+        quartz: { heatUp: 13, coolDown: 70 },
+        titanium: { heatUp: 14, coolDown: 63 },
+        ceramic: { heatUp: 15, coolDown: 80 }
     },
     heaters: {
-        butane: { modifier: 1.0 },
-        propane: { modifier: 0.8 }
+        butane: { heatModifier: 1.0, coolModifier: 1.0 },
+        propane: { heatModifier: 0.8, coolModifier: 0.85 }
+    },
+    concentrates: {
+        shatter: { coolModifier: 1.0 },
+        wax: { coolModifier: 0.97 },
+        resin: { coolModifier: 1.05 },
+        rosin: { coolModifier: 1.0 },
+        budder: { coolModifier: 0.97 },
+        diamonds: { coolModifier: 1.10 },
+        sauce: { coolModifier: 1.05 },
+        crumble: { coolModifier: 0.97 }
     }
 };
 
@@ -192,7 +202,7 @@ function setupTimerControls() {
     }
 }
 
-// Calculate Times
+// Calculate Times with NEW FORMULA
 function calculateTimes() {
     const customHeat = localStorage.getItem('customHeatTime');
     const customCool = localStorage.getItem('customCoolTime');
@@ -206,11 +216,17 @@ function calculateTimes() {
     
     const material = CONFIG.materials[state.settings.material];
     const heater = CONFIG.heaters[state.settings.heater];
+    const concentrate = CONFIG.concentrates[state.settings.concentrate];
     
-    return {
-        heatTime: Math.round(material.heatUp * heater.modifier),
-        coolTime: Math.round(material.coolDown * heater.modifier)
-    };
+    // Apply modifiers
+    let heatTime = Math.round(material.heatUp * heater.heatModifier);
+    let coolTime = Math.round(material.coolDown * heater.coolModifier * concentrate.coolModifier);
+    
+    // Enforce limits: Heat MAX 18s, Cool MIN 50s
+    heatTime = Math.min(heatTime, 18);
+    coolTime = Math.max(coolTime, 50);
+    
+    return { heatTime, coolTime };
 }
 
 // Initialize Timer
@@ -219,7 +235,7 @@ function initializeTimer() {
     
     state.timer = {
         isRunning: false,
-        mode: 'heat',
+        mode: 'heat up',
         timeLeft: times.heatTime,
         totalTime: times.heatTime,
         heatTime: times.heatTime,
@@ -299,7 +315,7 @@ function resetTimer() {
 function switchToCoolDown() {
     console.log('❄️ Cool down phase');
     
-    state.timer.mode = 'cool';
+    state.timer.mode = 'cool down';
     state.timer.timeLeft = state.timer.coolTime;
     state.timer.totalTime = state.timer.coolTime;
     
@@ -337,7 +353,7 @@ function completeTimer() {
     // Show message
     const msg = document.getElementById('completion-message');
     if (msg) {
-        msg.textContent = '🔥 Perfect! Time to dab! 🔥';
+        msg.textContent = 'enjoy';
         msg.classList.remove('hidden');
         setTimeout(() => msg.classList.add('hidden'), 5000);
     }
