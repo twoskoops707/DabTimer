@@ -270,6 +270,25 @@ main {
     gap: 8px;
 }
 
+.concentrate-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.concentrate-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 8px;
+}
+
+.concentrate-icon {
+    font-size: 28px;
+    display: block;
+}
+
 .option-btn {
     flex: 1;
     min-width: 90px;
@@ -300,10 +319,36 @@ main {
     margin-top: auto;
     padding: 16px 0;
     flex-shrink: 0;
-    position: sticky;
-    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: var(--bg-primary);
     z-index: 10;
+}
+
+.btn-round {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--theme-gradient);
+    border: none;
+    color: #fff;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 230, 118, 0.4);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-round:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 230, 118, 0.6);
+}
+
+.btn-round:active {
+    transform: translateY(-1px) scale(1.02);
 }
 
 .btn-primary {
@@ -385,10 +430,45 @@ main {
     font-size: 16px;
     color: var(--theme-primary);
     font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
 }
 
 .completion-message.hidden {
     display: none;
+}
+
+.spinning-leaf {
+    animation: spinGrow 2s ease-out;
+}
+
+.spinning-leaf i {
+    font-size: 64px;
+    color: var(--theme-primary);
+    filter: drop-shadow(0 0 20px var(--theme-primary));
+}
+
+@keyframes spinGrow {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1) rotate(720deg);
+        opacity: 1;
+    }
+}
+
+.enjoy-text {
+    font-family: 'Pacifico', cursive;
+    font-size: 32px;
+    color: var(--theme-primary);
+    text-shadow: 0 0 10px var(--theme-primary);
 }
 
 .timer-controls {
@@ -698,6 +778,18 @@ main {
     margin-bottom: 16px;
 }
 
+.center-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.center-button .btn-primary {
+    padding: 16px 48px;
+    font-size: 16px;
+    min-width: 250px;
+}
+
 .input-group {
     display: flex;
     flex-direction: column;
@@ -819,8 +911,27 @@ main {
         font-size: 12px;
     }
     
+    .concentrate-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+    
+    .concentrate-btn {
+        padding: 10px 6px;
+    }
+    
+    .concentrate-icon {
+        font-size: 24px;
+    }
+    
     .action-buttons {
         padding: 12px 0;
+    }
+    
+    .btn-round {
+        width: 64px;
+        height: 64px;
+        font-size: 24px;
     }
     
     .btn-primary {
@@ -905,6 +1016,19 @@ main {
         padding: 10px;
         font-size: 15px;
     }
+    
+    .center-button .btn-primary {
+        min-width: 200px;
+        padding: 14px 32px;
+    }
+    
+    .spinning-leaf i {
+        font-size: 48px;
+    }
+    
+    .enjoy-text {
+        font-size: 28px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -917,6 +1041,16 @@ main {
         font-size: 11px;
     }
     
+    .concentrate-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .btn-round {
+        width: 60px;
+        height: 60px;
+        font-size: 22px;
+    }
+    
     #timer {
         font-size: 42px;
     }
@@ -927,6 +1061,10 @@ main {
     
     .tab-btn i {
         font-size: 20px;
+    }
+    
+    .center-button .btn-primary {
+        min-width: 100%;
     }
 }
 
