@@ -12,322 +12,142 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Age Verification Styles */
+        #age-verification {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+
+        .age-verify-content {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3);
+            border: 2px solid #00FF88;
+        }
+
+        .age-verify-icon {
+            font-size: 60px;
+            color: #00FF88;
+            margin-bottom: 20px;
+        }
+
+        .age-verify-content h2 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .age-verify-content p {
+            color: #aaa;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .age-verify-state-selector {
+            margin-bottom: 30px;
+        }
+
+        .age-verify-state-selector label {
+            display: block;
+            color: #fff;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .age-verify-state-selector select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #00FF88;
+            background: #0a0a0a;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .age-verify-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn-verify-yes,
+        .btn-verify-no {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-verify-yes {
+            background: linear-gradient(135deg, #00FF88, #00BFA5);
+            color: #000;
+        }
+
+        .btn-verify-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-verify-no {
+            background: #333;
+            color: #fff;
+        }
+
+        .btn-verify-no:hover {
+            background: #444;
+        }
+
+        .age-verify-disclaimer {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+        }
+    </style>
 </head>
-            <div class="age-verify-buttons">
-                <button class="btn-verify-yes" id="verify-yes">I am 21+</button>
-                <button class="btn-verify-no" id="verify-no">Under 21</button>
+<body>
+    <!-- AGE VERIFICATION SCREEN -->
+    <div id="age-verification">
+        <div class="age-verify-content">
+            <div class="age-verify-icon">
+                <i class="fas fa-cannabis"></i>
             </div>
+            <h2>Age Verification Required</h2>
+            <p>You must be 21 years or older to use this application.</p>
             
-            <p class="age-verify-disclaimer">
-                By entering, you agree that you are of legal age in your state to view cannabis-related content. 
-                This app complies with Apple App Store and Google Play Store policies.
-            </p>
-        </div>
-    </div>
-
-    <div id="app" class="screen active">
-        <header>
-            <div class="header-content">
-                <div class="logo-small">
-                    <i class="fas fa-cannabis"></i>
-                    <span>DAB TIMER</span>
-                </div>
-                <div class="time-display" id="current-time">12:00</div>
-            </div>
-        </header>
-
-        <main>
-            <!-- Home Screen - EXACTLY AS YOU HAD IT -->
-            <div id="home-screen" class="tab-content active">
-                <div class="home-container">
-                    <div class="home-header">
-                        <i class="fas fa-cannabis"></i>
-                        <h1>DAB TIMER</h1>
-                        <p class="home-subtitle">Perfect dabs, every time</p>
-                    </div>
-
-                    <div class="settings-grid">
-                        <!-- Material Settings -->
-                        <div class="setting-card">
-                            <h3>Material</h3>
-                            <div class="option-buttons" id="material-options">
-                                <button class="option-btn active" data-setting="material" data-value="quartz">Quartz</button>
-                                <button class="option-btn" data-setting="material" data-value="titanium">Titanium</button>
-                                <button class="option-btn" data-setting="material" data-value="ceramic">Ceramic</button>
-                            </div>
-                        </div>
-
-                        <!-- Concentrate Settings -->
-                        <div class="setting-card">
-                            <h3>Concentrate</h3>
-                            <div class="option-buttons concentrate-grid" id="concentrate-options">
-                                <button class="option-btn concentrate-btn active" data-setting="concentrate" data-value="shatter">
-                                    <div class="concentrate-visual"></div>
-                                    <span>Shatter</span>
-                                </button>
-                                <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="wax">
-                                    <div class="concentrate-visual"></div>
-                                    <span>Wax</span>
-                                </button>
-                                <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="resin">
-                                    <div class="concentrate-visual"></div>
-                                    <span>Resin</span>
-                                </button>
-                                <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="rosin">
-                                    <div class="concentrate-visual"></div>
-                                    <span>Rosin</span>
-                                </button>
-                                <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="budder">
-                                    <div class="concentrate-visual"></div>
-                                    <span>Budder</span>
-                                </button>
-                                <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="diamonds">
-                                    <div class="concentrate-visual"></div>
-                                    <span>Diamonds</span>
-                                </button>
-                                <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="sauce">
-                                    <div class="concentrate-visual"></div>
-                                    <span>Sauce</span>
-                                </button>
-                                <button class="option-btn concentrate-btn" data-setting="concentrate" data-value="crumble">
-                                    <div class="concentrate-visual"></div>
-                                    <span>Crumble</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Heater Settings -->
-                        <div class="setting-card">
-                            <h3>Heating</h3>
-                            <div class="option-buttons" id="heater-options">
-                                <button class="option-btn active" data-setting="heater" data-value="butane">Butane Torch</button>
-                                <button class="option-btn" data-setting="heater" data-value="propane">Propane Torch</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="action-buttons">
-                        <button id="start-timer-btn" class="btn-round">
-                            <i class="fas fa-play"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Timer Screen - CLEANED UP, NO DUPLICATE HEADER -->
-            <div id="timer-screen" class="tab-content">
-                <div class="timer-container">
-                    <div class="timer-display">
-                        <div id="timer-mode">HEAT UP</div>
-                        <div id="timer" class="digital">0:30</div>
-                        <div class="progress-container">
-                            <div id="timer-progress" class="progress-bar"></div>
-                        </div>
-                        <div id="completion-message" class="completion-message hidden"></div>
-                    </div>
-
-                    <div class="timer-controls">
-                        <button id="start-timer" class="btn-primary">
-                            <i class="fas fa-play"></i> Start
-                        </button>
-                        <button id="reset-timer" class="btn-secondary">
-                            <i class="fas fa-redo"></i> Reset
-                        </button>
-                    </div>
-
-                    <!-- Formula Display - AS YOU WANTED IT -->
-                    <div class="formula-display">
-                        <h4>Scientific Heating Formula</h4>
-                        <div class="formula-line">t = (m × c × ΔT) / P</div>
-                        <div class="formula-line">Material: <span id="formula-material">Quartz</span></div>
-                        <div class="formula-line">Concentrate: <span id="formula-concentrate">Shatter</span></div>
-                        <div class="formula-line">Heater: <span id="formula-heater">Butane Torch</span></div>
-                        <div class="formula-line">Heat Time: <span id="formula-heat-time">30s</span></div>
-                        <div class="formula-line">Cool Time: <span id="formula-cool-time">45s</span></div>
-                        <div class="formula-line">Total Cycle: <span id="formula-total-time">75s</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Calendar Screen - EXACTLY AS YOU HAD IT -->
-            <div id="calendar-screen" class="tab-content">
-                <div class="calendar-container">
-                    <div class="calendar-header">
-                        <h2><i class="fas fa-chart-line"></i> Your Dab Journey</h2>
-                        <p class="calendar-subtitle">Track your sessions and preferences</p>
-                    </div>
-
-                    <div class="quick-stats">
-                        <div class="quick-stat-card">
-                            <div class="stat-icon"><i class="fas fa-fire"></i></div>
-                            <div class="stat-content">
-                                <span class="stat-value" id="total-sessions">0</span>
-                                <span class="stat-label">Total Dabs</span>
-                            </div>
-                        </div>
-                        <div class="quick-stat-card">
-                            <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
-                            <div class="stat-content">
-                                <span class="stat-value" id="sessions-today">0</span>
-                                <span class="stat-label">Today</span>
-                            </div>
-                        </div>
-                        <div class="quick-stat-card">
-                            <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                            <div class="stat-content">
-                                <span class="stat-value" id="streak-days">0</span>
-                                <span class="stat-label">Day Streak</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="time-range-selector">
-                        <button class="time-range-btn active" data-range="week">Week</button>
-                        <button class="time-range-btn" data-range="month">Month</button>
-                        <button class="time-range-btn" data-range="year">Year</button>
-                    </div>
-
-                    <div class="charts-section">
-                        <div class="chart-card">
-                            <h3><i class="fas fa-chart-bar"></i> Session Activity</h3>
-                            <canvas id="usage-frequency-chart"></canvas>
-                        </div>
-
-                        <div class="chart-card">
-                            <h3><i class="fas fa-chart-pie"></i> Favorite Concentrates</h3>
-                            <canvas id="concentrate-preference-chart"></canvas>
-                        </div>
-
-                        <div class="chart-card">
-                            <h3><i class="fas fa-gem"></i> Material Breakdown</h3>
-                            <canvas id="material-preference-chart"></canvas>
-                        </div>
-
-                        <div class="chart-card">
-                            <h3><i class="fas fa-clock"></i> Peak Hours</h3>
-                            <canvas id="time-of-day-chart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="recent-activity">
-                        <h3><i class="fas fa-history"></i> Recent Sessions</h3>
-                        <div class="activity-list" id="history-list">
-                            <div class="empty-state">
-                                <i class="fas fa-cannabis"></i>
-                                <p>No sessions yet. Start your first dab!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Settings Screen - CUSTOM TIMES HERE AS YOU WANTED -->
-            <div id="settings-screen" class="tab-content">
-                <div class="settings-container">
-                    <h2><i class="fas fa-cog"></i> Settings</h2>
-
-                    <!-- Color Theme Settings -->
-                    <div class="setting-card">
-                        <h3><i class="fas fa-palette"></i> Color Theme</h3>
-                        <p class="setting-description">Choose your preferred color scheme</p>
-                        <div class="theme-options">
-                            <button class="theme-btn active" data-theme="green">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #00E676, #00BFA5);"></div>
-                                <span>Green</span>
-                            </button>
-                            <button class="theme-btn" data-theme="blue">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #2196F3, #00BCD4);"></div>
-                                <span>Blue</span>
-                            </button>
-                            <button class="theme-btn" data-theme="purple">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #9C27B0, #7C4DFF);"></div>
-                                <span>Purple</span>
-                            </button>
-                            <button class="theme-btn" data-theme="orange">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #FF9800, #FF5722);"></div>
-                                <span>Orange</span>
-                            </button>
-                            <button class="theme-btn" data-theme="pink">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #E91E63, #F06292);"></div>
-                                <span>Pink</span>
-                            </button>
-                            <button class="theme-btn" data-theme="teal">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #009688, #26A69A);"></div>
-                                <span>Teal</span>
-                            </button>
-                            <button class="theme-btn" data-theme="cyberpunk">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #ff00ff, #00ffff);"></div>
-                                <span>Cyberpunk</span>
-                            </button>
-                            <button class="theme-btn" data-theme="earth">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #8B4513, #D2691E);"></div>
-                                <span>Earth</span>
-                            </button>
-                            <button class="theme-btn" data-theme="sunset">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #FF6B6B, #FFD93D);"></div>
-                                <span>Sunset</span>
-                            </button>
-                            <button class="theme-btn" data-theme="forest">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #52B788, #95D5B2);"></div>
-                                <span>Forest</span>
-                            </button>
-                            <button class="theme-btn" data-theme="ocean">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #06B6D4, #3B82F6);"></div>
-                                <span>Ocean</span>
-                            </button>
-                            <button class="theme-btn" data-theme="midnight">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);"></div>
-                                <span>Midnight</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Custom Timer Settings - ON SETTINGS PAGE AS YOU WANTED -->
-                    <div class="setting-card">
-                        <h3><i class="fas fa-clock"></i> Custom Timer</h3>
-                        <p class="setting-description">Override automatic calculations with your own times</p>
-                        <div class="custom-time-inputs">
-                            <div class="input-group">
-                                <label for="settings-heat-time">Heat Time (seconds)</label>
-                                <input type="number" id="settings-heat-time" min="5" max="15" placeholder="12">
-                            </div>
-                            <div class="input-group">
-                                <label for="settings-cool-time">Cool Time (seconds)</label>
-                                <input type="number" id="settings-cool-time" min="50" max="120" placeholder="60">
-                            </div>
-                        </div>
-                        <div class="center-button">
-                            <button id="apply-settings-times" class="btn-primary">Apply Custom Times</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Tab Navigation - YOUR 4 TABS -->
-        <nav class="tab-bar">
-            <button class="tab-btn active" data-tab="home-screen">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </button>
-            <button class="tab-btn" data-tab="timer-screen">
-                <i class="fas fa-stopwatch"></i>
-                <span>Timer</span>
-            </button>
-            <button class="tab-btn" data-tab="calendar-screen">
-                <i class="fas fa-calendar"></i>
-                <span>Calendar</span>
-            </button>
-            <button class="tab-btn" data-tab="settings-screen">
-                <i class="fas fa-cog"></i>
-                <span>Settings</span>
-            </button>
-        </nav>
-    </div>
-
-    <!-- YOUR EXACT SCRIPTS -->
-    <script src="js/app.js?v=6"></script>
-    <script src="js/calendar-core.js?v=3"></script>
-    <script src="js/calendar-charts.js?v=3"></script>
-</body>
-</html>
+            <div class="age-verify-state-selector">
+                <label for="user-state">Select Your State:</label>
+                <select id="user-state">
+                    <option value="">-- Select State --</option>
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                    <option value="CO">Colorado</option>
+                    <option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option>
+                    <option value="FL">Florida</option>
+                    <option value="GA">Georgia</option>
+                    <option value="HI">Hawaii</option>
+                    <option value="ID">Idaho</option>
+                    <option value="IL">Illinois</option>
+                    <option value="IN">Indiana
