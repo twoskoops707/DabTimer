@@ -6,15 +6,16 @@
     <title>Dab Timer</title>
     <link rel="icon" href="dab_timer_app_icon.png" type="image/png">
     <link rel="apple-touch-icon" href="dab_timer_app_icon.png">
-    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/style.css?v=10">
     <link rel="stylesheet" href="css/completion-animations.css?v=2">
     <link rel="stylesheet" href="css/calendar-redesign.css?v=1">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- Age Verification Inline Styles -->
+    <!-- Additional Styles for Fixes -->
     <style>
+        /* Age Verification Styles */
         #age-verification {
             position: fixed;
             top: 0;
@@ -90,7 +91,6 @@
             background: #0a0a0a;
             color: #fff;
             font-size: 16px;
-            cursor: pointer;
             transition: all 0.3s ease;
             box-sizing: border-box;
         }
@@ -102,11 +102,9 @@
         }
         
         #user-birthdate {
-            cursor: text;
             font-family: 'Montserrat', sans-serif;
         }
         
-        /* Style the date picker icon */
         #user-birthdate::-webkit-calendar-picker-indicator {
             filter: invert(1);
             cursor: pointer;
@@ -142,34 +140,12 @@
             box-shadow: 0 8px 25px rgba(0, 255, 136, 0.5);
         }
         
-        .btn-verify-yes:active {
-            transform: translateY(-1px);
-        }
-        
-        .btn-verify-yes:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
         .btn-verify-no {
             background: #333;
             color: #fff;
             border: 2px solid #555;
         }
         
-        .btn-verify-no:hover {
-            background: #444;
-            border-color: #777;
-        }
-        
-        .age-verify-disclaimer {
-            font-size: 11px;
-            color: #666;
-            line-height: 1.5;
-            margin-top: 15px;
-        }
-
         .age-error {
             background: rgba(255, 107, 107, 0.2);
             border: 1px solid #ff6b6b;
@@ -184,11 +160,163 @@
         .age-error.show {
             display: block;
         }
+        
+        /* Scrollable Home Screen Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            transform: translateY(-60px);
+        }
+        
+        /* Remove Black Box - Make Start Button Floating */
+        .action-buttons {
+            position: fixed !important;
+            bottom: 80px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 50 !important;
+            background: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            width: auto !important;
+        }
+        
+        .btn-round {
+            width: 80px !important;
+            height: 80px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg, #00FF88, #00BFA5) !important;
+            border: none !important;
+            box-shadow: 0 8px 30px rgba(0, 255, 136, 0.4) !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .btn-round:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 12px 40px rgba(0, 255, 136, 0.6) !important;
+        }
+        
+        .btn-round i {
+            font-size: 32px !important;
+            color: #000 !important;
+        }
+        
+        /* Concentrate Images */
+        .concentrate-btn .concentrate-visual {
+            width: 100%;
+            height: 60px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        /* Concentrate image paths - update with your actual image paths */
+        .concentrate-btn[data-value="shatter"] .concentrate-visual {
+            background-image: url('images/shatter.png');
+        }
+        .concentrate-btn[data-value="wax"] .concentrate-visual {
+            background-image: url('images/wax.png');
+        }
+        .concentrate-btn[data-value="resin"] .concentrate-visual {
+            background-image: url('images/resin.png');
+        }
+        .concentrate-btn[data-value="rosin"] .concentrate-visual {
+            background-image: url('images/rosin.png');
+        }
+        .concentrate-btn[data-value="budder"] .concentrate-visual {
+            background-image: url('images/budder.png');
+        }
+        .concentrate-btn[data-value="diamonds"] .concentrate-visual {
+            background-image: url('images/diamonds.png');
+        }
+        .concentrate-btn[data-value="sauce"] .concentrate-visual {
+            background-image: url('images/sauce.png');
+        }
+        .concentrate-btn[data-value="crumble"] .concentrate-visual {
+            background-image: url('images/crumble.png');
+        }
+        
+        /* Custom Timer Toggle */
+        .custom-timer-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .custom-timer-toggle label {
+            color: #00FF88;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #333;
+            transition: 0.4s;
+            border-radius: 30px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #00FF88;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+        
+        #custom-timer-inputs {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        #custom-timer-inputs.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
     
-    <!-- AGE VERIFICATION OVERLAY - WITH BIRTHDAY INPUT -->
+    <!-- AGE VERIFICATION OVERLAY -->
     <div id="age-verification">
         <div class="age-verify-content">
             <div class="age-verify-icon">
@@ -203,7 +331,7 @@
 
             <div class="age-verify-input-group">
                 <label for="user-birthdate"><i class="fas fa-calendar"></i> Date of Birth:</label>
-                <input type="date" id="user-birthdate" max="2024-12-31" placeholder="MM/DD/YYYY">
+                <input type="date" id="user-birthdate" max="2024-12-31">
             </div>
             
             <div class="age-verify-input-group">
@@ -289,8 +417,8 @@
         </header>
 
         <main>
-            <!-- Home Screen -->
-            <div id="home-screen" class="tab-content active">
+            <!-- Home Screen - SCROLLABLE -->
+            <div id="home-screen" class="tab-content active" style="overflow-y: auto; height: calc(100vh - 140px);">
                 <div class="home-container">
                     <div class="home-header">
                         <i class="fas fa-cannabis"></i>
@@ -302,17 +430,17 @@
                         <!-- Material Settings -->
                         <div class="setting-card">
                             <h3>Material</h3>
-                            <div class="option-buttons" id="material-options">
+                            <div class="option-buttons">
                                 <button class="option-btn active" data-setting="material" data-value="quartz">Quartz</button>
                                 <button class="option-btn" data-setting="material" data-value="titanium">Titanium</button>
                                 <button class="option-btn" data-setting="material" data-value="ceramic">Ceramic</button>
                             </div>
                         </div>
 
-                        <!-- Concentrate Settings -->
+                        <!-- Concentrate Settings WITH IMAGES -->
                         <div class="setting-card">
                             <h3>Concentrate</h3>
-                            <div class="option-buttons concentrate-grid" id="concentrate-options">
+                            <div class="option-buttons concentrate-grid">
                                 <button class="option-btn concentrate-btn active" data-setting="concentrate" data-value="shatter">
                                     <div class="concentrate-visual"></div>
                                     <span>Shatter</span>
@@ -351,13 +479,14 @@
                         <!-- Heater Settings -->
                         <div class="setting-card">
                             <h3>Heating</h3>
-                            <div class="option-buttons" id="heater-options">
+                            <div class="option-buttons">
                                 <button class="option-btn active" data-setting="heater" data-value="butane">Butane Torch</button>
                                 <button class="option-btn" data-setting="heater" data-value="propane">Propane Torch</button>
                             </div>
                         </div>
                     </div>
 
+                    <!-- FLOATING START BUTTON (no black box) -->
                     <div class="action-buttons">
                         <button id="start-timer-btn" class="btn-round">
                             <i class="fas fa-play"></i>
@@ -472,7 +601,7 @@
                 </div>
             </div>
 
-            <!-- Settings Screen -->
+            <!-- Settings Screen WITH CUSTOM TIMER TOGGLE -->
             <div id="settings-screen" class="tab-content">
                 <div class="settings-container">
                     <h2><i class="fas fa-cog"></i> Settings</h2>
@@ -506,49 +635,39 @@
                                 <div class="theme-preview" style="background: linear-gradient(135deg, #009688, #26A69A);"></div>
                                 <span>Teal</span>
                             </button>
-                            <button class="theme-btn" data-theme="cyberpunk">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #ff00ff, #00ffff);"></div>
-                                <span>Cyberpunk</span>
-                            </button>
-                            <button class="theme-btn" data-theme="earth">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #8B4513, #D2691E);"></div>
-                                <span>Earth</span>
-                            </button>
-                            <button class="theme-btn" data-theme="sunset">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #FF6B6B, #FFD93D);"></div>
-                                <span>Sunset</span>
-                            </button>
-                            <button class="theme-btn" data-theme="forest">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #52B788, #95D5B2);"></div>
-                                <span>Forest</span>
-                            </button>
-                            <button class="theme-btn" data-theme="ocean">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #06B6D4, #3B82F6);"></div>
-                                <span>Ocean</span>
-                            </button>
-                            <button class="theme-btn" data-theme="midnight">
-                                <div class="theme-preview" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);"></div>
-                                <span>Midnight</span>
-                            </button>
                         </div>
                     </div>
 
-                    <!-- Custom Timer Settings -->
+                    <!-- Custom Timer WITH TOGGLE -->
                     <div class="setting-card">
                         <h3><i class="fas fa-clock"></i> Custom Timer</h3>
                         <p class="setting-description">Override automatic calculations with your own times</p>
-                        <div class="custom-time-inputs">
-                            <div class="input-group">
-                                <label for="settings-heat-time">Heat Time (seconds)</label>
-                                <input type="number" id="settings-heat-time" min="5" max="15" placeholder="12">
-                            </div>
-                            <div class="input-group">
-                                <label for="settings-cool-time">Cool Time (seconds)</label>
-                                <input type="number" id="settings-cool-time" min="50" max="120" placeholder="60">
+                        
+                        <!-- Toggle Switch -->
+                        <div class="custom-timer-toggle">
+                            <label for="custom-timer-toggle">Enable Custom Timer</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="custom-timer-toggle">
+                                <span class="toggle-slider"></span>
                             </div>
                         </div>
-                        <div class="center-button">
-                            <button id="apply-settings-times" class="btn-primary">Apply Custom Times</button>
+                        
+                        <!-- Custom Inputs (Hidden by default) -->
+                        <div id="custom-timer-inputs">
+                            <div class="custom-time-inputs">
+                                <div class="input-group">
+                                    <label for="settings-heat-time">Heat Time (seconds)</label>
+                                    <input type="number" id="settings-heat-time" min="5" max="15" placeholder="12">
+                                </div>
+                                <div class="input-group">
+                                    <label for="settings-cool-time">Cool Time (seconds)</label>
+                                    <input type="number" id="settings-cool-time" min="50" max="120" placeholder="60">
+                                </div>
+                            </div>
+                            <div class="center-button" style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                                <button id="apply-settings-times" class="btn-primary">Apply Custom Times</button>
+                                <button id="reset-custom-times" class="btn-secondary">Reset to Formula</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -577,7 +696,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="js/app.js?v=9"></script>
+    <script src="js/app.js?v=11"></script>
     <script src="js/calendar-core.js?v=3"></script>
     <script src="js/calendar-charts.js?v=3"></script>
 </body>
