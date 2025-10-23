@@ -159,7 +159,72 @@ function initializeApp() {
     console.log('✅ App Ready!');
 }
 
-// Add sample data
+// REPLACE the addSampleDataIfNeeded() function in your app.js with this:
+
+function addSampleDataIfNeeded() {
+    const existing = localStorage.getItem('dabSessions');
+    
+    // Only add if no data exists or very little data
+    if (!existing || JSON.parse(existing).length < 10) {
+        console.log('🔄 Generating 100 mock sessions...');
+        
+        const materials = ['quartz', 'titanium', 'ceramic'];
+        const concentrates = ['shatter', 'wax', 'resin', 'rosin', 'budder', 'diamonds', 'sauce', 'crumble'];
+        const heaters = ['butane', 'propane'];
+        
+        const sessions = [];
+        const now = Date.now();
+        
+        // Helper functions
+        const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
+        const randomHeat = () => Math.floor(Math.random() * 6) + 8; // 8-13s
+        const randomCool = () => Math.floor(Math.random() * 30) + 50; // 50-79s
+        
+        // Generate 100 sessions over last 6 months
+        for (let i = 0; i < 100; i++) {
+            // Random time within last 180 days
+            const daysAgo = Math.floor(Math.random() * 180);
+            const hoursOffset = Math.floor(Math.random() * 24);
+            const minutesOffset = Math.floor(Math.random() * 60);
+            
+            const sessionTime = now 
+                - (daysAgo * 86400000) // days to ms
+                - (hoursOffset * 3600000) // hours to ms
+                - (minutesOffset * 60000); // minutes to ms
+            
+            const material = random(materials);
+            const concentrate = random(concentrates);
+            const heater = random(heaters);
+            const heatTime = randomHeat();
+            const coolTime = randomCool();
+            
+            sessions.push({
+                id: sessionTime + i,
+                date: new Date(sessionTime).toISOString(),
+                material: material,
+                concentrate: concentrate,
+                heater: heater,
+                heatTime: heatTime,
+                coolTime: coolTime,
+                totalTime: heatTime + coolTime
+            });
+        }
+        
+        // Sort by date (newest first)
+        sessions.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        localStorage.setItem('dabSessions', JSON.stringify(sessions));
+        
+        console.log('✅ 100 mock sessions created!');
+        console.log('📊 Materials: Quartz=' + sessions.filter(s => s.material === 'quartz').length + 
+                    ', Titanium=' + sessions.filter(s => s.material === 'titanium').length +
+                    ', Ceramic=' + sessions.filter(s => s.material === 'ceramic').length);
+        console.log('📅 Date range: ' + 
+                    new Date(sessions[sessions.length - 1].date).toLocaleDateString() + 
+                    ' to ' + 
+                    new Date(sessions[0].date).toLocaleDateString());
+    }
+}
 function addSampleDataIfNeeded() {
     const existing = localStorage.getItem('dabSessions');
     if (!existing || JSON.parse(existing).length === 0) {
