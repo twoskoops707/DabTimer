@@ -1,4 +1,4 @@
-// DabTimer - COMPLETE WORKING VERSION WITH BIRTHDAY VERIFICATION
+// DabTimer - COMPLETE FIXED VERSION
 console.log('🔥 DabTimer Loading...');
 
 // Application State
@@ -7,7 +7,8 @@ const state = {
         material: 'quartz',
         concentrate: 'shatter',
         heater: 'butane',
-        theme: 'green'
+        theme: 'green',
+        useCustomTimer: false
     },
     timer: {
         isRunning: false,
@@ -93,14 +94,10 @@ function setupAgeVerification() {
     const stateSelect = document.getElementById('user-state');
     const birthdateInput = document.getElementById('user-birthdate');
     
-    console.log('Setting up age verification');
-    
     if (yesBtn) {
         yesBtn.addEventListener('click', function() {
             const selectedState = stateSelect ? stateSelect.value : '';
             const birthdate = birthdateInput ? birthdateInput.value : '';
-            
-            console.log('Verify clicked:', { state: selectedState, birthdate: birthdate });
             
             if (!selectedState) {
                 showError('Please select your state');
@@ -113,14 +110,12 @@ function setupAgeVerification() {
             }
             
             const age = calculateAge(birthdate);
-            console.log('Age:', age);
             
             if (age < 21) {
                 showError('You must be 21 or older to use this app');
                 return;
             }
             
-            // Success!
             localStorage.setItem('ageVerified', 'true');
             localStorage.setItem('userState', selectedState);
             localStorage.setItem('userBirthdate', birthdate);
@@ -149,6 +144,7 @@ function initializeApp() {
     loadSettings();
     updateClock();
     setInterval(updateClock, 1000);
+    setupScrollHeader();
     setupTabNavigation();
     setupOptionButtons();
     setupTimerControls();
@@ -159,12 +155,10 @@ function initializeApp() {
     console.log('✅ App Ready!');
 }
 
-// REPLACE the addSampleDataIfNeeded() function in your app.js with this:
-
+// Add 100 mock sessions for testing
 function addSampleDataIfNeeded() {
     const existing = localStorage.getItem('dabSessions');
     
-    // Only add if no data exists or very little data
     if (!existing || JSON.parse(existing).length < 10) {
         console.log('🔄 Generating 100 mock sessions...');
         
@@ -175,22 +169,19 @@ function addSampleDataIfNeeded() {
         const sessions = [];
         const now = Date.now();
         
-        // Helper functions
         const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
-        const randomHeat = () => Math.floor(Math.random() * 6) + 8; // 8-13s
-        const randomCool = () => Math.floor(Math.random() * 30) + 50; // 50-79s
+        const randomHeat = () => Math.floor(Math.random() * 6) + 8;
+        const randomCool = () => Math.floor(Math.random() * 30) + 50;
         
-        // Generate 100 sessions over last 6 months
         for (let i = 0; i < 100; i++) {
-            // Random time within last 180 days
             const daysAgo = Math.floor(Math.random() * 180);
             const hoursOffset = Math.floor(Math.random() * 24);
             const minutesOffset = Math.floor(Math.random() * 60);
             
             const sessionTime = now 
-                - (daysAgo * 86400000) // days to ms
-                - (hoursOffset * 3600000) // hours to ms
-                - (minutesOffset * 60000); // minutes to ms
+                - (daysAgo * 86400000)
+                - (hoursOffset * 3600000)
+                - (minutesOffset * 60000);
             
             const material = random(materials);
             const concentrate = random(concentrates);
@@ -210,31 +201,56 @@ function addSampleDataIfNeeded() {
             });
         }
         
-        // Sort by date (newest first)
         sessions.sort((a, b) => new Date(b.date) - new Date(a.date));
-        
         localStorage.setItem('dabSessions', JSON.stringify(sessions));
         
         console.log('✅ 100 mock sessions created!');
-        console.log('📊 Materials: Quartz=' + sessions.filter(s => s.material === 'quartz').length + 
-                    ', Titanium=' + sessions.filter(s => s.material === 'titanium').length +
-                    ', Ceramic=' + sessions.filter(s => s.material === 'ceramic').length);
-        console.log('📅 Date range: ' + 
-                    new Date(sessions[sessions.length - 1].date).toLocaleDateString() + 
-                    ' to ' + 
-                    new Date(sessions[0].date).toLocaleDateString());
     }
 }
-function addSampleDataIfNeeded() {
-    const existing = localStorage.getItem('dabSessions');
-    if (!existing || JSON.parse(existing).length === 0) {
-        const sampleData = [
-            { id: Date.now() - 432000000, date: new Date(Date.now() - 432000000).toISOString(), material: "quartz", concentrate: "shatter", heater: "butane", heatTime: 12, coolTime: 60, totalTime: 72 },
-            { id: Date.now() - 86400000, date: new Date(Date.now() - 86400000).toISOString(), material: "titanium", concentrate: "wax", heater: "butane", heatTime: 10, coolTime: 50, totalTime: 60 }
-        ];
-        localStorage.setItem('dabSessions', JSON.stringify(sampleData));
-        console.log('✓ Sample data added');
+
+// LOG DAB SESSION - FIXED TO ACTUALLY SAVE
+window.logDabSession = function(material, concentrate, heater, heatTime, coolTime) {
+    console.log('📝 Logging dab session:', { material, concentrate, heater, heatTime, coolTime });
+    
+    const sessions = JSON.parse(localStorage.getItem('dabSessions') || '[]');
+    
+    const newSession = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        material: material,
+        concentrate: concentrate,
+        heater: heater,
+        heatTime: heatTime,
+        coolTime: coolTime,
+        totalTime: heatTime + coolTime
+    };
+    
+    sessions.unshift(newSession); // Add to beginning
+    localStorage.setItem('dabSessions', JSON.stringify(sessions));
+    
+    console.log('✅ Session logged! Total sessions:', sessions.length);
+    
+    // Trigger calendar update if on calendar page
+    if (window.updateCalendarData) {
+        window.updateCalendarData();
     }
+};
+
+// Setup scrolling header
+function setupScrollHeader() {
+    const homeScreen = document.getElementById('home-screen');
+    if (!homeScreen) return;
+    
+    homeScreen.addEventListener('scroll', function() {
+        const header = document.querySelector('header');
+        if (header) {
+            if (this.scrollTop > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }
+    });
 }
 
 // Load settings
@@ -243,7 +259,8 @@ function loadSettings() {
         material: localStorage.getItem('material'),
         concentrate: localStorage.getItem('concentrate'),
         heater: localStorage.getItem('heater'),
-        theme: localStorage.getItem('theme')
+        theme: localStorage.getItem('theme'),
+        useCustomTimer: localStorage.getItem('useCustomTimer') === 'true'
     };
     
     if (saved.material) state.settings.material = saved.material;
@@ -253,6 +270,7 @@ function loadSettings() {
         state.settings.theme = saved.theme;
         document.body.setAttribute('data-theme', saved.theme);
     }
+    state.settings.useCustomTimer = saved.useCustomTimer;
     
     setActiveButton('material', state.settings.material);
     setActiveButton('concentrate', state.settings.concentrate);
@@ -302,6 +320,11 @@ function switchToTab(tabId) {
     
     const target = document.getElementById(tabId);
     if (target) target.classList.add('active');
+    
+    // Update calendar when switching to calendar tab
+    if (tabId === 'calendar-screen' && window.updateCalendarData) {
+        window.updateCalendarData();
+    }
 }
 
 // Option Buttons
@@ -369,16 +392,20 @@ function setupTimerControls() {
 
 // Calculate Times
 function calculateTimes() {
-    const customHeat = localStorage.getItem('customHeatTime');
-    const customCool = localStorage.getItem('customCoolTime');
-    
-    if (customHeat && customCool) {
-        return {
-            heatTime: parseInt(customHeat),
-            coolTime: parseInt(customCool)
-        };
+    // Check if custom timer is enabled
+    if (state.settings.useCustomTimer) {
+        const customHeat = localStorage.getItem('customHeatTime');
+        const customCool = localStorage.getItem('customCoolTime');
+        
+        if (customHeat && customCool) {
+            return {
+                heatTime: parseInt(customHeat),
+                coolTime: parseInt(customCool)
+            };
+        }
     }
     
+    // Use formula-based timing
     const material = CONFIG.materials[state.settings.material];
     const heater = CONFIG.heaters[state.settings.heater];
     const concentrate = CONFIG.concentrates[state.settings.concentrate];
@@ -481,19 +508,18 @@ function switchToCoolDown() {
     updateTimerDisplay();
 }
 
-// Complete Timer
+// Complete Timer - ACTUALLY LOGS SESSION NOW
 function completeTimer() {
     pauseTimer();
     
-    if (window.logDabSession) {
-        window.logDabSession(
-            state.settings.material,
-            state.settings.concentrate,
-            state.settings.heater,
-            state.timer.heatTime,
-            state.timer.coolTime
-        );
-    }
+    // LOG THE SESSION
+    window.logDabSession(
+        state.settings.material,
+        state.settings.concentrate,
+        state.settings.heater,
+        state.timer.heatTime,
+        state.timer.coolTime
+    );
     
     const btn = document.getElementById('start-timer');
     if (btn) {
@@ -554,17 +580,42 @@ function updateFormulaDisplay() {
     if (els.totalTime) els.totalTime.textContent = `${times.heatTime + times.coolTime}s`;
 }
 
-// Custom Time Inputs
+// Custom Time Inputs with Toggle
 function setupCustomTimeInputs() {
+    const toggle = document.getElementById('custom-timer-toggle');
+    const customInputs = document.getElementById('custom-timer-inputs');
     const heat = document.getElementById('settings-heat-time');
     const cool = document.getElementById('settings-cool-time');
     const apply = document.getElementById('apply-settings-times');
+    const reset = document.getElementById('reset-custom-times');
     
+    // Load saved state
     const savedHeat = localStorage.getItem('customHeatTime');
     const savedCool = localStorage.getItem('customCoolTime');
+    const useCustom = localStorage.getItem('useCustomTimer') === 'true';
     
     if (heat && savedHeat) heat.value = savedHeat;
     if (cool && savedCool) cool.value = savedCool;
+    
+    if (toggle) {
+        toggle.checked = useCustom;
+        if (customInputs) {
+            customInputs.style.display = useCustom ? 'block' : 'none';
+        }
+        
+        toggle.addEventListener('change', function() {
+            const isEnabled = this.checked;
+            state.settings.useCustomTimer = isEnabled;
+            localStorage.setItem('useCustomTimer', isEnabled);
+            
+            if (customInputs) {
+                customInputs.style.display = isEnabled ? 'block' : 'none';
+            }
+            
+            updateFormulaDisplay();
+            console.log('Custom timer:', isEnabled ? 'ON' : 'OFF');
+        });
+    }
     
     if (apply) {
         apply.addEventListener('click', function() {
@@ -581,7 +632,25 @@ function setupCustomTimeInputs() {
             }
         });
     }
-    console.log('✓ Custom times ready');
+    
+    if (reset) {
+        reset.addEventListener('click', function() {
+            localStorage.removeItem('customHeatTime');
+            localStorage.removeItem('customCoolTime');
+            localStorage.setItem('useCustomTimer', 'false');
+            state.settings.useCustomTimer = false;
+            
+            if (heat) heat.value = '';
+            if (cool) cool.value = '';
+            if (toggle) toggle.checked = false;
+            if (customInputs) customInputs.style.display = 'none';
+            
+            updateFormulaDisplay();
+            alert('✓ Custom timer reset! Using formula timing.');
+        });
+    }
+    
+    console.log('✓ Custom timer ready');
 }
 
 // Helper
