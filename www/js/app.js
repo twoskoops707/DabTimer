@@ -81,10 +81,10 @@ function setupAgeVerification() {
 // Initialize App
 function initializeApp() {
     console.log('🚀 Initializing App...');
-    
-    // Create 100 mock sessions IMMEDIATELY
+
+    // Create mock sessions for testing/debugging
     createMockSessions();
-    
+
     loadSettings();
     updateClock();
     setInterval(updateClock, 1000);
@@ -94,7 +94,7 @@ function initializeApp() {
     setupThemeButtons();
     setupCustomTimeInputs();
     updateFormulaDisplay();
-    
+
     console.log('✅ App Ready!');
 }
 

@@ -1392,3 +1392,119 @@ main {
 .concentrate-btn[data-value="crumble"] .concentrate-visual {
     background: linear-gradient(135deg, #D2691E, #8B4513) !important;
 }
+
+/* === FLOATING START BUTTON (Home Screen ONLY) === */
+#home-screen .floating-start-btn {
+    position: fixed !important;
+    bottom: 85px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 999 !important;
+    width: 70px !important;
+    height: 70px !important;
+    border-radius: 50% !important;
+    background: var(--theme-gradient) !important;
+    border: none !important;
+    box-shadow: 0 8px 30px var(--theme-primary) !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+#home-screen .floating-start-btn:hover {
+    transform: translateX(-50%) translateY(-3px) !important;
+    box-shadow: 0 12px 40px var(--theme-primary) !important;
+}
+
+#home-screen .floating-start-btn:active {
+    transform: translateX(-50%) scale(0.95) !important;
+}
+
+#home-screen .floating-start-btn i {
+    font-size: 28px !important;
+    color: #fff !important;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)) !important;
+}
+
+/* Hide start button on other screens */
+#timer-screen .floating-start-btn,
+#calendar-screen .floating-start-btn,
+#settings-screen .floating-start-btn {
+    display: none !important;
+}
+
+/* === THEME BUTTONS - Styled with CURRENT active theme === */
+.theme-btn {
+    background: var(--bg-secondary) !important;
+    border: 2px solid transparent !important;
+    border-radius: 12px !important;
+    transition: var(--transition) !important;
+}
+
+.theme-btn:hover {
+    background: var(--bg-card-hover) !important;
+    border-color: var(--theme-primary) !important;
+    transform: translateY(-2px) !important;
+}
+
+.theme-btn.active {
+    background: var(--theme-gradient) !important;
+    border-color: var(--theme-primary) !important;
+    box-shadow: 0 4px 16px var(--theme-primary) !important;
+}
+
+.theme-btn.active span {
+    color: #fff !important;
+    font-weight: 600 !important;
+}
+
+/* Theme previews show each theme's actual colors */
+.theme-btn[data-theme="green"] .theme-preview {
+    background: linear-gradient(135deg, #00E676, #00BFA5) !important;
+}
+
+.theme-btn[data-theme="blue"] .theme-preview {
+    background: linear-gradient(135deg, #2196F3, #00BCD4) !important;
+}
+
+.theme-btn[data-theme="purple"] .theme-preview {
+    background: linear-gradient(135deg, #9C27B0, #7C4DFF) !important;
+}
+
+.theme-btn[data-theme="orange"] .theme-preview {
+    background: linear-gradient(135deg, #FF9800, #FF5722) !important;
+}
+
+.theme-btn[data-theme="pink"] .theme-preview {
+    background: linear-gradient(135deg, #E91E63, #F06292) !important;
+}
+
+.theme-btn[data-theme="teal"] .theme-preview {
+    background: linear-gradient(135deg, #009688, #26A69A) !important;
+}
+
+.theme-btn[data-theme="cyberpunk"] .theme-preview {
+    background: linear-gradient(135deg, #ff00ff, #00ffff) !important;
+}
+
+.theme-btn[data-theme="earth"] .theme-preview {
+    background: linear-gradient(135deg, #8B4513, #D2691E) !important;
+}
+
+.theme-btn[data-theme="sunset"] .theme-preview {
+    background: linear-gradient(135deg, #FF6B6B, #FFD93D) !important;
+}
+
+.theme-btn[data-theme="forest"] .theme-preview {
+    background: linear-gradient(135deg, #52B788, #95D5B2) !important;
+}
+
+.theme-btn[data-theme="ocean"] .theme-preview {
+    background: linear-gradient(135deg, #06B6D4, #3B82F6) !important;
+}
+
+.theme-btn[data-theme="midnight"] .theme-preview {
+    background: linear-gradient(135deg, #8B5CF6, #A78BFA) !important;
+}
