@@ -1273,3 +1273,122 @@ main {
     color: var(--text-muted);
     line-height: 1.4;
 }
+
+/* === CRITICAL FIXES - ADD TO END OF style.css === */
+
+/* Remove Black Box - Home Screen Fix */
+.action-buttons {
+    position: fixed !important;
+    bottom: 80px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 999 !important;
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.btn-round {
+    width: 70px !important;
+    height: 70px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #00FF88, #00BFA5) !important;
+    border: none !important;
+    box-shadow: 0 8px 30px rgba(0, 255, 136, 0.5) !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.btn-round:active {
+    transform: scale(0.95) !important;
+}
+
+.btn-round i {
+    font-size: 28px !important;
+    color: #000 !important;
+}
+
+/* Compact Header */
+header {
+    height: 50px !important;
+    min-height: 50px !important;
+    max-height: 50px !important;
+}
+
+.header-content {
+    height: 50px !important;
+    padding: 0 15px !important;
+}
+
+.logo-small {
+    font-size: 16px !important;
+}
+
+.logo-small i {
+    font-size: 20px !important;
+}
+
+/* Home Container - Extra Padding for Floating Button */
+.home-container {
+    padding-bottom: 120px !important;
+}
+
+/* Tab Bar - Fixed at Bottom */
+.tab-bar {
+    height: 70px !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 100 !important;
+}
+
+/* Main Content - Proper Height */
+main {
+    height: calc(100vh - 50px - 70px) !important;
+    overflow-y: auto !important;
+}
+
+.tab-content {
+    height: 100% !important;
+    overflow-y: auto !important;
+}
+
+/* Concentrate Images - Fallback Colors */
+.concentrate-visual {
+    background-color: #333 !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+/* If images don't load, show colors */
+.concentrate-btn[data-value="shatter"] .concentrate-visual {
+    background: linear-gradient(135deg, #FFE5B4, #DEB887) !important;
+}
+.concentrate-btn[data-value="wax"] .concentrate-visual {
+    background: linear-gradient(135deg, #F5DEB3, #DEB887) !important;
+}
+.concentrate-btn[data-value="resin"] .concentrate-visual {
+    background: linear-gradient(135deg, #8B4513, #654321) !important;
+}
+.concentrate-btn[data-value="rosin"] .concentrate-visual {
+    background: linear-gradient(135deg, #DAA520, #B8860B) !important;
+}
+.concentrate-btn[data-value="budder"] .concentrate-visual {
+    background: linear-gradient(135deg, #FFD700, #FFA500) !important;
+}
+.concentrate-btn[data-value="diamonds"] .concentrate-visual {
+    background: linear-gradient(135deg, #E0E0E0, #FFFFFF) !important;
+}
+.concentrate-btn[data-value="sauce"] .concentrate-visual {
+    background: linear-gradient(135deg, #FF8C00, #FF6347) !important;
+}
+.concentrate-btn[data-value="crumble"] .concentrate-visual {
+    background: linear-gradient(135deg, #D2691E, #8B4513) !important;
+}
