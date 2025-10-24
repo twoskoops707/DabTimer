@@ -972,13 +972,13 @@
                                 <button class="option-btn" data-setting="heater" data-value="propane">Propane Torch</button>
                             </div>
                         </div>
+
+                        <!-- START TIMER BUTTON -->
+                        <button class="btn-start-timer" id="start-timer-btn">
+                            <i class="fas fa-play"></i> Start Timer
+                        </button>
                     </div>
                 </div>
-                
-                <!-- FLOATING START BUTTON -->
-                <button class="floating-start-btn" id="start-timer-btn">
-                    <i class="fas fa-play"></i>
-                </button>
             </div>
 
             <!-- TIMER SCREEN -->
@@ -1016,7 +1016,70 @@ formula-display">
             <!-- CALENDAR SCREEN -->
             <div id="calendar-screen" class="tab-content">
                 <div class="calendar-container">
-                    <!-- Calendar content loaded by calendar-core.js -->
+                    <div class="calendar-header">
+                        <h2>📊 Session Analytics</h2>
+                        <p class="calendar-subtitle">Track your dab sessions and preferences</p>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="quick-stats">
+                        <div class="quick-stat-card">
+                            <i class="stat-icon fas fa-fire"></i>
+                            <div class="stat-content">
+                                <div class="stat-value" id="stat-total">0</div>
+                                <div class="stat-label">Total Dabs</div>
+                            </div>
+                        </div>
+                        <div class="quick-stat-card">
+                            <i class="stat-icon fas fa-calendar-day"></i>
+                            <div class="stat-content">
+                                <div class="stat-value" id="stat-today">0</div>
+                                <div class="stat-label">Today</div>
+                            </div>
+                        </div>
+                        <div class="quick-stat-card">
+                            <i class="stat-icon fas fa-trophy"></i>
+                            <div class="stat-content">
+                                <div class="stat-value" id="stat-streak">0</div>
+                                <div class="stat-label">Day Streak</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Time Range Selector -->
+                    <div class="time-range-selector">
+                        <button class="time-range-btn active" data-range="week">Week</button>
+                        <button class="time-range-btn" data-range="month">Month</button>
+                        <button class="time-range-btn" data-range="year">Year</button>
+                    </div>
+
+                    <!-- Charts Section -->
+                    <div class="charts-section">
+                        <div class="chart-card">
+                            <h3>Session Activity</h3>
+                            <canvas id="activity-chart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h3>Favorite Concentrates</h3>
+                            <canvas id="concentrate-chart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h3>Material Preference</h3>
+                            <canvas id="material-chart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h3>Peak Hours</h3>
+                            <canvas id="hours-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="recent-activity">
+                        <h3>Recent Sessions</h3>
+                        <div class="activity-list" id="recent-sessions">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
                 </div>
             </div>
 

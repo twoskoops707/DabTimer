@@ -295,44 +295,60 @@ main {
     margin-bottom: 2px;
 }
 
-/* Concentrate Visual Styles - Based on Real Colors */
+/* Concentrate Visual Styles - Real Images */
 .concentrate-btn[data-value="shatter"] .concentrate-visual {
-    background: linear-gradient(135deg, #FFD700, #FFA500);
+    background-image: url('../images/shatter.jpg');
+    background-size: cover;
+    background-position: center;
     box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
 }
 
 .concentrate-btn[data-value="wax"] .concentrate-visual {
-    background: linear-gradient(135deg, #F4E4C1, #E8D5B5);
+    background-image: url('../images/wax.jpg');
+    background-size: cover;
+    background-position: center;
     box-shadow: 0 2px 8px rgba(244, 228, 193, 0.4);
 }
 
 .concentrate-btn[data-value="resin"] .concentrate-visual {
-    background: linear-gradient(135deg, #8B4513, #CD853F);
+    background-image: url('../images/resin.jpg');
+    background-size: cover;
+    background-position: center;
     box-shadow: 0 2px 8px rgba(139, 69, 19, 0.4);
 }
 
 .concentrate-btn[data-value="rosin"] .concentrate-visual {
-    background: linear-gradient(135deg, #DAA520, #B8860B);
+    background-image: url('../images/rosin.webp');
+    background-size: cover;
+    background-position: center;
     box-shadow: 0 2px 8px rgba(218, 165, 32, 0.4);
 }
 
 .concentrate-btn[data-value="budder"] .concentrate-visual {
-    background: linear-gradient(135deg, #FFE4B5, #FFDAB9);
+    background-image: url('../images/budder.jpg');
+    background-size: cover;
+    background-position: center;
     box-shadow: 0 2px 8px rgba(255, 228, 181, 0.4);
 }
 
 .concentrate-btn[data-value="diamonds"] .concentrate-visual {
-    background: linear-gradient(135deg, #E0F7FA, #B2EBF2);
+    background-image: url('../images/diamonds.jpg');
+    background-size: cover;
+    background-position: center;
     box-shadow: 0 2px 8px rgba(224, 247, 250, 0.4);
 }
 
 .concentrate-btn[data-value="sauce"] .concentrate-visual {
-    background: linear-gradient(135deg, #FF8C00, #FFA500);
+    background-image: url('../images/sauce.jpg');
+    background-size: cover;
+    background-position: center;
     box-shadow: 0 2px 8px rgba(255, 140, 0, 0.4);
 }
 
 .concentrate-btn[data-value="crumble"] .concentrate-visual {
-    background: linear-gradient(135deg, #F5DEB3, #DEB887);
+    background-image: url('../images/crumble.png');
+    background-size: cover;
+    background-position: center;
     box-shadow: 0 2px 8px rgba(245, 222, 179, 0.4);
 }
 
@@ -762,6 +778,10 @@ main {
 .settings-container {
     max-width: 600px;
     margin: 0 auto;
+    padding: 20px;
+    overflow-y: auto;
+    height: 100%;
+    padding-bottom: 100px;
 }
 
 .settings-container h2 {
@@ -1433,46 +1453,37 @@ main {
     background: linear-gradient(135deg, #D2691E, #8B4513) !important;
 }
 
-/* === FLOATING START BUTTON (Home Screen ONLY) === */
-#home-screen .floating-start-btn {
-    position: fixed !important;
-    bottom: 85px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    z-index: 999 !important;
-    width: 70px !important;
-    height: 70px !important;
-    border-radius: 50% !important;
-    background: var(--theme-gradient) !important;
-    border: none !important;
-    box-shadow: 0 8px 30px var(--theme-primary) !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+/* === START TIMER BUTTON (Inline at bottom of home screen) === */
+.btn-start-timer {
+    width: 100%;
+    padding: 18px;
+    margin-top: 20px;
+    background: var(--theme-gradient);
+    border: none;
+    border-radius: var(--border-radius);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 230, 118, 0.4);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
-#home-screen .floating-start-btn:hover {
-    transform: translateX(-50%) translateY(-3px) !important;
-    box-shadow: 0 12px 40px var(--theme-primary) !important;
+.btn-start-timer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 230, 118, 0.6);
 }
 
-#home-screen .floating-start-btn:active {
-    transform: translateX(-50%) scale(0.95) !important;
+.btn-start-timer:active {
+    transform: translateY(0);
 }
 
-#home-screen .floating-start-btn i {
-    font-size: 28px !important;
-    color: #fff !important;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)) !important;
-}
-
-/* Hide start button on other screens */
-#timer-screen .floating-start-btn,
-#calendar-screen .floating-start-btn,
-#settings-screen .floating-start-btn {
-    display: none !important;
+.btn-start-timer i {
+    font-size: 20px;
 }
 
 /* === THEME BUTTONS - Styled with CURRENT active theme === */

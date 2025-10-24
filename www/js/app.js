@@ -129,6 +129,11 @@ function initializeApp() {
     setupCustomTimeInputs();
     updateFormulaDisplay();
 
+    // Initialize calendar (after DOM is ready)
+    if (typeof Calendar !== 'undefined' && Calendar.init) {
+        setTimeout(() => Calendar.init(), 100);
+    }
+
     console.log('✅ App Ready!');
 }
 
