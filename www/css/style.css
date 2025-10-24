@@ -1160,7 +1160,13 @@ main {
 }
 
 .age-verify-content {
-    max-width: 400px;
+    max-width: 450px;
+    width: 100%;
+    background: rgba(26, 26, 30, 0.95);
+    padding: 40px 30px;
+    border-radius: 20px;
+    border: 2px solid #00FF88;
+    box-shadow: 0 20px 60px rgba(0, 255, 136, 0.3);
     text-align: center;
     animation: fadeInScale 0.5s ease;
 }
@@ -1176,62 +1182,92 @@ main {
     }
 }
 
-.age-verify-logo {
-    font-size: 80px;
-    color: var(--theme-primary);
-    filter: drop-shadow(0 0 30px var(--theme-primary));
-    margin-bottom: 20px;
+.age-verify-icon {
+    font-size: 60px;
+    color: #00FF88;
+    margin-bottom: 15px;
     animation: pulse 2s infinite;
 }
 
-.age-verify-content h1 {
+.age-verify-content h2 {
     font-size: 28px;
     margin-bottom: 12px;
-    background: var(--theme-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #fff;
 }
 
 .age-verify-content p {
-    color: var(--text-secondary);
-    margin-bottom: 30px;
+    color: #aaa;
+    margin-bottom: 25px;
     font-size: 14px;
     line-height: 1.6;
 }
 
-.state-select-container {
-    margin-bottom: 24px;
+/* Age Error Message */
+.age-error {
+    display: none;
+    background: rgba(255, 77, 77, 0.2);
+    border: 2px solid #ff4d4d;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 20px;
+    color: #ff6b6b;
+    font-size: 14px;
+    font-weight: 500;
 }
 
-.state-select-container label {
+.age-error.show {
     display: block;
-    color: var(--text-secondary);
-    font-size: 13px;
-    margin-bottom: 8px;
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* Input Groups */
+.age-verify-input-group {
+    margin-bottom: 20px;
     text-align: left;
 }
 
-.state-select {
+.age-verify-input-group label {
+    display: block;
+    color: #00FF88;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.age-verify-input-group label i {
+    margin-right: 6px;
+}
+
+.age-verify-input-group input,
+.age-verify-input-group select {
     width: 100%;
     padding: 14px;
-    background: var(--bg-card);
-    border: 2px solid var(--bg-secondary);
-    border-radius: 12px;
-    color: var(--text-primary);
+    background: #0a0a0a;
+    border: 2px solid #333;
+    border-radius: 10px;
+    color: #fff;
     font-size: 16px;
-    cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s ease;
 }
 
-.state-select:focus {
+.age-verify-input-group input:focus,
+.age-verify-input-group select:focus {
     outline: none;
-    border-color: var(--theme-primary);
+    border-color: #00FF88;
+    box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
 }
 
+/* Buttons */
 .age-verify-buttons {
     display: flex;
     gap: 12px;
+    margin-top: 25px;
 }
 
 .age-verify-buttons button {
@@ -1241,36 +1277,40 @@ main {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s ease;
 }
 
 .btn-verify-yes {
-    background: var(--theme-gradient);
+    background: linear-gradient(135deg, #00FF88, #00BFA5);
     border: none;
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(0, 230, 118, 0.4);
+    color: #000;
+    box-shadow: 0 4px 16px rgba(0, 255, 136, 0.4);
 }
 
 .btn-verify-yes:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 230, 118, 0.5);
+    box-shadow: 0 6px 20px rgba(0, 255, 136, 0.6);
+}
+
+.btn-verify-yes:active {
+    transform: translateY(0);
 }
 
 .btn-verify-no {
     background: transparent;
-    border: 2px solid var(--text-muted);
-    color: var(--text-secondary);
+    border: 2px solid #666;
+    color: #aaa;
 }
 
 .btn-verify-no:hover {
-    border-color: var(--text-secondary);
-    color: var(--text-primary);
+    border-color: #999;
+    color: #fff;
 }
 
 .age-verify-disclaimer {
     margin-top: 20px;
     font-size: 11px;
-    color: var(--text-muted);
+    color: #666;
     line-height: 1.4;
 }
 
