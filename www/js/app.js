@@ -48,33 +48,67 @@ function showError(message) {
 }
 
 function setupAgeVerification() {
+    console.log('📋 Setting up age verification...');
     const yesBtn = document.getElementById('verify-yes');
     const noBtn = document.getElementById('verify-no');
     const stateSelect = document.getElementById('user-state');
     const birthdateInput = document.getElementById('user-birthdate');
-    
+
+    console.log('Elements found:', {
+        yesBtn: !!yesBtn,
+        noBtn: !!noBtn,
+        stateSelect: !!stateSelect,
+        birthdateInput: !!birthdateInput
+    });
+
     if (yesBtn) {
         yesBtn.addEventListener('click', function() {
+            console.log('✅ Verify button clicked!');
             const selectedState = stateSelect ? stateSelect.value : '';
             const birthdate = birthdateInput ? birthdateInput.value : '';
-            
-            if (!selectedState) { showError('Please select your state'); return; }
-            if (!birthdate) { showError('Please enter your date of birth'); return; }
-            
+
+            console.log('Values:', { selectedState, birthdate });
+
+            if (!selectedState) {
+                console.log('❌ No state selected');
+                showError('Please select your state');
+                return;
+            }
+            if (!birthdate) {
+                console.log('❌ No birthdate entered');
+                showError('Please enter your date of birth');
+                return;
+            }
+
             const age = calculateAge(birthdate);
-            if (age < 21) { showError('You must be 21 or older'); return; }
-            
+            console.log('Calculated age:', age);
+
+            if (age < 21) {
+                console.log('❌ Under 21');
+                showError('You must be 21 or older');
+                return;
+            }
+
+            console.log('✅ Verification passed! Hiding screen...');
             localStorage.setItem('ageVerified', 'true');
             localStorage.setItem('userState', selectedState);
-            
+
             const ageScreen = document.getElementById('age-verification');
-            if (ageScreen) ageScreen.style.display = 'none';
+            if (ageScreen) {
+                ageScreen.style.display = 'none';
+                console.log('✅ Age screen hidden');
+            }
             initializeApp();
         });
+    } else {
+        console.error('❌ Verify button not found!');
     }
-    
+
     if (noBtn) {
-        noBtn.addEventListener('click', () => showError('You must be 21 or older'));
+        noBtn.addEventListener('click', () => {
+            console.log('❌ User clicked "Under 21"');
+            showError('You must be 21 or older');
+        });
     }
 }
 
