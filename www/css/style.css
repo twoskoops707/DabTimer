@@ -1520,32 +1520,25 @@ main {
     transform: translateX(-50%) scale(1.05);
 }
 
-.btn-start-timer:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 60px var(--theme-primary);
-}
-
-.btn-start-timer:active {
-    transform: translateY(-2px) scale(0.98);
-}
-
-.btn-start-timer i {
-    font-size: 26px;
-    position: relative;
-    z-index: 1;
-}
-
-.btn-start-timer span {
-    position: relative;
-    z-index: 1;
-}
-
 /* === THEME BUTTONS - Styled with CURRENT active theme === */
 .theme-btn {
     background: var(--bg-secondary) !important;
     border: 2px solid transparent !important;
     border-radius: 12px !important;
     transition: var(--transition) !important;
+}
+
+/* Green Theme (Default) - Fresh, vibrant style */
+body[data-theme="green"] .option-btn.active,
+body[data-theme="green"] .btn-start-timer,
+body[data-theme="green"] .btn-primary {
+    border-radius: 16px;
+    box-shadow:
+        0 6px 24px rgba(0, 230, 118, 0.4),
+        0 0 20px rgba(0, 191, 165, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border: 2px solid #00E676 !important;
+    background: linear-gradient(135deg, #00E676, #00BFA5);
 }
 
 .theme-btn:hover {
