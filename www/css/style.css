@@ -598,13 +598,18 @@ main {
 }
 
 /* === CALENDAR SCREEN === */
+#calendar-screen {
+    overflow-y: auto !important;
+    height: 100% !important;
+    -webkit-overflow-scrolling: touch;
+}
+
 .calendar-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    overflow-y: auto;
-    height: 100%;
-    padding-bottom: 100px;
+    padding-bottom: 120px; /* Extra space for FAB button */
+    min-height: 100%;
 }
 
 .calendar-header {
@@ -778,13 +783,18 @@ main {
 }
 
 /* === SETTINGS SCREEN === */
+#settings-screen {
+    overflow-y: auto !important;
+    height: 100% !important;
+    -webkit-overflow-scrolling: touch;
+}
+
 .settings-container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    overflow-y: auto;
-    height: 100%;
-    padding-bottom: 100px;
+    padding-bottom: 120px; /* Extra space for FAB button */
+    min-height: 100%;
 }
 
 .settings-container h2 {
@@ -797,6 +807,12 @@ main {
     color: var(--text-secondary);
     font-size: 14px;
     margin-bottom: 16px;
+}
+
+.settings-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .theme-options {
@@ -833,6 +849,44 @@ main {
     height: 60px;
     border-radius: 50%;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Theme preview gradient colors */
+.theme-btn[data-theme="green"] .theme-preview {
+    background: linear-gradient(135deg, #00E676, #00BFA5);
+}
+.theme-btn[data-theme="blue"] .theme-preview {
+    background: linear-gradient(135deg, #2196F3, #00BCD4);
+}
+.theme-btn[data-theme="purple"] .theme-preview {
+    background: linear-gradient(135deg, #9C27B0, #7C4DFF);
+}
+.theme-btn[data-theme="orange"] .theme-preview {
+    background: linear-gradient(135deg, #FF9800, #FF5722);
+}
+.theme-btn[data-theme="pink"] .theme-preview {
+    background: linear-gradient(135deg, #E91E63, #F06292);
+}
+.theme-btn[data-theme="teal"] .theme-preview {
+    background: linear-gradient(135deg, #009688, #26A69A);
+}
+.theme-btn[data-theme="cyberpunk"] .theme-preview {
+    background: linear-gradient(135deg, #ff00ff, #00ffff);
+}
+.theme-btn[data-theme="earth"] .theme-preview {
+    background: linear-gradient(135deg, #8B4513, #D2691E);
+}
+.theme-btn[data-theme="sunset"] .theme-preview {
+    background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+}
+.theme-btn[data-theme="forest"] .theme-preview {
+    background: linear-gradient(135deg, #52B788, #95D5B2);
+}
+.theme-btn[data-theme="ocean"] .theme-preview {
+    background: linear-gradient(135deg, #06B6D4, #3B82F6);
+}
+.theme-btn[data-theme="midnight"] .theme-preview {
+    background: linear-gradient(135deg, #1e3a8a, #312e81);
 }
 
 .theme-btn span {
@@ -1423,79 +1477,47 @@ main {
     overflow-y: auto !important;
 }
 
-/* Concentrate Images - Fallback Colors */
-.concentrate-visual {
-    background-color: #333 !important;
-    background-size: cover !important;
-    background-position: center !important;
-}
+/* Concentrate Images - REMOVED FALLBACK that was blocking real images */
 
-/* If images don't load, show colors */
-.concentrate-btn[data-value="shatter"] .concentrate-visual {
-    background: linear-gradient(135deg, #FFE5B4, #DEB887) !important;
-}
-.concentrate-btn[data-value="wax"] .concentrate-visual {
-    background: linear-gradient(135deg, #F5DEB3, #DEB887) !important;
-}
-.concentrate-btn[data-value="resin"] .concentrate-visual {
-    background: linear-gradient(135deg, #8B4513, #654321) !important;
-}
-.concentrate-btn[data-value="rosin"] .concentrate-visual {
-    background: linear-gradient(135deg, #DAA520, #B8860B) !important;
-}
-.concentrate-btn[data-value="budder"] .concentrate-visual {
-    background: linear-gradient(135deg, #FFD700, #FFA500) !important;
-}
-.concentrate-btn[data-value="diamonds"] .concentrate-visual {
-    background: linear-gradient(135deg, #E0E0E0, #FFFFFF) !important;
-}
-.concentrate-btn[data-value="sauce"] .concentrate-visual {
-    background: linear-gradient(135deg, #FF8C00, #FF6347) !important;
-}
-.concentrate-btn[data-value="crumble"] .concentrate-visual {
-    background: linear-gradient(135deg, #D2691E, #8B4513) !important;
-}
-
-/* === START TIMER BUTTON (Inline at bottom of home screen) === */
+/* === START TIMER BUTTON (CIRCULAR FAB - Fixed at bottom) === */
 .btn-start-timer {
-    width: 100%;
-    padding: 24px 32px;
-    margin-top: 30px;
+    position: fixed;
+    bottom: 85px; /* Above tab bar */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 80px;
+    padding: 0;
     background: var(--theme-gradient);
     border: none;
-    border-radius: 16px;
+    border-radius: 50%; /* CIRCULAR */
     color: #fff;
-    font-size: 22px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 32px;
     cursor: pointer;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 40px var(--theme-primary);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 60px var(--theme-primary);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    position: relative;
-    overflow: hidden;
+    z-index: 50;
+    border: 4px solid rgba(0, 0, 0, 0.3);
 }
 
-.btn-start-timer::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
+.btn-start-timer i {
+    font-size: 36px;
 }
 
-.btn-start-timer:hover::before {
-    width: 400px;
-    height: 400px;
+.btn-start-timer span {
+    display: none; /* Hide text, icon only */
+}
+
+.btn-start-timer:hover {
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 80px var(--theme-primary);
+}
+
+.btn-start-timer:active {
+    transform: translateX(-50%) scale(1.05);
 }
 
 .btn-start-timer:hover {
