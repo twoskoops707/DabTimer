@@ -315,28 +315,28 @@
         
         /* Image paths */
         .concentrate-btn[data-value="shatter"] .concentrate-visual {
-            background-image: url('images/shatter.png');
+            background: linear-gradient(135deg, #FFD700, #FFA500) !important;
         }
         .concentrate-btn[data-value="wax"] .concentrate-visual {
-            background-image: url('images/wax.png');
+            background: linear-gradient(135deg, #FFA500, #FF8C00) !important;
         }
         .concentrate-btn[data-value="resin"] .concentrate-visual {
-            background-image: url('images/resin.png');
+            background: linear-gradient(135deg, #8B4513, #654321) !important;
         }
         .concentrate-btn[data-value="rosin"] .concentrate-visual {
-            background-image: url('images/rosin.png');
+            background: linear-gradient(135deg, #DAA520, #B8860B) !important;
         }
         .concentrate-btn[data-value="budder"] .concentrate-visual {
-            background-image: url('images/budder.png');
+            background: linear-gradient(135deg, #FFDB58, #FFD700) !important;
         }
         .concentrate-btn[data-value="diamonds"] .concentrate-visual {
-            background-image: url('images/diamonds.png');
+            background: linear-gradient(135deg, #00CED1, #20B2AA) !important;
         }
         .concentrate-btn[data-value="sauce"] .concentrate-visual {
-            background-image: url('images/sauce.png');
+            background: linear-gradient(135deg, #FF6347, #FF4500) !important;
         }
         .concentrate-btn[data-value="crumble"] .concentrate-visual {
-            background-image: url('images/crumble.png');
+            background: linear-gradient(135deg, #DEB887, #D2B48C) !important;
         }
         
         .concentrate-btn span {
@@ -344,32 +344,39 @@
         }
         
         /* === FLOATING START BUTTON (FIXED AT BOTTOM) === */
-        .floating-start-btn {
-            position: fixed;
-            bottom: 80px; /* Above nav bar */
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 999;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00FF88, #00BFA5);
-            border: none;
-            box-shadow: 0 8px 30px rgba(0, 255, 136, 0.5);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .floating-start-btn,
+        .btn-start-timer {
+            position: fixed !important;
+            bottom: 80px !important; /* Above nav bar */
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 999 !important;
+            width: 100px !important;
+            height: 100px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg, #00FF88, #00BFA5) !important;
+            border: none !important;
+            box-shadow: 0 8px 30px rgba(0, 255, 136, 0.5) !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
         }
-        
-        .floating-start-btn:active {
-            transform: translateX(-50%) scale(0.95);
+
+        .floating-start-btn:active,
+        .btn-start-timer:active {
+            transform: translateX(-50%) scale(0.95) !important;
         }
-        
-        .floating-start-btn i {
-            font-size: 28px;
-            color: #000;
+
+        .floating-start-btn i,
+        .btn-start-timer i {
+            font-size: 40px !important;
+            color: #000 !important;
+        }
+
+        .btn-start-timer span {
+            display: none !important;
         }
         
         /* === TAB BAR (BOTTOM NAVIGATION) === */
@@ -1059,20 +1066,24 @@ formula-display">
                     <div class="charts-section">
                         <div class="chart-card">
                             <h3>Session Activity</h3>
-                            <canvas id="activity-chart"></canvas>
+                            <canvas id="usage-frequency-chart"></canvas>
                         </div>
                         <div class="chart-card">
                             <h3>Favorite Concentrates</h3>
-                            <canvas id="concentrate-chart"></canvas>
+                            <canvas id="concentrate-preference-chart"></canvas>
                         </div>
+                        <!-- REMOVED: Material chart doesn't have matching JS
                         <div class="chart-card">
                             <h3>Material Preference</h3>
                             <canvas id="material-chart"></canvas>
                         </div>
+                        -->
+                        <!-- REMOVED: Hours chart doesn't have matching JS
                         <div class="chart-card">
                             <h3>Peak Hours</h3>
                             <canvas id="hours-chart"></canvas>
                         </div>
+                        -->
                     </div>
 
                     <!-- Recent Activity -->

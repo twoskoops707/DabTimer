@@ -178,15 +178,16 @@ main {
 .tab-content {
     display: none;
     animation: fadeIn 0.3s ease;
-    height: 100%;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    height: 100% !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
 }
 
 .tab-content.active {
-    display: block;
-    overflow-y: auto;
-    height: 100%;
+    display: block !important;
+    overflow-y: auto !important;
+    height: 100% !important;
+    -webkit-overflow-scrolling: touch !important;
 }
 
 @keyframes fadeIn {
@@ -610,6 +611,9 @@ main {
     padding: 20px;
     padding-bottom: 120px; /* Extra space for FAB button */
     min-height: 100%;
+    overflow-y: auto !important;
+    height: calc(100vh - 120px) !important;
+    -webkit-overflow-scrolling: touch !important;
 }
 
 .calendar-header {
@@ -793,8 +797,11 @@ main {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    padding-bottom: 120px; /* Extra space for FAB button */
+    padding-bottom: 100px !important;
     min-height: 100%;
+    overflow-y: auto !important;
+    height: calc(100vh - 120px) !important;
+    -webkit-overflow-scrolling: touch !important;
 }
 
 .settings-container h2 {
@@ -853,40 +860,40 @@ main {
 
 /* Theme preview gradient colors */
 .theme-btn[data-theme="green"] .theme-preview {
-    background: linear-gradient(135deg, #00E676, #00BFA5);
+    background: linear-gradient(135deg, #00E676, #00BFA5) !important;
 }
 .theme-btn[data-theme="blue"] .theme-preview {
-    background: linear-gradient(135deg, #2196F3, #00BCD4);
+    background: linear-gradient(135deg, #2196F3, #00BCD4) !important;
 }
 .theme-btn[data-theme="purple"] .theme-preview {
-    background: linear-gradient(135deg, #9C27B0, #7C4DFF);
+    background: linear-gradient(135deg, #9C27B0, #7C4DFF) !important;
 }
 .theme-btn[data-theme="orange"] .theme-preview {
-    background: linear-gradient(135deg, #FF9800, #FF5722);
+    background: linear-gradient(135deg, #FF9800, #FF5722) !important;
 }
 .theme-btn[data-theme="pink"] .theme-preview {
-    background: linear-gradient(135deg, #E91E63, #F06292);
+    background: linear-gradient(135deg, #E91E63, #F06292) !important;
 }
 .theme-btn[data-theme="teal"] .theme-preview {
-    background: linear-gradient(135deg, #009688, #26A69A);
+    background: linear-gradient(135deg, #009688, #26A69A) !important;
 }
 .theme-btn[data-theme="cyberpunk"] .theme-preview {
-    background: linear-gradient(135deg, #ff00ff, #00ffff);
+    background: linear-gradient(135deg, #ff00ff, #00ffff) !important;
 }
 .theme-btn[data-theme="earth"] .theme-preview {
-    background: linear-gradient(135deg, #8B4513, #D2691E);
+    background: linear-gradient(135deg, #8B4513, #D2691E) !important;
 }
 .theme-btn[data-theme="sunset"] .theme-preview {
-    background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+    background: linear-gradient(135deg, #FF6B6B, #FFD93D) !important;
 }
 .theme-btn[data-theme="forest"] .theme-preview {
-    background: linear-gradient(135deg, #52B788, #95D5B2);
+    background: linear-gradient(135deg, #52B788, #95D5B2) !important;
 }
 .theme-btn[data-theme="ocean"] .theme-preview {
-    background: linear-gradient(135deg, #06B6D4, #3B82F6);
+    background: linear-gradient(135deg, #06B6D4, #3B82F6) !important;
 }
 .theme-btn[data-theme="midnight"] .theme-preview {
-    background: linear-gradient(135deg, #1e3a8a, #312e81);
+    background: linear-gradient(135deg, #1e3a8a, #312e81) !important;
 }
 
 .theme-btn span {
@@ -1538,7 +1545,7 @@ body[data-theme="green"] .btn-primary {
         0 0 20px rgba(0, 191, 165, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
     border: 2px solid #00E676 !important;
-    background: linear-gradient(135deg, #00E676, #00BFA5);
+    background: linear-gradient(135deg, #00E676, #00BFA5) !important;
 }
 
 .theme-btn:hover {
