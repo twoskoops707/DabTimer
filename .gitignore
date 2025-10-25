@@ -5,6 +5,12 @@ npm-debug.log
 # Capacitor
 .capacitor/
 
+# Android
+android/local.properties
+android/.gradle/
+android/build/
+android/app/build/
+
 # Build outputs
 dist/
 build/
