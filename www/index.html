@@ -200,17 +200,19 @@
         /* === MAIN CONTENT AREA === */
         main {
             flex: 1;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
             position: relative;
+            -webkit-overflow-scrolling: touch;
         }
-        
+
         .tab-content {
             display: none;
-            height: 100%;
+            min-height: 100%;
             overflow-y: auto;
-            padding-bottom: 80px; /* Space for nav bar */
+            -webkit-overflow-scrolling: touch;
         }
-        
+
         .tab-content.active {
             display: block;
         }
@@ -268,79 +270,104 @@
         
         .option-btn {
             flex: 1;
-            min-width: 80px;
-            padding: 12px;
+            min-width: 100px;
+            padding: 16px 12px;
             background: #0a0a0a;
             border: 2px solid #333;
-            border-radius: 10px;
+            border-radius: 12px;
             color: #fff;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
-        
+
         .option-btn:hover {
             border-color: #00FF88;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
         }
-        
+
         .option-btn.active {
             background: linear-gradient(135deg, #00FF88, #00BFA5);
             border-color: #00FF88;
             color: #000;
+            box-shadow: 0 4px 16px rgba(0, 255, 136, 0.4);
         }
         
         /* Concentrate Grid */
         .concentrate-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 12px;
         }
-        
+
         .concentrate-btn {
             flex-direction: column;
-            padding: 10px;
+            padding: 12px 8px;
             min-width: unset;
+            display: flex;
+            align-items: center;
         }
-        
+
         .concentrate-visual {
             width: 100%;
-            height: 50px;
+            height: 60px;
             background-color: #333;
             background-size: cover;
             background-position: center;
-            border-radius: 8px;
-            margin-bottom: 5px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
         }
         
-        /* Image paths */
+        /* REAL Image paths - FIXED */
         .concentrate-btn[data-value="shatter"] .concentrate-visual {
-            background: linear-gradient(135deg, #FFD700, #FFA500) !important;
+            background-image: url('images/shatter.jpg') !important;
+            background-size: cover !important;
+            background-position: center !important;
         }
         .concentrate-btn[data-value="wax"] .concentrate-visual {
-            background: linear-gradient(135deg, #FFA500, #FF8C00) !important;
+            background-image: url('images/wax.jpg') !important;
+            background-size: cover !important;
+            background-position: center !important;
         }
         .concentrate-btn[data-value="resin"] .concentrate-visual {
-            background: linear-gradient(135deg, #8B4513, #654321) !important;
+            background-image: url('images/resin.jpg') !important;
+            background-size: cover !important;
+            background-position: center !important;
         }
         .concentrate-btn[data-value="rosin"] .concentrate-visual {
-            background: linear-gradient(135deg, #DAA520, #B8860B) !important;
+            background-image: url('images/rosin.webp') !important;
+            background-size: cover !important;
+            background-position: center !important;
         }
         .concentrate-btn[data-value="budder"] .concentrate-visual {
-            background: linear-gradient(135deg, #FFDB58, #FFD700) !important;
+            background-image: url('images/budder.jpg') !important;
+            background-size: cover !important;
+            background-position: center !important;
         }
         .concentrate-btn[data-value="diamonds"] .concentrate-visual {
-            background: linear-gradient(135deg, #00CED1, #20B2AA) !important;
+            background-image: url('images/diamonds.jpg') !important;
+            background-size: cover !important;
+            background-position: center !important;
         }
         .concentrate-btn[data-value="sauce"] .concentrate-visual {
-            background: linear-gradient(135deg, #FF6347, #FF4500) !important;
+            background-image: url('images/sauce.jpg') !important;
+            background-size: cover !important;
+            background-position: center !important;
         }
         .concentrate-btn[data-value="crumble"] .concentrate-visual {
-            background: linear-gradient(135deg, #DEB887, #D2B48C) !important;
+            background-image: url('images/crumble.png') !important;
+            background-size: cover !important;
+            background-position: center !important;
         }
         
         .concentrate-btn span {
-            font-size: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
         }
         
         /* === FLOATING START BUTTON (FIXED AT BOTTOM) === */
@@ -537,7 +564,7 @@
         
         /* === CALENDAR SCREEN === */
         .calendar-container {
-            padding: 20px 15px;
+            padding: 20px 15px 100px 15px; /* Extra padding for nav bar */
         }
         
         .calendar-header {
@@ -662,7 +689,7 @@
         
         /* === SETTINGS SCREEN === */
         .settings-container {
-            padding: 20px 15px;
+            padding: 20px 15px 100px 15px; /* Extra padding for nav bar */
             max-width: 600px;
             margin: 0 auto;
         }
@@ -689,25 +716,71 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
-            padding: 15px;
+            gap: 10px;
+            padding: 18px 12px;
             background: #0a0a0a;
             border: 2px solid #333;
-            border-radius: 12px;
+            border-radius: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
-        
+
+        .theme-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
         .theme-btn.active {
             border-color: #00FF88;
+            box-shadow: 0 4px 16px rgba(0, 255, 136, 0.3);
         }
-        
+
         .theme-preview {
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
         }
-        
+
+        /* Theme preview gradients */
+        .theme-btn[data-theme="green"] .theme-preview {
+            background: linear-gradient(135deg, #00FF88, #00BFA5);
+        }
+        .theme-btn[data-theme="blue"] .theme-preview {
+            background: linear-gradient(135deg, #2196F3, #00BCD4);
+        }
+        .theme-btn[data-theme="purple"] .theme-preview {
+            background: linear-gradient(135deg, #9C27B0, #7C4DFF);
+        }
+        .theme-btn[data-theme="orange"] .theme-preview {
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+        }
+        .theme-btn[data-theme="pink"] .theme-preview {
+            background: linear-gradient(135deg, #E91E63, #F06292);
+        }
+        .theme-btn[data-theme="teal"] .theme-preview {
+            background: linear-gradient(135deg, #009688, #26A69A);
+        }
+        .theme-btn[data-theme="cyberpunk"] .theme-preview {
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+        }
+        .theme-btn[data-theme="earth"] .theme-preview {
+            background: linear-gradient(135deg, #8B4513, #D2691E);
+        }
+        .theme-btn[data-theme="sunset"] .theme-preview {
+            background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+        }
+        .theme-btn[data-theme="forest"] .theme-preview {
+            background: linear-gradient(135deg, #52B788, #95D5B2);
+        }
+        .theme-btn[data-theme="ocean"] .theme-preview {
+            background: linear-gradient(135deg, #06B6D4, #3B82F6);
+        }
+        .theme-btn[data-theme="midnight"] .theme-preview {
+            background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+        }
+
         .theme-btn span {
             font-size: 12px;
             font-weight: 600;
@@ -1010,7 +1083,8 @@
                             <i class="fas fa-redo"></i> Reset
                         </button>
                     </div>
-formula-display">
+
+                    <div class="formula-display">
                         <h4>📊 Timer Formula</h4>
                         <div class="formula-line">Material: <span id="formula-material">Quartz</span></div>
                         <div class="formula-line">Concentrate: <span id="formula-concentrate">Shatter</span></div>
